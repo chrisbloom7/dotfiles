@@ -6,14 +6,14 @@ tap 'homebrew/bundle'
 
 # Install Binaries
 brew 'awscli'
-brew 'bash' # Bash 4
+#brew 'bash' # Bash 4
 brew 'bat'
 brew 'coreutils' # Those that come with macOS are outdated
 brew 'git'
 brew 'grep'
 brew 'httpie'
 brew 'mackup'
-brew 'mackvim', args: ["env-std", "with-override-system-vim"]
+brew 'macvim', args: ["env-std", "with-override-system-vim"]
 brew 'mas'
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
 brew 'screen'
