@@ -86,4 +86,5 @@ cask 'font-source-serif-pro'
 # Install Mac App Store apps
 mas 'Giphy Capture', id: 668208984
 mas 'Lastpass Password Manager', id: 926036361
+mas 'Speedtest by Ookla', id: 1153157709
 mas 'The Unarchiver', id: 425424353
