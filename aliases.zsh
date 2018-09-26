@@ -1,21 +1,22 @@
 # Shortcuts
+alias beep="say -v Fred \"My liege, the task is complete\""
+alias cls="clear"
 alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
-alias reloadcli="source $HOME/.zshrc"
-alias reloaddns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
-alias ll="$(brew --prefix coreutils)/libexec/gnubin/ls -ahlF --color --group-directories-first"
-weather() { curl -4 wttr.in/${1:-antwerp} }
-alias phpstorm='open -a /Applications/PhpStorm.app "`pwd`"'
+alias flushdns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+alias hosts="$EDITOR /etc/hosts"
+alias reload="source $HOME/.zshrc"
 alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
-alias c="clear"
+weather() { curl -4 wttr.in/${1:-SRQ}?${2:-n2} }
 
 # Directories
 alias dotfiles="cd $DOTFILES"
 alias library="cd $HOME/Library"
-alias sites="cd $HOME/Sites"
+alias src="cd $HOME/src"
 
-# Laravel
-alias a="php artisan"
-alias ams="php artisan migrate:fresh --seed"
+# Ruby
+alias epoch="ruby -e 'puts Time.now.to_i'"
+alias timestamp='epoch'
+rvmrc() { rvm --create --ruby-version use $1 }
 
 # Vagrant
 alias v="vagrant global-status"
@@ -33,9 +34,35 @@ dbuild() { docker build -t=$1 .; }
 dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
 
 # Git
-alias commit="git add . && git commit -m"
-alias gcommit="git add . && git commit"
-alias gst="git status"
-alias gc="git checkout"
-alias gd="git diff"
-alias gl="git log --oneline --decorate --color"
+alias git-bin='git-branch-incoming'
+alias git-bout='git-branch-outgoing'
+alias git-mb='git-make-branch'
+alias me='git pretty | grep "Chris Bloom" | more'
+git-make-branch() {
+  echo "\$@ = '$@'"
+  typeset branch
+  if [[ "$@" != "" ]]; then
+    branch=$(ruby -e 'puts ARGV.join(" ").strip.gsub(/[\W\s_]+/, " ").downcase.split(" ").join("_")' "$@")
+    # echo "branch = '$branch'"
+    if [[ "$branch" = "" ]]; then
+      echo "-- Could not create branch from supplied arguments"
+    else
+      git co -b "$branch"
+      echo "-- Created branch $branch"
+    fi
+  else
+    echo "-- Could not create branch from supplied arguments"
+  fi
+}
+parse_git_branch() {
+  # From http://stackoverflow.com/a/2831173/83743
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+git-branch-incoming() {
+    echo branch \($1\) has these commits and \($(parse_git_branch)\) does not
+    git log ..$1 --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
+}
+git-branch-outgoing() {
+    echo branch \($(parse_git_branch)\) has these commits and \($1\) does not
+    git log $1.. --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
+}
