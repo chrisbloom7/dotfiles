@@ -56,29 +56,17 @@ ZSH_CUSTOM=$DOTFILES
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(git git-extras)
-plugins=(aws \                     # https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/aws
-         bundler \                 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/bundler
-         colored-man-pages \
-         colorize \                # ccat
+plugins=(bundler \                 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/bundler
          common-aliases \          # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/common-aliases
-         docker \                  # zsh completion for docker
-         dotenv \                  # Automatically load ENV variables from .env
          encode64 \                # encode64/e64; decode64/d64
-         gem \                     # gemb (build); gemp (build); gemy (yank)
          history \                 # h (history); hs (grep); hsi (grep -i)
          history-substring-search \ # type in part of prev entered command and cycle with UP/DOWN arrow keys
          httpie \
          jira \                    # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/jira
          jsontools \               # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
-         npm \                     # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/npm
-         nvm \
-         osx \                     # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/osx
-         rails \                   # https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/rails
          rake-fast \
          screen \                  # let the zsh tell screen what the title and hardstatus of the tab should be
          sudo \                    # ESC twice puts sudo in front of the current command or the last one
-         vscode \                  # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/vscode
-         yarn \                    # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/yarn
          zsh-syntax-highlighting)  # https://github.com/zsh-users/zsh-syntax-highlighting
 
 DEFAULT_USER="chrisbloom"
@@ -103,3 +91,12 @@ export ARCHFLAGS="-arch x86_64"
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+. "/usr/local/opt/nvm/nvm.sh"
+
+# rvm
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+
+source $HOME/.aliases

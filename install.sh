@@ -25,7 +25,6 @@ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB8
 npm install --global yarn
 
 # Create a source directory
-# This is a default directory for macOS user accounts but doesn't comes pre-installed
 mkdir $HOME/src
 
 # Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
