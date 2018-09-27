@@ -27,7 +27,7 @@ brew 'zsh-syntax-highlighting'
 
 # Development
 #brew 'apache-httpd'
-brew 'docker'
+#brew 'docker' # Use the cask version instead
 brew 'imagemagick'
 brew 'mongodb'
 #brew 'mysql'
@@ -46,6 +46,7 @@ cask 'boinc'
 cask 'clamxav'
 cask 'cleanmymac3'
 cask 'divvy'
+cask 'docker'
 cask 'dropbox'
 #cask 'firefox'
 cask 'gemini'

@@ -4,8 +4,19 @@ alias cls="clear"
 alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
 alias flushdns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 alias hosts="$EDITOR /etc/hosts"
-alias reload="source $HOME/.zshrc"
 alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
+reload() {
+	local cache="$ZSH_CACHE_DIR"
+	autoload -U compinit zrecompile
+	compinit -i -d "$cache/zcomp-$HOST"
+
+	for f in ~/.zshrc "$cache/zcomp-$HOST"; do
+		zrecompile -p $f && command rm -f $f.zwc.old
+	done
+
+	# Use $SHELL if available; remove leading dash if login shell
+	[[ -n "$SHELL" ]] && exec ${SHELL#-} || exec zsh
+}
 weather() { curl -4 wttr.in/${1:-SRQ}?${2:-n2} }
 
 # Directories
@@ -27,11 +38,11 @@ alias vreload="vagrant reload"
 alias vrebuild="vagrant destroy --force && vagrant up"
 
 # Docker
-alias dstop="docker stop $(docker ps -a -q)"
-alias dpurgecontainers="dstop && docker rm $(docker ps -a -q)"
-alias dpurgeimages="docker rmi $(docker images -q)"
-dbuild() { docker build -t=$1 .; }
-dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
+#alias dstop="docker stop $(docker ps -a -q)"
+#alias dpurgecontainers="dstop && docker rm $(docker ps -a -q)"
+#alias dpurgeimages="docker rmi $(docker images -q)"
+#dbuild() { docker build -t=$1 .; }
+#dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
 
 # Git
 alias git-bin='git-branch-incoming'

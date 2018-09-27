@@ -4,6 +4,9 @@ export DOTFILES=$HOME/.dotfiles
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
+# Disable the annoying "You have new mail" message
+#unset MAILCHECK # This isn't working in oh_my_zsh :/
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -78,6 +81,8 @@ plugins=(aws \                     # https://github.com/robbyrussell/oh-my-zsh/b
          yarn \                    # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/yarn
          zsh-syntax-highlighting)  # https://github.com/zsh-users/zsh-syntax-highlighting
 
+DEFAULT_USER="chrisbloom"
+
 # Activate Oh-My-Zsh
 source $ZSH/oh-my-zsh.sh
 
@@ -97,4 +102,4 @@ fi
 export ARCHFLAGS="-arch x86_64"
 
 # ssh
-export SSH_KEY_PATH="~/.ssh/id_rsa"
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
