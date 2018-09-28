@@ -1,12 +1,17 @@
 # Taps
-tap 'caskroom/cask'
-tap 'caskroom/fonts'
-tap 'caskroom/versions'
-tap 'homebrew/bundle'
+tap "homebrew/bundle"
+tap "homebrew/cask-drivers"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/cask"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "homebrew/versions"
 
 # Install Binaries
 brew 'awscli'
-#brew 'bash' # Bash 4
+brew 'bash'
+brew 'bash-completion'
 brew 'bat'
 brew 'coreutils' # Those that come with macOS are outdated
 brew 'git'
@@ -29,13 +34,13 @@ brew 'zsh-syntax-highlighting'
 #brew 'apache-httpd'
 #brew 'docker' # Use the cask version instead
 brew 'imagemagick'
-brew 'mongodb'
-#brew 'mysql'
-brew 'postgresql'
+brew 'mongodb', restart_service: true
+#brew 'mysql', restart_service: true
+brew 'postgresql', restart_service: true
 #brew 'python'
 brew 'node'
 brew 'nvm'
-brew 'redis'
+brew 'redis', restart_service: true
 brew 'sqlite'
 brew 'yarn'
 
@@ -48,6 +53,7 @@ cask 'cleanmymac3'
 cask 'divvy'
 cask 'docker'
 cask 'dropbox'
+cask 'duplicate-annihilator' # may need Duplicate Annihilator for iOS separately
 #cask 'firefox'
 cask 'gemini'
 cask 'google-chrome'
@@ -60,15 +66,14 @@ cask 'insomnia'
 cask 'iterm2'
 cask 'macdown'
 cask 'mailplane'
-cask 'opera'
-cask 'slack'
+#cask 'opera'
 cask 'spotify'
 cask 'transmit'
 cask 'vagrant'
 cask 'virtualbox-extension-pack'
 cask 'virtualbox'
 cask 'visual-studio-code'
-cask 'vlc'
+#cask 'vlc'
 cask 'voodoopad'
 
 # Quicklook
@@ -85,7 +90,15 @@ cask 'font-source-sans-pro'
 cask 'font-source-serif-pro'
 
 # Install Mac App Store apps
-mas 'Giphy Capture', id: 668208984
-mas 'Lastpass Password Manager', id: 926036361
-mas 'Speedtest by Ookla', id: 1153157709
-mas 'The Unarchiver', id: 425424353
+# Currently broken in Mojave. See:
+#   https://github.com/mas-cli/mas/issues/164
+#   https://github.com/mas-cli/mas/issues/171
+# mas 'Encrypto', id: 935235287
+# mas 'Giphy Capture', id: 668208984
+# mas 'LastPass', id: 926036361
+# mas 'Pixelmator', id: 407963104
+# mas 'Rested', id: 421879749
+# mas 'Slack', id: 803453959
+# mas 'Speedtest', id: 1153157709
+# mas 'The Unarchiver', id: 425424353
+# mas 'Xcode', id: 497799835
