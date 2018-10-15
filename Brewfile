@@ -8,15 +8,17 @@ tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/versions"
 
-# Install Binaries
+# Binaries
 brew 'awscli'
 brew 'bash'
 brew 'bash-completion'
 brew 'bat'
 brew 'coreutils' # Those that come with macOS are outdated
+brew 'cpanminus'
 brew 'git'
 brew 'grep'
 brew 'httpie'
+brew 'lastpass-cli'
 brew 'mackup'
 brew 'macvim', args: ["env-std", "with-override-system-vim"]
 brew 'mas'
@@ -38,11 +40,11 @@ brew 'mongodb', restart_service: true
 #brew 'mysql', restart_service: true
 brew 'postgresql', restart_service: true
 #brew 'python'
-brew 'node'
-brew 'nvm'
+#brew 'node' # Prefer using NVM instead
+#brew 'nvm' # Prefer the official install script
 brew 'redis', restart_service: true
 brew 'sqlite'
-brew 'yarn'
+#brew 'yarn' # Prefer using NVM instead
 
 # Apps
 cask 'alfred'
@@ -89,7 +91,7 @@ cask 'font-source-code-pro'
 cask 'font-source-sans-pro'
 cask 'font-source-serif-pro'
 
-# Install Mac App Store apps
+# Mac App Store
 # Currently broken in Mojave. See:
 #   https://github.com/mas-cli/mas/issues/164
 #   https://github.com/mas-cli/mas/issues/171
