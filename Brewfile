@@ -6,7 +6,6 @@ tap "homebrew/cask-versions"
 tap "homebrew/cask"
 tap "homebrew/core"
 tap "homebrew/services"
-tap "homebrew/versions"
 
 # Binaries
 brew 'awscli'
