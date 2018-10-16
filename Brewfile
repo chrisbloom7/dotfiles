@@ -19,7 +19,7 @@ brew 'grep'
 brew 'httpie'
 brew 'lastpass-cli'
 brew 'mackup'
-brew 'macvim', args: ["env-std", "with-override-system-vim"]
+#brew 'macvim', args: ["env-std", "with-override-system-vim"]
 brew 'mas'
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
 brew 'screen'
@@ -58,7 +58,8 @@ cask 'duplicate-annihilator' # may need Duplicate Annihilator for iOS separately
 #cask 'firefox'
 cask 'gemini'
 cask 'google-chrome'
-cask 'google-drive-file-stream'
+cask 'google-backup-and-sync' # for personal google accounts
+#cask 'google-drive-file-stream' # only for corporate google accounts
 cask 'gpg-suite'
 cask 'grammarly'
 cask 'homebrew/cask-drivers/sonos'
@@ -68,13 +69,14 @@ cask 'iterm2'
 cask 'macdown'
 cask 'mailplane'
 #cask 'opera'
+cask 'postman'
 cask 'spotify'
 cask 'transmit'
 cask 'vagrant'
-cask 'virtualbox-extension-pack'
 cask 'virtualbox'
+cask 'virtualbox-extension-pack'
 cask 'visual-studio-code'
-#cask 'vlc'
+cask 'vlc'
 cask 'voodoopad'
 
 # Quicklook
