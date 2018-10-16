@@ -344,7 +344,7 @@ defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
 
 for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
     "Dock" "Finder" "Google Chrome" "iTerm" "Mail" "Messages" "Photos" "Safari" "SystemUIServer" \
-    "Terminal" "Tweetbot" "iCal"; do
+    "Tweetbot" "iCal"; do
     killall "${app}" &> /dev/null
 done
 
