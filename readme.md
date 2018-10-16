@@ -1,8 +1,8 @@
-# Dries's Dotfiles
+# My Dotfiles
 
-This repository serves as my way to help me setup and maintain my Mac. It takes the effort out of installing everything manually. Everything which is needed to install my preffered setup of macOS is detailed in this readme. Feel free to explore, learn and copy parts for your own dotfiles. Enjoy! :smile:
+This repository is an attempt to make setting up new Macbooks a bit less painful by being selective about which settings and apps are restored. It's a bit more effort than letting the Apple transfer agent do it magically, but the end result is also more clean. It will be in a constant state of progress as my preferences change and I refine the process. You are free to fork this for your own purposes (this project is itself a fork of [driesvints/dotfiles](https://github.com/driesvints/dotfiles) [setup files](https://medium.com/@driesvints/getting-started-with-dotfiles-76bf046d035c)), but I strongly encourage you to read through each file (especially the remainder of this README) before running it on your own machine.
 
-Read the blog post: https://medium.com/@driesvints/getting-started-with-dotfiles-76bf046d035c
+The install script is intended to be idempotent, so you can run it as often as you like as you're making adjustments to it. Note that it won't roll back previous setup steps though, so you may need to unset/uninstall things manually if you're removing apps or macos configuration settings.
 
 ## A Fresh macOS Setup
 
@@ -16,7 +16,7 @@ First, go through the checklist below to make sure you didn't forget anything be
 - Did you remember to save all important documents from non-iCloud directories?
 - Did you save all of your work from apps which aren't synced through iCloud?
 - Did you remember to export important data from your local database?
-- Did you update [mackup](https://github.com/lra/mackup) to the latest version and ran `mackup backup`?
+- Did you update [mackup](https://github.com/lra/mackup) to the latest version and run `mackup backup`?
 
 ### Installing macOS cleanly
 
@@ -48,7 +48,7 @@ If you want to start with your own dotfiles from this setup, it's pretty easy to
 
 Go through the [`.macos`](./.macos) file and adjust the settings to your liking. You can find much more settings at [the original script by Mathias Bynens](https://github.com/mathiasbynens/dotfiles/blob/master/.macos) and [Kevin Suttle's macOS Defaults project](https://github.com/kevinSuttle/MacOS-Defaults).
 
-Check out the [`Brewfile`](./Brewfile) file and adjust the apps you want to install for your machine. Use [their search page](https://caskroom.github.io/search) to check if the app you want to install is available.
+Check out the [`Brewfile`](./Brewfile) file and adjust the apps you want to install for your machine. Use `brew search` to check if the app you want to install is available.
 
 Check out the [`aliases.zsh`](./aliases.zsh) file and add your own aliases. If you need to tweak your `$PATH` check out the [`path.zsh`](./path.zsh) file. These files get loaded in because the `$ZSH_CUSTOM` setting points to the `.dotfiles` directory. You can adjust the [`.zshrc`](./.zshrc) file to your liking to tweak your Oh My Zsh setup. More info about how to customize Oh My Zsh can be found [here](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization).
 
@@ -63,8 +63,10 @@ You can tweak the shell theme, the Oh My Zsh settings and much more. Go through 
 
 Enjoy your own Dotfiles!
 
-## Thanks To...
+## Thanks
 
-I first got the idea for starting this project by visiting the [Github does dotfiles](https://dotfiles.github.io/) project. Both [Zach Holman](https://github.com/holman/dotfiles) and [Mathias Bynens](https://github.com/mathiasbynens/dotfiles) were great sources of inspiration. [Sourabh Bajaj](https://twitter.com/sb2nov/)'s [Mac OS X Setup Guide](http://sourabhbajaj.com/mac-setup/) proved to be invaluable. Thanks to [Taylor Otwell](https://twitter.com/taylorotwell) for his awesome Zsh theme! And lastly, I'd like to thank [Maxime Fabre](https://twitter.com/anahkiasen) for [his excellent presentation on Homebrew](https://speakerdeck.com/anahkiasen/a-storm-homebrewin) which made me migrate a lot to a [`Brewfile`](./Brewfile) and [Mackup](https://github.com/lra/mackup).
-
-In general, I'd like to thank every single one who open-sources their dotfiles for their effort to contribute something to the open-source community. Your work means the world! :earth_africa: :heart:
+- [Dries Vints](https://github.com/driesvints/)
+- [Github dotfiles project](https://dotfiles.github.io/)
+- [Zach Holman](https://github.com/holman/dotfiles)
+- [Mathias Bynens](https://github.com/mathiasbynens/dotfiles)
+- [Mackup](https://github.com/lra/mackup)
