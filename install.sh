@@ -33,6 +33,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 # Install global NPM packages
+nvm install --latest-npm
 npm install --global yarn
 
 # Create a source directory
