@@ -8,7 +8,7 @@ if test ! $(which brew); then
 fi
 
 # Agree to Xcode licenses
-sudo xcodebuild -license
+#sudo xcodebuild -license
 
 # Update Homebrew recipes
 brew update
