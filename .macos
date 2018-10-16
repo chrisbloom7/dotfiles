@@ -251,6 +251,9 @@ defaults write com.apple.terminal StringEncodings -array 4
 # Don’t display the annoying prompt when quitting iTerm
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
 
+# Import iTerm2 settings
+defaults import com.googlecode.iterm2 "$HOME/.dotfiles/iterm2.plist"
+
 ###############################################################################
 # Time Machine                                                                #
 ###############################################################################

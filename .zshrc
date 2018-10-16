@@ -66,8 +66,7 @@ plugins=(bundler \                 # https://github.com/robbyrussell/oh-my-zsh/t
          jsontools \               # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
          rake-fast \
          screen \                  # let the zsh tell screen what the title and hardstatus of the tab should be
-         sudo \                    # ESC twice puts sudo in front of the current command or the last one
-         zsh-syntax-highlighting)  # https://github.com/zsh-users/zsh-syntax-highlighting
+         sudo)                     # ESC twice puts sudo in front of the current command or the last one
 
 DEFAULT_USER="chrisbloom"
 
@@ -100,3 +99,9 @@ export NVM_DIR="$HOME/.nvm"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 
 source $HOME/.aliases
+
+# load zsh extensions from Homebrew
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/local/opt/zsh-git-prompt/zshrc.sh
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fpath=(/usr/local/share/zsh-completions $fpath)

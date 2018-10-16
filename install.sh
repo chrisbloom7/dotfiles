@@ -38,18 +38,21 @@ npm install --global yarn
 # Create a source directory
 mkdir $HOME/src
 
+# Install Oh-My-Zsh - If you've run `mackup restore` or installed OMZ previously this step will fail
+curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | zsh
+
+# Install iTerm2 shell integration for Zsh
+curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh
+
 # Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
 [ -s "$HOME/.zshrc" ] && rm -rf "$HOME/.zshrc"
 ln -s "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
 
 # Symlink the Mackup config file to the home directory
+[ -s "$HOME/.mackup.cfg" ] && rm -rf "$HOME/.mackup.cfg"
 ln -s "$HOME/.dotfiles/.mackup.cfg" "$HOME/.mackup.cfg"
 
 # Set macOS preferences
-# We will run this last because this will reload the shell
 source .macos
-
-# Install Oh-My-Zsh - If you've run `mackup restore` or installed OMZ previously this step will fail
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 echo "Done. Note that some of these changes require a logout/restart to take effect."
