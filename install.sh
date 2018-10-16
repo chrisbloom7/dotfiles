@@ -55,4 +55,4 @@ ln -s "$HOME/.dotfiles/.mackup.cfg" "$HOME/.mackup.cfg"
 # Set macOS preferences
 source .macos
 
-echo "Done. Note that some of these changes require a logout/restart to take effect."
+echo "Done. Note that some of these changes require a logout/restart to take effect, and you may still need to set fonts manually in your iTerm2 profile"
