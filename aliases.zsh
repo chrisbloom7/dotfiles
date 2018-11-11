@@ -28,7 +28,14 @@ alias src="cd $HOME/src"
 # Ruby
 alias epoch="ruby -e 'puts Time.now.to_i'"
 alias timestamp='epoch'
-rvmrc() { rvm --create --ruby-version use $1 }
+rvmrc() {
+  if [ "$1" != "" ]
+  then
+    rvm --create --ruby-version use `rvm current`
+  else
+    rvm --create --ruby-version use $1
+  fi
+}
 
 # Vagrant
 alias v="vagrant global-status"
