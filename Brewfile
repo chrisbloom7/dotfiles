@@ -54,6 +54,7 @@ cask 'cleanmymac'
 cask 'divvy'
 cask 'docker'
 cask 'dropbox'
+cask 'db-browser-for-sqlite'
 cask 'duplicate-annihilator' # may need Duplicate Annihilator for iOS separately
 cask 'freeze'
 #cask 'firefox'
