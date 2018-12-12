@@ -12,16 +12,20 @@ brew 'awscli'
 brew 'bash'
 brew 'bash-completion'
 brew 'bat'
+brew 'convox'
 brew 'coreutils' # Those that come with macOS are outdated
 brew 'cpanminus'
 brew 'git'
 brew 'grep'
 brew 'httpie'
 brew 'lastpass-cli'
+brew 'libffi'
 brew 'mackup'
 #brew 'macvim', args: ["env-std", "with-override-system-vim"]
 brew 'mas'
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
+brew 'rbenv'
+brew 'ruby-build'
 brew 'screen'
 brew 'tree'
 #brew 'vaulted'
@@ -33,15 +37,17 @@ brew 'zsh-syntax-highlighting'
 
 # Development
 #brew 'apache-httpd'
+brew 'convox'
 #brew 'docker' # Use the cask version instead
+brew 'docker-compose'
 brew 'imagemagick'
-brew 'mongodb', restart_service: true
+#brew 'mongodb', restart_service: true
 #brew 'mysql', restart_service: true
-brew 'postgresql', restart_service: true
+#brew 'postgresql', restart_service: true # Use the cask version instead
 #brew 'python'
 #brew 'node' # Prefer using NVM instead
-#brew 'nvm' # Prefer the official install script
-brew 'redis', restart_service: true
+#brew 'nvm' # Prefer the official install script (see ./install.sh)
+#brew 'redis', restart_service: true
 brew 'sqlite'
 #brew 'yarn' # Prefer using NVM instead
 
@@ -72,6 +78,7 @@ cask 'iterm2'
 cask 'macdown'
 cask 'mailplane'
 #cask 'opera'
+cask 'postgres' # multi-version Postgres.app
 cask 'postman'
 cask 'sequel-pro'
 cask 'spotify'
