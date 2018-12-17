@@ -16,6 +16,8 @@ brew update
 # Install all our dependencies with bundle (See Brewfile)
 brew tap homebrew/bundle
 brew bundle
+brew services stop postgresql
+brew services cleanup
 
 # Make ZSH the default shell environment
 chsh -s $(which zsh)

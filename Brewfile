@@ -43,7 +43,7 @@ brew 'docker-compose'
 brew 'imagemagick'
 #brew 'mongodb', restart_service: true
 #brew 'mysql', restart_service: true
-#brew 'postgresql', restart_service: true # Use the cask version instead
+brew 'postgresql', restart_service: false # Necessary for libs, but use Postgres.app for service
 #brew 'python'
 #brew 'node' # Prefer using NVM instead
 #brew 'nvm' # Prefer the official install script (see ./install.sh)
@@ -79,6 +79,7 @@ cask 'macdown'
 cask 'mailplane'
 #cask 'opera'
 cask 'postgres' # multi-version Postgres.app
+cask 'postico'
 cask 'postman'
 cask 'sequel-pro'
 cask 'spotify'
@@ -107,12 +108,13 @@ cask 'font-source-serif-pro'
 # Currently broken in Mojave. See:
 #   https://github.com/mas-cli/mas/issues/164
 #   https://github.com/mas-cli/mas/issues/171
-# mas 'Encrypto', id: 935235287
-# mas 'Giphy Capture', id: 668208984
-# mas 'LastPass', id: 926036361
-# mas 'Pixelmator', id: 407963104
-# mas 'Rested', id: 421879749
-# mas 'Slack', id: 803453959
-# mas 'Speedtest', id: 1153157709
-# mas 'The Unarchiver', id: 425424353
-# mas 'Xcode', id: 497799835
+mas '1Password 7 - Password Manager', id: 1333542190
+mas 'Encrypto', id: 935235287
+mas 'Giphy Capture', id: 668208984
+mas 'LastPass', id: 926036361
+mas 'Pixelmator', id: 407963104
+mas 'Rested', id: 421879749
+mas 'Slack', id: 803453959
+mas 'Speedtest', id: 1153157709
+mas 'The Unarchiver', id: 425424353
+mas 'Xcode', id: 497799835
