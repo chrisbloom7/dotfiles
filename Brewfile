@@ -57,6 +57,7 @@ cask 'beyond-compare'
 cask 'boinc'
 cask 'clamxav'
 cask 'cleanmymac'
+cask 'chromedriver'
 cask 'divvy'
 cask 'docker'
 cask 'dropbox'
@@ -105,10 +106,7 @@ cask 'font-source-sans-pro'
 cask 'font-source-serif-pro'
 
 # Mac App Store
-# Currently broken in Mojave. See:
-#   https://github.com/mas-cli/mas/issues/164
-#   https://github.com/mas-cli/mas/issues/171
-mas '1Password 7 - Password Manager', id: 1333542190
+#mas '1Password 7 - Password Manager', id: 1333542190
 mas 'Encrypto', id: 935235287
 mas 'Giphy Capture', id: 668208984
 mas 'LastPass', id: 926036361
