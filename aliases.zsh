@@ -56,7 +56,7 @@ alias vrebuild="vagrant destroy --force && vagrant up"
 alias git-bin='git-branch-incoming'
 alias git-bout='git-branch-outgoing'
 alias git-mb='git-make-branch'
-alias me='git pretty | grep "Chris Bloom" | more'
+alias me='git pretty | grep "Chris Bloom" | less'
 git-make-branch() {
   echo "\$@ = '$@'"
   typeset branch
