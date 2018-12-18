@@ -30,6 +30,9 @@ chsh -s $(which zsh)
 # Install Node Version Manager - Make sure to update the version as new versions are published
 \curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 
+# Install Elixir Version Manager
+curl -Lqs https://raw.githubusercontent.com/taylor/kiex/master/install | bash -s
+
 # Make sure NPM is available now
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
