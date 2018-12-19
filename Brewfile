@@ -43,7 +43,7 @@ brew 'docker-compose'
 brew 'imagemagick'
 #brew 'mongodb', restart_service: true
 #brew 'mysql', restart_service: true
-brew 'postgresql', restart_service: false # Necessary for libs, but use Postgres.app for service
+brew 'postgresql' #, restart_service: true # Necessary for libs, but use Postgres.app for service
 #brew 'python'
 #brew 'node' # Prefer using NVM instead
 #brew 'nvm' # Prefer the official install script (see ./install.sh)
