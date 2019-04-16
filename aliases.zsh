@@ -1,5 +1,5 @@
 # Shortcuts
-alias dots="cd ~/.dotfiles"
+alias dots="dotfiles && $EDITOR $DOTFILES"
 alias beep="say -v Fred \"My liege, the task is complete\""
 alias cls="clear"
 alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"

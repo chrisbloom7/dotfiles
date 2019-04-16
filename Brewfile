@@ -15,6 +15,7 @@ brew 'bat'
 brew 'convox'
 brew 'coreutils' # Those that come with macOS are outdated
 brew 'cpanminus'
+brew 'direnv' # https://github.com/direnv/direnv#direnv----unclutter-your-profile
 brew 'git'
 brew 'grep'
 brew 'httpie'
@@ -23,11 +24,15 @@ brew 'libffi'
 brew 'mackup'
 #brew 'macvim', args: ["env-std", "with-override-system-vim"]
 brew 'mas'
+brew 'packer'
 brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
 brew 'rbenv'
 brew 'rbenv-gemset'
 brew 'ruby-build'
+brew 'rbenv-default-gems'
+brew 'rbenv-vars'
 brew 'screen'
+brew 'terraform'
 brew 'tree'
 #brew 'vaulted'
 brew 'zsh'
@@ -112,6 +117,7 @@ cask 'font-source-serif-pro'
 mas 'Encrypto', id: 935235287
 mas 'Giphy Capture', id: 668208984
 mas 'LastPass', id: 926036361
+mas 'Monosnap', id: 540348655
 mas 'Pixelmator', id: 407963104
 mas 'Rested', id: 421879749
 mas 'Slack', id: 803453959

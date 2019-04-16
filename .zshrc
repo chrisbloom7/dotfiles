@@ -56,19 +56,19 @@ ZSH_CUSTOM=$DOTFILES
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(git git-extras)
-plugins=(bundler \                 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/bundler
-         common-aliases \          # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/common-aliases
-         encode64 \                # encode64/e64; decode64/d64
-         history \                 # h (history); hs (grep); hsi (grep -i)
-         history-substring-search \ # type in part of prev entered command and cycle with UP/DOWN arrow keys
-         httpie \                  # completion for HTTPie
-         #jira \                    # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/jira
-         #jsontools \               # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
-         nvm \                     # auto sources nvm
-         rake-fast \               # Fast rake autocompletion plugin that caches output
-         rbenv \                   # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
-         screen \                  # let the zsh tell screen what the title and hardstatus of the tab should be
-         sudo)                     # ESC twice puts sudo in front of the current command or the last one
+plugins=(bundler                  # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/bundler
+         common-aliases           # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/common-aliases
+         encode64                 # encode64/e64; decode64/d64
+         history                  # h (history); hs (grep); hsi (grep -i)
+         history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
+         httpie                   # completion for HTTPie
+         nvm                      # auto sources nvm
+         rake-fast                # Fast rake autocompletion plugin that caches output
+         rbenv                    # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
+         screen                   # let the zsh tell screen what the title and hardstatus of the tab should be
+         sudo)                    # ESC twice puts sudo in front of the current command or the last one
+         #jira                    # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/jira
+         #jsontools               # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
 
 DEFAULT_USER="chrisbloom"
 
@@ -90,6 +90,9 @@ fi
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
+# rbenv config: https://albertogrespan.com/blog/installing-ruby-the-right-way-on-os-x-using-rbenv/
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --with-readline-dir=`brew --prefix readline` --with-libyaml-dir=`brew --prefix libyaml`"
+
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
@@ -106,6 +109,9 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 
 # load iTerm2 shell integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# Direnv
+eval "$(direnv hook zsh)"
 
 # BrightBytes ENVs
 source ~/.bb_ops/dpl.env

@@ -40,6 +40,7 @@ export NVM_DIR="$HOME/.nvm"
 # Install global NPM packages
 nvm install --latest-npm
 npm install --global yarn
+npm install --global avn avn-nvm
 
 # Create a source directory
 mkdir $HOME/src
@@ -61,6 +62,9 @@ ln -s "$HOME/.dotfiles/.mackup.cfg" "$HOME/.mackup.cfg"
 
 [ -s "$HOME/.mackup" ] && rm -rf "$HOME/.mackup"
 ln -s "$HOME/.dotfiles/.mackup" "$HOME/.mackup"
+
+[ -s "$RBENV_ROOT/default-gems" ] && rm -rf "$RBENV_ROOT/default-gems"
+ln -s "$HOME/.dotfiles/default-gems" "$RBENV_ROOT/default-gems"
 
 # Set macOS preferences
 source .macos
