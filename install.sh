@@ -28,7 +28,7 @@ chsh -s $(which zsh)
 #\curl -sSL https://get.rvm.io | bash -s stable --rails
 
 # Install Node Version Manager - Make sure to update the version as new versions are published
-\curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+\curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 
 # Install Elixir Version Manager
 curl -Lqs https://raw.githubusercontent.com/taylor/kiex/master/install | bash -s
@@ -40,7 +40,6 @@ export NVM_DIR="$HOME/.nvm"
 # Install global NPM packages
 nvm install --latest-npm
 npm install --global yarn
-npm install --global avn avn-nvm
 
 # Create a source directory
 mkdir $HOME/src

@@ -113,5 +113,8 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # Direnv
 eval "$(direnv hook zsh)"
 
+# Use Postgres.app's client. Note this will need to be updated if using a different version of PG
+export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/9.6/bin"
+
 # BrightBytes ENVs
 source ~/.bb_ops/dpl.env
