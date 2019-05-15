@@ -13,8 +13,8 @@ These instructions are for when you've already set up your dotfiles. If you want
 First, go through the checklist below to make sure you didn't forget anything before you wipe your hard drive.
 
 - Did you commit and push any changes/branches to your git repositories?
-- Did you remember to save all important documents from non-iCloud directories?
-- Did you save all of your work from apps which aren't synced through iCloud?
+- Did you remember to save all open work?
+- Did you backup all important files which aren't synced through iCloud, Dropbox, Google Drive, Adobe Cloud, etc?
 - Did you remember to export important data from your local database?
 - Did you update [mackup](https://github.com/lra/mackup) to the latest version and run `mackup backup`?
 
@@ -33,7 +33,7 @@ If you did all of the above you may now follow these install instructions to set
 5. Copy your public and private SSH keys to `~/.ssh` and make sure they're set to `600`
 6. Clone this repo to `~/.dotfiles`
 7. Append `/usr/local/bin/zsh` to the end of your `/etc/shells` file
-8. Run `install.sh` to start the installation
+8. Run `install.sh` to start the installation. Keep an eye on it to ensure it finishes, or resolve any errors and then restart it.
 9. Restore preferences by running `mackup restore`
 10. Restart your computer to finalize the process
 

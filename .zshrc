@@ -64,9 +64,9 @@ plugins=(bundler                  # https://github.com/robbyrussell/oh-my-zsh/tr
          httpie                   # completion for HTTPie
          nvm                      # auto sources nvm
          rake-fast                # Fast rake autocompletion plugin that caches output
-         rbenv                    # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
          screen                   # let the zsh tell screen what the title and hardstatus of the tab should be
          sudo)                    # ESC twice puts sudo in front of the current command or the last one
+         #rbenv                   # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
          #jira                    # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/jira
          #jsontools               # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
 
@@ -90,14 +90,11 @@ fi
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
-# rbenv config: https://albertogrespan.com/blog/installing-ruby-the-right-way-on-os-x-using-rbenv/
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --with-readline-dir=`brew --prefix readline` --with-libyaml-dir=`brew --prefix libyaml`"
+# # rbenv config: https://albertogrespan.com/blog/installing-ruby-the-right-way-on-os-x-using-rbenv/
+# export RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --with-readline-dir=`brew --prefix readline` --with-libyaml-dir=`brew --prefix libyaml`"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Kiex
-test -s "$HOME/.kiex/scripts/kiex" && source "$HOME/.kiex/scripts/kiex"
+# TODO: export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 source $HOME/.aliases
 
@@ -115,6 +112,3 @@ eval "$(direnv hook zsh)"
 
 # Use Postgres.app's client. Note this will need to be updated if using a different version of PG
 export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/9.6/bin"
-
-# BrightBytes ENVs
-source ~/.bb_ops/dpl.env

@@ -9,11 +9,45 @@ sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 ###############################################################################
-# General UI/UX                                                               #
+# Power Management Settings                                                   #
 ###############################################################################
 
-# Set standby delay to 24 hours (default is 1 hour)
-#sudo pmset -a standbydelay 86400
+# The -a, -b, -c, -u flags determine whether the settings apply to battery ( -b ), charger (wall power) ( -c ), UPS ( -u ) or all ( -a ).
+# Use a minutes argument of 0 to set the idle time to never for sleep disksleep and displaysleep# displaysleep - display sleep timer; replaces 'dim' argument in 10.4 (value in minutes, or 0 to disable)
+# Settings:
+#   disksleep - disk spindown timer; replaces 'spindown' argument in 10.4 (value in minutes, or 0 to disable)
+#   sleep - system sleep timer (value in minutes, or 0 to disable)
+#   womp - wake on ethernet magic packet (value = 0/1). Same as "Wake for network access" in the Energy Saver preferences.
+#   ring - wake on modem ring (value = 0/1)
+#   powernap - enable/disable Power Nap on supported machines (value = 0/1)
+#   proximitywake - On supported systems, this option controls system wake from sleep based on proximity of devices using same iCloud id. (value = 0/1)
+#   autorestart - automatic restart on power loss (value = 0/1)
+#   lidwake - wake the machine when the laptop lid (or clamshell) is opened (value = 0/1)
+#   acwake - wake the machine when power source (AC/battery) is changed (value = 0/1)
+#   lessbright - slightly turn down display brightness when switching to this power source (value = 0/1)
+#   halfdim - display sleep will use an intermediate half-brightness state between full brightness and fully off  (value = 0/1)
+#   sms - use Sudden Motion Sensor to park disk heads on sudden changes in G force (value = 0/1)
+#   hibernatemode - change hibernation mode. Please use caution. (value = integer)
+#   hibernatefile - change hibernation image file location. Image may only be located on the root volume. Please use caution. (value = path)
+#   ttyskeepawake - prevent idle system sleep when any tty (e.g. remote login session) is 'active'. A tty is 'inactive' only when its idle time exceeds the sys-
+#     tem sleep timer. (value = 0/1)
+#   networkoversleep - this setting affects how OS X networking presents shared network services during system sleep. This setting is not used by all platforms;
+#     changing its value is unsupported.
+#   destroyfvkeyonstandby - Destroy File Vault Key when going to standby mode. By default File vault keys are retained even when system goes to standby. If the
+#     keys are destroyed, user will be prompted to enter the password while coming out of standby mode.(value: 1 - Destroy, 0 - Retain)
+
+# Restore Energy Saver settings to their default values
+sudo pmset -a restoredefaults
+
+# Set standby delay to 24 hours (default is 1 hour) for wall power
+sudo pmset -c standbydelay 86400
+
+# Prevent idle system sleep when any tty is active
+sudo pmset -a ttyskeepawake 1
+
+###############################################################################
+# General UI/UX                                                               #
+###############################################################################
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "
@@ -33,7 +67,7 @@ defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 # Disable the “Are you sure you want to open this application?” dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
-# Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
+# Remove duplicates in the “Open With” menu
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 # Reveal IP address, hostname, OS version, etc. when clicking the clock
@@ -44,7 +78,8 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo Hos
 sudo systemsetup -setrestartfreeze on
 
 # Disable Notification Center and remove the menu bar icon
-launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2> /dev/null
+# This might fail with `operation not permitted while system integrity protection is engaged` if `csrutil status` is enabled
+launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
 
 # Disable smart quotes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
