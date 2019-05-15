@@ -116,9 +116,10 @@ cask 'font-source-serif-pro'
 # Mac App Store
 mas '1Password 7 - Password Manager', id: 1333542190
 mas 'Encrypto', id: 935235287
-mas 'Giphy Capture', id: 668208984
+# mas 'Giphy Capture', id: 668208984
 # mas 'LastPass', id: 926036361
-mas 'Monosnap', id: 540348655
+# mas 'MindNode', id: 1289197285
+# mas 'Monosnap', id: 540348655
 mas 'Pixelmator', id: 407963104
 mas 'Rested', id: 421879749
 mas 'Slack', id: 803453959
