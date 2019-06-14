@@ -93,6 +93,10 @@ export ARCHFLAGS="-arch x86_64"
 # # rbenv config: https://albertogrespan.com/blog/installing-ruby-the-right-way-on-os-x-using-rbenv/
 # export RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --with-readline-dir=`brew --prefix readline` --with-libyaml-dir=`brew --prefix libyaml`"
 
+# Bundler Config Options
+export LDFLAGS="-L/usr/local/opt/libffi/lib"
+export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"
+
 # ssh
 # TODO: export SSH_KEY_PATH="~/.ssh/dsa_id"
 
