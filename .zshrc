@@ -115,6 +115,3 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 
 # load iTerm2 shell integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# Wrap git with hub
-eval "$(hub alias -s)"
