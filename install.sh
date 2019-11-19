@@ -47,10 +47,17 @@ nvm install --latest-npm
 # Install global NPM packages
 npm install --global yarn
 
-# Create a source directory
+# Create a source directory and fold for personal projects
 mkdir $HOME/src
+mkdir $HOME/src/chrisbloom7
+mkdir $HOME/src/sandbox
 
 # TODO: Checkout common repos to src
+git clone git@github.com:chrisbloom7/enumpath.git $HOME/src/chrisbloom7/enumpath
+git clone git@github.com:chrisbloom7/enumpath.io.git $HOME/src/chrisbloom7/enumpath.io
+git clone git@github.com:chrisbloom7/improved-initiative.git $HOME/src/chrisbloom7/improved-initiative
+git clone git@github.com:chrisbloom7/robinina.art.git $HOME/src/chrisbloom7/robinina.art
+git clone git@github.com:chrisbloom7/statblock-shop.git $HOME/src/chrisbloom7/statblock-shop
 
 # Install Oh-My-Zsh - If you've run `mackup restore` or installed OMZ previously this step may fail
 # TODO: What happens when this fails? Can we detect installation status or catch the error?
@@ -75,6 +82,10 @@ export RBENV_ROOT="$HOME/.rbenv"
 [ -s "$RBENV_ROOT/default-gems" ] && rm -rf "$RBENV_ROOT/default-gems"
 ln -s "$HOME/.dotfiles/default-gems" "$RBENV_ROOT/default-gems"
 rbenv install "$RBENV_VERSION" && rbenv global "$RBENV_VERSION" && rbenv rehash
+
+# Removes .autobin from $HOME (if it exists) and symlinks the .autobin file from the .dotfiles
+[ -s "$HOME/.autobin" ] && rm -rf "$HOME/.autobin"
+ln -s "$HOME/.dotfiles/.autobin" "$HOME/.autobin"
 
 # Set macOS preferences
 # source .macos

@@ -6,24 +6,53 @@ alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
 alias flushdns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
 alias hosts="$EDITOR /etc/hosts"
 alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
+readme () {
+  if [ $1 ]; then
+    pandoc $1 | lynx -stdin
+  else
+    pandoc README.md | lynx -stdin
+  fi
+}
 reload() {
-	local cache="$ZSH_CACHE_DIR"
-	autoload -U compinit zrecompile
-	compinit -i -d "$cache/zcomp-$HOST"
+  local cache="$ZSH_CACHE_DIR"
+  autoload -U compinit zrecompile
+  compinit -i -d "$cache/zcomp-$HOST"
 
-	for f in ~/.zshrc "$cache/zcomp-$HOST"; do
-		zrecompile -p $f && command rm -f $f.zwc.old
-	done
+  for f in ~/.zshrc "$cache/zcomp-$HOST"; do
+    zrecompile -p $f && command rm -f $f.zwc.old
+  done
 
-	# Use $SHELL if available; remove leading dash if login shell
-	[[ -n "$SHELL" ]] && exec ${SHELL#-} || exec zsh
+  # Use $SHELL if available; remove leading dash if login shell
+  [[ -n "$SHELL" ]] && exec ${SHELL#-} || exec zsh
 }
 weather() { curl -4 wttr.in/${1:-SRQ}?${2:-n2} }
 
 # Directories
 alias dotfiles="cd $DOTFILES"
 alias library="cd $HOME/Library"
-alias src="cd $HOME/src"
+function src() { cd "$HOME/src/$@" }
+
+
+# Add local ./bin folders to path if they are whitelisted
+if [[ -n $ZSH_VERSION ]]; then
+  [[ -z $AUTOBIN_LIST ]] && AUTOBIN_LIST=~/.autobin
+
+  _autobin_hook() {
+    if [[ -n $AUTOBIN_DIR ]]; then
+      # remove old dir from path
+      path=(${path:#$AUTOBIN_DIR})
+      unset AUTOBIN_DIR
+    fi
+    if [[ -d "${PWD}/bin" ]] && grep "${PWD}/bin" "$AUTOBIN_LIST" >/dev/null 2>&1; then
+      # add whitelisted dir to path
+      AUTOBIN_DIR="${PWD}/bin"
+      path=($AUTOBIN_DIR $path)
+    fi
+  }
+
+  [[ -z $chpwd_functions ]] && chpwd_functions=()
+  chpwd_functions=($chpwd_functions _autobin_hook)
+fi
 
 # Ruby
 alias epoch="ruby -e 'puts Time.now.to_i'"

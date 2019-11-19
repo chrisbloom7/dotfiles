@@ -7,30 +7,33 @@ tap "homebrew/cask"
 # tap "homebrew/core"
 # tap "homebrew/services"
 # tap "heroku/brew"
+tap "github/gh"
 
 # Binaries
 brew 'awscli'
 brew 'bash'
 brew 'bash-completion'
 brew 'bat'
-# brew 'coreutils' # Those that come with macOS are outdated
+brew 'coreutils' # Those that come with macOS are outdated
 # brew 'direnv' # https://github.com/direnv/direnv#direnv----unclutter-your-profile
 brew 'git'
 brew 'grep'
-# brew 'httpie'
+brew 'httpie'
 brew 'icu4c'
 brew 'libffi'
+brew 'lynx'
 brew 'mackup'
 brew 'mas'
 # brew 'packer'
-# brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
+brew 'pandoc'
+brew 'pkg-config' # https://github.com/driesvints/dotfiles/issues/20
 brew 'rbenv'
 # brew 'rbenv-gemset'
 brew 'ruby-build'
 brew 'rbenv-default-gems'
 # brew 'rbenv-user-gems' # Have to install manually https://github.com/mislav/rbenv-user-gems
 # brew 'rbenv-vars'
-# brew 'screen'
+brew 'screen'
 # brew 'terraform'
 # brew 'tree'
 # brew 'vaulted'
@@ -43,19 +46,20 @@ brew 'zsh-syntax-highlighting'
 # Development
 # brew 'apache-httpd'
 # brew 'docker' # Use the cask version instead
-# brew 'docker-compose'
+# brew 'docker-compose' # Ships with cask version (I think)
+brew 'gh'
 brew 'grip' # Preview GitHub Markdown files like Readme locally before committing them
 # brew 'heroku' # Heroku CLI, from heroku/brew tap
-brew 'hub' # A command-line tool that makes git easier to use with GitHub
+# brew 'hub' # A command-line tool that makes git easier to use with GitHub
 brew 'imagemagick'
 # brew 'mongodb', restart_service: true
-# brew 'mysql', restart_service: true
-# brew 'postgresql' # Necessary for libs, but use Postgres.app for service
+brew 'mysql', restart_service: true
+brew 'postgresql' # Necessary for libs, but use Postgres.app for service
 brew 'putty'
 # brew 'python'
 # brew 'node' # Prefer using NVM instead
 # brew 'nvm' # Prefer the official install script (see ./install.sh)
-# brew 'redis', restart_service: true
+brew 'redis', restart_service: true
 brew 'sqlite'
 # brew 'yarn' # Prefer using NVM instead
 
@@ -70,13 +74,13 @@ cask 'cyberduck'
 # cask 'datagrip'
 cask 'db-browser-for-sqlite'
 cask 'divvy'
-# cask 'docker'
+cask 'docker'
 cask 'dropbox'
 # cask 'duplicate-annihilator' # prefer https://www.brattoo.com/propaganda/downloadDap.php?show=true
 cask 'freeze'
 cask 'firefox'
 cask 'gemini'
-# cask 'github' # GitHub Desktop
+cask 'github' # GitHub Desktop
 cask 'google-chrome'
 # cask 'google-backup-and-sync' # for personal google accounts
 cask 'google-drive-file-stream' # only for corporate google accounts
