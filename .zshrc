@@ -56,7 +56,8 @@ ZSH_CUSTOM=$DOTFILES
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(git git-extras)
-plugins=(dotenv                   # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/dotenv
+plugins=(common-aliases           # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/common-aliases
+         dotenv                   # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/dotenv
          encode64                 # encode64/e64; decode64/d64
          history                  # h (history); hs (grep); hsi (grep -i)
          history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
@@ -66,7 +67,6 @@ plugins=(dotenv                   # https://github.com/robbyrussell/oh-my-zsh/tr
          screen                   # let the zsh tell screen what the title and hardstatus of the tab should be
          sudo)                    # ESC twice puts sudo in front of the current command or the last one
          # bundler                  # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/bundler
-         # common-aliases           # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/common-aliases
          # jira                     # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/jira
          # jsontools                # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
          # rbenv                    # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
@@ -116,3 +116,6 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 # load iTerm2 shell integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+
+# Load rbenv
+eval "$(rbenv init -)"
