@@ -5,6 +5,7 @@ tap "homebrew/cask-fonts"
 # tap "homebrew/cask-versions"
 tap "homebrew/cask"
 # tap "homebrew/core"
+# tap "mongodb/brew"
 # tap "homebrew/services"
 # tap "heroku/brew"
 tap "github/gh"
@@ -52,7 +53,7 @@ brew 'grip' # Preview GitHub Markdown files like Readme locally before committin
 # brew 'heroku' # Heroku CLI, from heroku/brew tap
 # brew 'hub' # A command-line tool that makes git easier to use with GitHub
 brew 'imagemagick'
-# brew 'mongodb', restart_service: true
+# brew 'mongodb-community', restart_service: true
 brew 'mysql', restart_service: true
 brew 'postgresql' # Necessary for libs, but use Postgres.app for service
 brew 'putty'
