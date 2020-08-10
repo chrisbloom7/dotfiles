@@ -36,6 +36,7 @@ DETACHED="\u27a6"
 CROSS="\u2718"
 LIGHTNING="\u26a1"
 GEAR="\u2699"
+RUBY="\U1F48E"
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
@@ -120,6 +121,14 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment $PRIMARY_FG default " $symbols "
 }
 
+prompt_rbenv() {
+  local rbenv_info="$(rbenv_prompt_info | sed 's/[\(\)]//g')"
+
+  if [[ "$rbenv_info" != "system" ]]; then
+    prompt_segment 161 $PRIMARY_FG " $RUBY $rbenv_info"
+  fi
+}
+
 ## Main prompt
 prompt_agnoster_main() {
   RETVAL=$?
@@ -128,6 +137,7 @@ prompt_agnoster_main() {
   prompt_context
   prompt_dir
   prompt_git
+  prompt_rbenv
   prompt_end
 }
 

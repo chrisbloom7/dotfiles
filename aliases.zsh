@@ -26,7 +26,7 @@ reload() {
   # Use $SHELL if available; remove leading dash if login shell
   [[ -n "$SHELL" ]] && exec ${SHELL#-} || exec zsh
 }
-weather() { curl -4 wttr.in/${1:-SRQ}?${2:-n2} }
+weather() { curl -4 wttr.in/${1:-SRQ}\?${2:-n2} }
 
 # Directories
 alias dotfiles="cd $DOTFILES"
@@ -67,13 +67,13 @@ rvmrc() {
   fi
 }
 
-# Vagrant
-alias v="vagrant global-status"
-alias vup="vagrant up"
-alias vhalt="vagrant halt"
-alias vssh="vagrant ssh"
-alias vreload="vagrant reload"
-alias vrebuild="vagrant destroy --force && vagrant up"
+# # Vagrant
+# alias v="vagrant global-status"
+# alias vup="vagrant up"
+# alias vhalt="vagrant halt"
+# alias vssh="vagrant ssh"
+# alias vreload="vagrant reload"
+# alias vrebuild="vagrant destroy --force && vagrant up"
 
 # Docker
 #alias dstop="docker stop $(docker ps -a -q)"
@@ -83,6 +83,7 @@ alias vrebuild="vagrant destroy --force && vagrant up"
 #dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
 
 # Git
+alias gpom='git pull origin master -q'
 alias git-bin='git-branch-incoming'
 alias git-bout='git-branch-outgoing'
 alias git-mb='git-make-branch'

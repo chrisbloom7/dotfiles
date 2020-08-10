@@ -65,56 +65,56 @@ brew 'sqlite'
 # brew 'yarn' # Prefer using NVM instead
 
 # Apps
-cask 'alfred'
-cask 'beyond-compare'
-cask 'boinc'
-cask 'clamxav'
-cask 'cleanmymac'
-cask 'chromedriver'
-cask 'cyberduck'
-# cask 'datagrip'
-cask 'db-browser-for-sqlite'
-cask 'divvy'
-cask 'docker'
-cask 'dropbox'
-# cask 'duplicate-annihilator' # prefer https://www.brattoo.com/propaganda/downloadDap.php?show=true
-cask 'freeze'
-cask 'firefox'
-cask 'gemini'
-cask 'github' # GitHub Desktop
-cask 'google-chrome'
-# cask 'google-backup-and-sync' # for personal google accounts
-cask 'google-drive-file-stream' # only for corporate google accounts
-cask 'gpg-suite'
-# cask 'gog-galaxy'
-# cask 'grammarly'
-cask 'homebrew/cask-drivers/sonos'
-cask 'imageoptim'
-# cask 'insomnia'
-cask 'iterm2'
-# cask 'java' # Get the JDK, for building jruby
-cask 'macdown'
-cask 'mailplane'
-# cask 'opera'
-# cask 'postgres' # multi-version Postgres.app
-# cask 'postico' # Prefer DataGrip
-cask 'postman'
-cask 'sequel-pro'
-cask 'spotify'
-cask 'transmit'
-# cask 'vagrant'
-# cask 'virtualbox'
-# cask 'virtualbox-extension-pack'
-cask 'visual-studio-code'
-# cask 'vlc'
-cask 'voodoopad'
+cask 'alfred', force: true
+cask 'beyond-compare', force: true
+cask 'boinc', force: true
+cask 'clamxav', force: true
+cask 'cleanmymac', force: true
+cask 'chromedriver', force: true
+cask 'cyberduck', force: true
+# cask 'datagrip', force: true
+cask 'db-browser-for-sqlite', force: true
+cask 'divvy', force: true
+cask 'docker', force: true
+cask 'dropbox', force: true
+# cask 'duplicate-annihilator', force: true # prefer https://www.brattoo.com/propaganda/downloadDap.php?show=true
+cask 'freeze', force: true
+cask 'firefox', force: true
+cask 'gemini', force: true
+cask 'github', force: true # GitHub Desktop
+cask 'google-chrome', force: true
+# cask 'google-backup-and-sync', force: true # for personal google accounts
+cask 'google-drive-file-stream', force: true # only for corporate google accounts
+cask 'gpg-suite', force: true
+# cask 'gog-galaxy', force: true
+# cask 'grammarly', force: true
+cask 'homebrew/cask-drivers/sonos', force: true
+cask 'imageoptim', force: true
+# cask 'insomnia', force: true
+cask 'iterm2', force: true
+# cask 'java', force: true # Get the JDK, for building jruby
+cask 'macdown', force: true
+cask 'mailplane', force: true
+# cask 'opera', force: true
+# cask 'postgres', force: true # multi-version Postgres.app
+# cask 'postico', force: true # Prefer DataGrip
+cask 'postman', force: true
+cask 'sequel-pro', force: true
+cask 'spotify', force: true
+cask 'transmit', force: true
+# cask 'vagrant', force: true
+# cask 'virtualbox', force: true
+# cask 'virtualbox-extension-pack', force: true
+cask 'visual-studio-code', force: true
+# cask 'vlc', force: true
+cask 'voodoopad', force: true
 
 # Quicklook
-cask 'qlcolorcode'
-cask 'qlmarkdown'
-cask 'quicklook-json'
-cask 'quicklook-csv'
-cask 'qlstephen'
+cask 'qlcolorcode', force: true
+cask 'qlmarkdown', force: true
+cask 'quicklook-json', force: true
+cask 'quicklook-csv', force: true
+cask 'qlstephen', force: true
 
 # Fonts
 cask 'font-source-code-pro-for-powerline'
@@ -123,16 +123,17 @@ cask 'font-source-sans-pro'
 cask 'font-source-serif-pro'
 
 # Mac App Store
-mas '1Password 7 - Password Manager', id: 1333542190
-mas 'Encrypto', id: 935235287
-mas 'Giphy Capture', id: 668208984
-# mas 'LastPass', id: 926036361
-mas 'MindNode', id: 1289197285
-# mas 'Monosnap', id: 540348655
-mas 'Pixelmator', id: 407963104
-# mas 'Rested', id: 421879749
-mas 'Slack', id: 803453959
-mas 'Speedtest', id: 1153157709
-mas 'The Unarchiver', id: 425424353
-mas 'Window Focus', id: 1142625137
-mas 'Xcode', id: 497799835
+mas '1Password 7 - Password Manager', id: 1333542190, force: true
+mas 'Bear', id: 1091189122, force: true
+mas 'Encrypto', id: 935235287, force: true
+mas 'Giphy Capture', id: 668208984, force: true
+# mas 'LastPass', id: 926036361, force: true
+mas 'MindNode', id: 1289197285, force: true
+# mas 'Monosnap', id: 540348655, force: true
+mas 'Pixelmator', id: 407963104, force: true
+# mas 'Rested', id: 421879749, force: true
+mas 'Slack', id: 803453959, force: true
+mas 'Speedtest', id: 1153157709, force: true
+mas 'The Unarchiver', id: 425424353, force: true
+mas 'Window Focus', id: 1142625137, force: true
+mas 'Xcode', id: 497799835, force: true
