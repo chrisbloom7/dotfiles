@@ -56,7 +56,13 @@ if [[ -n $ZSH_VERSION ]]; then
 fi
 
 # Ruby
-alias epoch="ruby -e 'puts Time.now.to_i'"
+epoch() {
+  if [ $1 ]; then
+    ruby -e "puts Time.at($1)"
+  else
+    ruby -e "puts Time.now.to_i"
+  fi
+}
 alias timestamp='epoch'
 rvmrc() {
   if [ "$1" != "" ]
@@ -83,11 +89,12 @@ rvmrc() {
 #dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
 
 # Git
-alias gpom='git pull origin master -q'
+alias gcom='git com'
+alias gpom='git pom'
 alias git-bin='git-branch-incoming'
 alias git-bout='git-branch-outgoing'
 alias git-mb='git-make-branch'
-alias me='git pretty | grep "Chris Bloom" | less'
+# alias me='git pretty | grep "Chris Bloom" | less'
 git-make-branch() {
   echo "\$@ = '$@'"
   typeset branch
