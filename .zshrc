@@ -64,7 +64,6 @@ plugins=(
   history                  # h (history); hs (grep); hsi (grep -i)
   history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
   nvm                      # auto sources nvm
-  per-directory-history    # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/per-directory-history; `^G` to toggle
   rake-fast                # Fast rake autocompletion plugin that caches output
   rbenv                    # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
   screen                   # let the zsh tell screen what the title and hardstatus of the tab should be
