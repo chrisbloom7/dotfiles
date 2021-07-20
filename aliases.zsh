@@ -1,6 +1,6 @@
 # Shortcuts
 alias dots="$EDITOR $DOTFILES"
-alias beep="say -v Fred \"My liege, the task is complete\""
+alias beep="say -v Yuri \"My liege, the task is complete\""
 alias cls="clear"
 alias copyssh="pbcopy < $HOME/.ssh/id_rsa.pub"
 alias fixzoom="sudo killall VDCAssistant"
