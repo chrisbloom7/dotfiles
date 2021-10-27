@@ -1,6 +1,3 @@
-# This file is currently ignored with preference for the version backed
-# up by mackup
-
 # Compiled source #
 ###################
 *.com
@@ -41,3 +38,4 @@ Thumbs.db
 .idea/
 .vscode
 .vagrant/
+.rake_tasks

@@ -6,13 +6,13 @@ export DOTFILES=$HOME/.dotfiles
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-# Disable the annoying "You have new mail" message
-#unset MAILCHECK # This isn't working in oh_my_zsh :/
+# Enable completions
+autoload -Uz compinit && compinit
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="agnoster"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -25,8 +25,14 @@ HYPHEN_INSENSITIVE="true"
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
+# Uncomment the following line to automatically update without prompting.
+DISABLE_UPDATE_PROMPT="true"
+
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -47,17 +53,20 @@ COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
 HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
 ZSH_CUSTOM=$DOTFILES
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-# plugins=(git git-extras)
 plugins=(
   common-aliases           # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/common-aliases
   dotenv                   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/dotenv
@@ -76,10 +85,10 @@ plugins=(
   # sudo                     # ESC twice puts sudo in front of the current command or the last one
 )
 
-DEFAULT_USER="chrisbloom7"
-
-# Activate Oh-My-Zsh
 source $ZSH/oh-my-zsh.sh
+
+# User configuration
+DEFAULT_USER="chrisbloom7"
 
 # You may need to manually set your language environment
 export LC_ALL=en_US.UTF-8
@@ -94,18 +103,7 @@ else
 fi
 
 # Compilation flags
-export ARCHFLAGS="-arch x86_64"
-
-# # rbenv config: https://albertogrespan.com/blog/installing-ruby-the-right-way-on-os-x-using-rbenv/
-# export RUBY_CONFIGURE_OPTS="--with-openssl-dir=`brew --prefix openssl` --with-readline-dir=`brew --prefix readline` --with-libyaml-dir=`brew --prefix libyaml`"
-
-# Bundler Config Options
-# export LDFLAGS="-L/usr/local/opt/icu4c/lib -L/usr/local/opt/libffi/lib"
-# export CPPFLAGS="-I/usr/local/opt/icu4c/include"
-# export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"
-
-# ssh
-# TODO: export SSH_KEY_PATH="~/.ssh/dsa_id"
+# export ARCHFLAGS="-arch x86_64"
 
 # Ensure AWS defaults are set
 export AWS_DEFAULT_REGION=us-east-1
@@ -122,12 +120,6 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 # load iTerm2 shell integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
-
-# Load rbenv
-eval "$(rbenv init -)"
-
-# Nodenv for hubot
-eval "$(nodenv init -)"
 
 # Load fuzzy finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

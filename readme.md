@@ -33,7 +33,7 @@ If you did all of the above you may now follow these install instructions to set
 5. Copy your public and private SSH keys to `~/.ssh` and make sure they're set to `600`
 6. Clone this repo to `~/.dotfiles`
 7. Append `/usr/local/bin/zsh` to the end of your `/etc/shells` file
-8. Run `install.sh` to start the installation. Keep an eye on it to ensure it finishes, or resolve any errors and then restart it.
+8. Run `fresh.sh` to start the installation. Keep an eye on it to ensure it finishes, or resolve any errors and then restart it.
 9. Restore preferences by running `mackup restore`
 10. Restart your computer to finalize the process
 

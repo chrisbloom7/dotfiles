@@ -1,0 +1,65 @@
+[user]
+	name = Chris Bloom
+[github]
+	user = chrisbloom7
+[core]
+	autocrlf = input
+	safecrlf = warn
+	excludesfile = ~/.gitignore_global
+[alias]
+	# Shortcuts
+	br = branch
+	ci = commit
+	co = checkout
+	com = !git switch $(git head-branch)
+	pom = !git pull origin $(git head-branch)
+	stat = status
+
+	# Log reporting
+	last = log -1 HEAD
+	me = !git pretty | grep Chris\\ Bloom | less
+	pretty = log --pretty=format:"%h%x09%an%x09%ad%x09%s"
+	tree = log --graph --decorate --pretty=oneline --abbrev-commit
+
+	# Navigation
+	default-branch = !git config --global init.defaultBranch || echo 'master'
+	ignored = ls-files -o -i --exclude-standard
+	ls = ls-files
+	upstream-name = !git remote | egrep -o '(upstream|origin)' | tail -1
+	head-branch = !git remote show $(git upstream-name) | awk '/HEAD branch/ {print $NF}'
+
+	# Cleanup
+	nuke = !git clean -df && git reset --hard
+	sweep = !git fetch && git branch --merged $([[ $1 != \"-f\" ]] && git rev-parse $(git head-branch)) | egrep -v \"(^\\*|^\\s*(`git head-branch`|develop)$)\" | xargs git branch -d
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	grep = auto
+	interactive = auto
+	ui = true
+[diff]
+  tool = default-difftool
+[difftool "default-difftool"]
+  cmd = code --wait --diff $LOCAL $REMOTE
+[push]
+	default = simple
+[remote "origin"]
+	push = HEAD
+[ui]
+	interactive = auto
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[credential]
+	helper = store
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[fetch]
+	prune = true
