@@ -1,18 +1,24 @@
 #!/bin/sh
 
 # Check for Oh My Zsh and install if we don't have it
-if test -z $(which omz); then
-  /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
+if [ -d "$HOME/.oh-my-zsh/" ]
+then
+  echo "Oh My Zsh already installed, removing it"
+  rm -rf  "$HOME/.oh-my-zsh/"
 fi
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" "" --unattended
 
-[ -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ] && rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions"
+git clone https://github.com/olivierverdier/zsh-git-prompt.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-git-prompt"
 
-[ -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ] && rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-git clone https://github.com/zsh-users/zsh-autosuggestions.git "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+# Symlink .oh-my-zsh custom files
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/aliases.zsh" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/aliases.zsh"
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/agnoster.zsh-theme" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/agnoster.zsh-theme"
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/path.zsh" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/path.zsh"
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.gitconfig" "$HOME/.gitconfig"
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.gitignore_global" "$HOME/.gitignore_global"
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
 
-[ -d "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" ] && rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"
-git clone https://github.com/zsh-users/zsh-completions.git "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"
-
-[ -d "$HOME/.oh-my-zsh/custom/plugins/zsh-git-prompt" ] && rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-git-prompt"
-git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/.oh-my-zsh/custom/plugins/zsh-git-prompt"
+omz reload

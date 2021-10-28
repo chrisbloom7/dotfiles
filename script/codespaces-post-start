@@ -1,28 +1,8 @@
 #!/bin/sh
-
-# Symlink .oh-my-zsh custom files
-[ -s "$HOME/.oh-my-zsh/custom/aliases.zsh" ] && rm -rf "$HOME/.oh-my-zsh/custom/aliases.zsh"
-ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
-
-[ -s "$HOME/.oh-my-zsh/custom/agnoster.zsh-theme" ] && rm -rf "$HOME/.oh-my-zsh/custom/agnoster.zsh-theme"
-ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/agnoster.zsh-theme" "$HOME/.oh-my-zsh/custom/agnoster.zsh-theme"
-
-[ -s "$HOME/.oh-my-zsh/custom/path.zsh" ] && rm -rf "$HOME/.oh-my-zsh/custom/path.zsh"
-ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/path.zsh" "$HOME/.oh-my-zsh/custom/path.zsh"
-
-[ -s "$HOME/.gitconfig" ] && rm -rf "$HOME/.gitconfig"
-ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.gitconfig" "$HOME/.gitconfig"
-
-[ -s "$HOME/.gitignore_global" ] && rm -rf "$HOME/.gitignore_global"
-ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.gitignore_global" "$HOME/.gitignore_global"
-
-[ -s "$HOME/.zshrc" ] && rm -rf "$HOME/.zshrc"
-ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
+# Run by Codespaces after starting
 
 # Always want to use ZSH as my default shell (e.g. for SSH)
 if ! grep -q "root.*/bin/zsh" /etc/passwd
 then
-  chsh -s /bin/zsh root
+  sudo chsh -s /bin/zsh root
 fi
-
-omz reload
