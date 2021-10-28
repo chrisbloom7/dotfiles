@@ -19,3 +19,9 @@ git clone https://github.com/olivierverdier/zsh-git-prompt.git "${ZSH_CUSTOM:-~/
 ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/aliases.zsh" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/aliases.zsh"
 ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/agnoster.zsh-theme" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/agnoster.zsh-theme"
 ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/path.zsh" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/path.zsh"
+
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.gitconfig" "$HOME/.gitconfig"
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.gitignore_global" "$HOME/.gitignore_global"
+
+[ -f "$HOME/.zshrc" ] && rm -rf "$HOME/.zshrc"
+ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
