@@ -1,33 +1,4 @@
-#!/usr/bin/env bash
-
-SCRIPT_NAME=${1:-"script/codepaces-post-start"}
-
-# Send all our -x output to this file for later debugging
-LOG_DIR="$HOME/codepaces-post-start.logs"
-mkdir -p "${LOG_DIR}"
-exec 1>"${LOG_DIR}/stdout"
-exec 2>"${LOG_DIR}/stderr"
-exec 19>"${LOG_DIR}/trace"
-BASH_XTRACEFD=19
-
-set -x
-
-echo "${SCRIPT_NAME} start: $(date)"
-
-# DOTFILES_ROOT=$(pwd -P)
-
-set -e
-
-echo ""
-
-if [ -d "$HOME/zsh-git-prompt" ]
-then
-  echo "Updating zsh-git-prompt..."
-  (cd "$HOME/zsh-git-prompt" && git pull)
-else
-  echo "Cloning zsh-git-prompt..."
-  git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/zsh-git-prompt"
-fi
+#!/bin/sh
 
 # Always want to use ZSH as my default shell (e.g. for SSH)
 if ! grep -q "root.*/bin/zsh" /etc/passwd
@@ -41,5 +12,11 @@ apt-get install -y \
   zsh-autosuggestions \
   zsh-syntax-highlighting
 
-echo ""
-echo "🏁 Post start script finished! 🏁"
+if [ -d "$HOME/zsh-git-prompt" ]
+then
+  echo "Updating zsh-git-prompt..."
+  (cd "$HOME/zsh-git-prompt" && git pull)
+else
+  echo "Cloning zsh-git-prompt..."
+  git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/zsh-git-prompt"
+fi
