@@ -20,16 +20,12 @@ set -e
 
 echo ""
 
-echo "Checking ZSH..."
-echo "$ZSH"
 if [ -z "$ZSH" ]
 then
   echo "Setting ZSH..."
   ZSH="$HOME/.oh-my-zsh"
 fi
 
-echo "Checking ZSH_CUSTOM..."
-echo "$ZSH_CUSTOM"
 if [ -z "$ZSH_CUSTOM" ]
 then
   echo "Setting ZSH_CUSTOM..."

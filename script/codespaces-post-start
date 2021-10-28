@@ -1,8 +1,58 @@
-#!/bin/sh
+#!/usr/bin/env bash
+#
 # Run by Codespaces after starting
 
 # Always want to use ZSH as my default shell (e.g. for SSH)
 if ! grep -q "root.*/bin/zsh" /etc/passwd
 then
   sudo chsh -s /bin/zsh root
+fi
+
+
+if [ -z "$ZSH" ]
+then
+  echo "Setting ZSH..."
+  ZSH="$HOME/.oh-my-zsh"
+fi
+
+if [ -z "$ZSH_CUSTOM" ]
+then
+  echo "Setting ZSH_CUSTOM..."
+  ZSH_CUSTOM="$ZSH/custom"
+fi
+
+if [ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]
+then
+  echo "Updating zsh-syntax-highlighting..."
+  (cd "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" && git pull)
+else
+  echo "Cloning zsh-syntax-highlighting..."
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+fi
+
+if [ -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]
+then
+  echo "Updating zsh-autosuggestions..."
+  (cd "$ZSH_CUSTOM/plugins/zsh-autosuggestions" && git pull)
+else
+  echo "Cloning zsh-autosuggestions..."
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+fi
+
+if [ -d "$ZSH_CUSTOM/plugins/zsh-completions" ]
+then
+  echo "Updating zsh-completions..."
+  (cd "$ZSH_CUSTOM/plugins/zsh-completions" && git pull)
+else
+  echo "Cloning zsh-completions..."
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-completions"
+fi
+
+if [ -d "$ZSH_CUSTOM/plugins/zsh-git-prompt" ]
+then
+  echo "Updating zsh-git-prompt..."
+  (cd "$ZSH_CUSTOM/plugins/zsh-git-prompt" && git pull)
+else
+  echo "Cloning zsh-git-prompt..."
+  git clone https://github.com/olivierverdier/zsh-git-prompt.git "$ZSH_CUSTOM/plugins/zsh-git-prompt"
 fi
