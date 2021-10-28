@@ -1,7 +1,3 @@
-[user]
-	name = Chris Bloom
-[github]
-	user = chrisbloom7
 [core]
 	autocrlf = input
 	safecrlf = warn
