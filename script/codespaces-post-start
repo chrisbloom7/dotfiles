@@ -1,9 +1,11 @@
 #!/bin/sh
 
+set -e
+
 # Always want to use ZSH as my default shell (e.g. for SSH)
 if ! grep -q "root.*/bin/zsh" /etc/passwd
 then
-  sudo chsh -s /bin/zsh root
+  chsh -s /bin/zsh root
 fi
 
 git config --global --unset url."git@github.com:".insteadOf
