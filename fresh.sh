@@ -2,13 +2,10 @@
 
 echo "Setting up your Mac..."
 
-# Check for Oh My Zsh and install if we don't have it
-if test ! $(which omz); then
-  /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
-fi
+script/setup
 
 # Check for Homebrew and install if we don't have it
-if test ! $(which brew); then
+if [[ -z $(which brew) ]]; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
@@ -69,6 +66,14 @@ git clone git@github.com:chrisbloom7/statblock-shop.git $HOME/src/chrisbloom7/st
 
 # Install iTerm2 shell integration for Zsh
 curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh
+
+# Symlink .oh-my-zsh custom files
+[ -s "$HOME/.oh-my-zsh/custom/aliases.zsh" ] && rm -rf "$HOME/.oh-my-zsh/custom/aliases.zsh"
+ln -s "$HOME/.dotfiles/aliases.zsh" "$HOME/.oh-my-zsh/custom/aliases.zsh"
+[ -s "$HOME/.oh-my-zsh/custom/agnoster.zsh-theme" ] && rm -rf "$HOME/.oh-my-zsh/custom/agnoster.zsh-theme"
+ln -s "$HOME/.dotfiles/agnoster.zsh-theme" "$HOME/.oh-my-zsh/custom/agnoster.zsh-theme"
+[ -s "$HOME/.oh-my-zsh/custom/path.zsh" ] && rm -rf "$HOME/.oh-my-zsh/custom/path.zsh"
+ln -s "$HOME/.dotfiles/path.zsh" "$HOME/.oh-my-zsh/custom/path.zsh"
 
 # Symlink .zshrc
 [ -s "$HOME/.zshrc" ] && rm -rf "$HOME/.zshrc"

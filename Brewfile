@@ -39,10 +39,10 @@ brew 'screen'
 # brew 'tree'
 # brew 'vaulted'
 brew 'zsh'
-brew 'zsh-autosuggestions'
-brew 'zsh-completions'
-brew 'zsh-git-prompt'
-brew 'zsh-syntax-highlighting'
+# brew 'zsh-autosuggestions'     # sourced in script/setup
+# brew 'zsh-completions'         # sourced in script/setup
+# brew 'zsh-git-prompt'          # sourced in script/setup
+# brew 'zsh-syntax-highlighting' # sourced in script/setup
 
 # Development
 # brew 'apache-httpd'

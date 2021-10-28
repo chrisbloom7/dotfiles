@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Check for Oh My Zsh and install if we don't have it
+if [[ -z $(which omz) ]]; then
+  /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
+fi
+
+[ -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ] && rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+
+[ -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ] && rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+git clone https://github.com/zsh-users/zsh-autosuggestions.git "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+
+[ -d "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" ] && rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"
+git clone https://github.com/zsh-users/zsh-completions.git "$HOME/.oh-my-zsh/custom/plugins/zsh-completions"
+
+[ -d "$HOME/.oh-my-zsh/custom/plugins/zsh-git-prompt" ] && rm -rf "$HOME/.oh-my-zsh/custom/plugins/zsh-git-prompt"
+git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/.oh-my-zsh/custom/plugins/zsh-git-prompt"

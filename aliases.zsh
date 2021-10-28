@@ -14,18 +14,7 @@ readme () {
     pandoc README.md | lynx -stdin
   fi
 }
-reload() {
-  local cache="$ZSH_CACHE_DIR"
-  autoload -U compinit zrecompile
-  compinit -i -d "$cache/zcomp-$HOST"
-
-  for f in ~/.zshrc "$cache/zcomp-$HOST"; do
-    zrecompile -p $f && command rm -f $f.zwc.old
-  done
-
-  # Use $SHELL if available; remove leading dash if login shell
-  [[ -n "$SHELL" ]] && exec ${SHELL#-} || exec zsh
-}
+alias reload="omz reload"
 weather() { curl -4 wttr.in/${1:-SRQ}\?${2:-n2} }
 
 # Directories

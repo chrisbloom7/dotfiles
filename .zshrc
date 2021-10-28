@@ -60,7 +60,7 @@ COMPLETION_WAITING_DOTS="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$DOTFILES
+# ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -76,6 +76,9 @@ plugins=(
   rake-fast                # Fast rake autocompletion plugin that caches output
   rbenv                    # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
   screen                   # let the zsh tell screen what the title and hardstatus of the tab should be
+  zsh-autosuggestions
+  zsh-completions
+  zsh-syntax-highlighting
   ### INACTIVE ###
   # bundler                  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/bundler
   # encode64                 # encode64/e64; decode64/d64
@@ -109,17 +112,14 @@ fi
 export AWS_DEFAULT_REGION=us-east-1
 
 # Load project aliases
-source $HOME/.aliases
+[[ -e "${HOME}/.aliases" ]] && source "${HOME}/.aliases"
 
-# load zsh extensions from Homebrew
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/local/opt/zsh-git-prompt/zshrc.sh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fpath=(/usr/local/share/zsh-completions $fpath)
+# load git prompt extensions
+[[ -e "${ZSH_CUSTOM}/.plugins/zsh-git-prompt/zshrc.sh" ]] && source "${ZSH_CUSTOM}/plugins/zsh-git-prompt/zshrc.sh"
 
 # load iTerm2 shell integration
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+[[ -e "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 
 # Load fuzzy finder
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -e "${HOME}/.fzf.zsh" ] && source "${HOME}/.fzf.zsh"
