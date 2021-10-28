@@ -66,5 +66,19 @@ else
   echo "MISSING /workspaces/.codespaces/.persistedshare/dotfiles"
 fi
 
+echo "Installing dependencies..."
+apt-get install -y \
+  zsh-autosuggestions \
+  zsh-syntax-highlighting
+
+if [ -d "$HOME/zsh-git-prompt" ]
+then
+  echo "Updating zsh-git-prompt..."
+  (cd "$HOME/zsh-git-prompt" && git pull)
+else
+  echo "Cloning zsh-git-prompt..."
+  git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/zsh-git-prompt"
+fi
+
 echo ""
 echo "🏁 All installed! 🏁"
