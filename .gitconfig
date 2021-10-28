@@ -1,3 +1,8 @@
+[user]
+	name = Chris Bloom
+	email = chrisbloom7@github.com
+[github]
+	user = chrisbloom7
 [core]
 	autocrlf = input
 	safecrlf = warn
@@ -51,6 +56,8 @@
 	clean = git-lfs clean -- %f
 [credential]
 	helper = store
+[credential "https://github.com"]
+	username = chrisbloom7
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [init]
@@ -59,6 +66,3 @@
 	rebase = true
 [fetch]
 	prune = true
-[user]
-	name = Chris Bloom
-	email = chrisbloom7@github.com
