@@ -53,5 +53,3 @@ git clone https://github.com/zsh-users/zsh-completions.git "$ZSH_CUSTOM/plugins/
 
 echo "Cloning zsh-git-prompt..."
 git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/zsh-git-prompt"
-
-bin/zsh -c "omz update"
