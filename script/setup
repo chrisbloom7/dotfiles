@@ -1,5 +1,25 @@
 #!/bin/sh
 
+SCRIPT_NAME=${1:-"script/setup"}
+
+# Send all our -x output to this file for later debugging
+LOG_DIR="$HOME/setup.logs"
+mkdir -p "${LOG_DIR}"
+exec 1>"${LOG_DIR}/stdout"
+exec 2>"${LOG_DIR}/stderr"
+exec 19>"${LOG_DIR}/trace"
+BASH_XTRACEFD=19
+
+set -x
+
+echo "${SCRIPT_NAME} start: $(date)"
+
+# DOTFILES_ROOT=$(pwd -P)
+
+set -e
+
+echo ""
+
 # Check for Oh My Zsh and install if we don't have it
 if [ -d "$HOME/.oh-my-zsh/" ]
 then
@@ -12,18 +32,31 @@ else
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" "" --unattended
 fi
 
+# (ssh-keygen -F github.com || ssh-keyscan github.com) >> ~/.ssh/known_hosts
+
+echo "Copying git config files..."
 cp "/workspaces/.codespaces/.persistedshare/dotfiles/.gitignore_global" "$HOME/.gitignore_global"
 cp "/workspaces/.codespaces/.persistedshare/dotfiles/.gitconfig" "$HOME/.gitconfig"
 git config --global --unset url."git@github.com:".insteadOf
 
+echo "Cloning omz plugins..."
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
 git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions"
 git clone https://github.com/olivierverdier/zsh-git-prompt.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-git-prompt"
 
+echo "Copying omz scripts..."
 cp "/workspaces/.codespaces/.persistedshare/dotfiles/aliases.zsh" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/aliases.zsh"
 cp "/workspaces/.codespaces/.persistedshare/dotfiles/agnoster.zsh-theme" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/agnoster.zsh-theme"
 cp "/workspaces/.codespaces/.persistedshare/dotfiles/path.zsh" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/path.zsh"
 
-[ -f "$HOME/.zshrc" ] && rm -rf "$HOME/.zshrc"
+if [ -f "$HOME/.zshrc" ]
+then
+  echo "Removing default .zshrc..."
+  rm -rf "$HOME/.zshrc"
+fi
+echo "Copying custom .zshrc..."
 cp "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
+
+echo ""
+echo "🏁 All installed! 🏁"
