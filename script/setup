@@ -20,14 +20,30 @@ set -e
 
 echo ""
 
-# Check for Oh My Zsh and install if we don't have it
-if [ -d "$HOME/.oh-my-zsh/" ]
+echo "Checking ZSH..."
+echo "$ZSH"
+if [ -z "$ZSH" ]
 then
-  if [ -d "$HOME/.oh-my-zsh/custom" ]
+  echo "Setting ZSH..."
+  ZSH="$HOME/.oh-my-zsh"
+fi
+
+echo "Checking ZSH_CUSTOM..."
+echo "$ZSH_CUSTOM"
+if [ -z "$ZSH_CUSTOM" ]
+then
+  echo "Setting ZSH_CUSTOM..."
+  ZSH_CUSTOM="$ZSH/custom"
+fi
+
+# Check for Oh My Zsh and install if we don't have it
+if [ -d "$ZSH" ]
+then
+  if [ -d "$ZSH_CUSTOM" ]
   then
-    echo "Oh My Zsh custom folder already exists, removing it"
-    rm -rf  "$HOME/.oh-my-zsh/custom"
-    mkdir -p "$HOME/.oh-my-zsh/custom"
+    echo "Oh My Zsh custom folder already exists, deleting and recreating it"
+    rm -rf  "$ZSH_CUSTOM"
+    mkdir -p "$ZSH_CUSTOM"
   fi
 else
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" "" --unattended
@@ -35,29 +51,28 @@ fi
 
 # (ssh-keygen -F github.com || ssh-keyscan github.com) >> ~/.ssh/known_hosts
 
-echo "Copying git config files..."
-cp "/workspaces/.codespaces/.persistedshare/dotfiles/.gitignore_global" "$HOME/.gitignore_global"
-cp "/workspaces/.codespaces/.persistedshare/dotfiles/.gitconfig" "$HOME/.gitconfig"
-git config --global --unset url."git@github.com:".insteadOf
-
-echo "Cloning omz plugins..."
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions"
-git clone https://github.com/olivierverdier/zsh-git-prompt.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-git-prompt"
-
-echo "Copying omz scripts..."
-cp "/workspaces/.codespaces/.persistedshare/dotfiles/aliases.zsh" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/aliases.zsh"
-cp "/workspaces/.codespaces/.persistedshare/dotfiles/agnoster.zsh-theme" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/agnoster.zsh-theme"
-cp "/workspaces/.codespaces/.persistedshare/dotfiles/path.zsh" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/path.zsh"
-
-if [ -f "$HOME/.zshrc" ]
+if [ -d "/workspaces/.codespaces/.persistedshare/dotfiles" ]
 then
-  echo "Removing default .zshrc..."
-  rm -rf "$HOME/.zshrc"
+  echo "Copying git config files..."
+  cp "/workspaces/.codespaces/.persistedshare/dotfiles/.gitignore_global" "$HOME/.gitignore_global"
+  cp "/workspaces/.codespaces/.persistedshare/dotfiles/.gitconfig" "$HOME/.gitconfig"
+  git config --global --unset url."git@github.com:".insteadOf
+
+  echo "Copying omz scripts..."
+  cp "/workspaces/.codespaces/.persistedshare/dotfiles/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
+  cp "/workspaces/.codespaces/.persistedshare/dotfiles/agnoster.zsh-theme" "$ZSH_CUSTOM/agnoster.zsh-theme"
+  cp "/workspaces/.codespaces/.persistedshare/dotfiles/path.zsh" "$ZSH_CUSTOM/path.zsh"
+
+  if [ -f "$HOME/.zshrc" ]
+  then
+    echo "Removing default .zshrc..."
+    rm -rf "$HOME/.zshrc"
+  fi
+  echo "Copying custom .zshrc..."
+  cp "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
+else
+  echo "MISSING /workspaces/.codespaces/.persistedshare/dotfiles"
 fi
-echo "Copying custom .zshrc..."
-cp "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
 
 echo ""
 echo "🏁 All installed! 🏁"
