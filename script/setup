@@ -1,24 +1,4 @@
-#!/usr/bin/env bash
-
-SCRIPT_NAME=${1:-"script/setup"}
-
-# Send all our -x output to this file for later debugging
-LOG_DIR="$HOME/setup.logs"
-mkdir -p "${LOG_DIR}"
-exec 1>"${LOG_DIR}/stdout"
-exec 2>"${LOG_DIR}/stderr"
-exec 19>"${LOG_DIR}/trace"
-BASH_XTRACEFD=19
-
-set -x
-
-echo "${SCRIPT_NAME} start: $(date)"
-
-# DOTFILES_ROOT=$(pwd -P)
-
-set -e
-
-echo ""
+#!/bin/sh
 
 if [ -z "$ZSH" ]
 then
@@ -73,6 +53,3 @@ git clone https://github.com/zsh-users/zsh-completions.git "$ZSH_CUSTOM/plugins/
 
 echo "Cloning zsh-git-prompt..."
 git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/zsh-git-prompt"
-
-echo ""
-echo "🏁 All installed! 🏁"
