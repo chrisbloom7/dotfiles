@@ -77,9 +77,9 @@ plugins=(
   rbenv                    # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
   screen                   # let the zsh tell screen what the title and hardstatus of the tab should be
   zsh-autosuggestions
+  zsh-completions
   zsh-syntax-highlighting
   ### INACTIVE ###
-  # zsh-completions
   # bundler                  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/bundler
   # encode64                 # encode64/e64; decode64/d64
   # httpie                   # completion for HTTPie
@@ -115,7 +115,7 @@ export AWS_DEFAULT_REGION=us-east-1
 [[ -e "${HOME}/.aliases" ]] && source "${HOME}/.aliases"
 
 # load git prompt extensions
-[[ -e "${ZSH_CUSTOM}/.plugins/zsh-git-prompt/zshrc.sh" ]] && source "${ZSH_CUSTOM}/plugins/zsh-git-prompt/zshrc.sh"
+[[ -e "$HOME/zsh-git-prompt/zshrc.sh" ]] && source "$HOME/zsh-git-prompt/zshrc.sh"
 
 # load iTerm2 shell integration
 [[ -e "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"

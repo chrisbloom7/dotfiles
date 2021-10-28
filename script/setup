@@ -66,27 +66,13 @@ else
   echo "MISSING /workspaces/.codespaces/.persistedshare/dotfiles"
 fi
 
-echo "Installing dependencies..."
-sudo apt-get install -y \
-  zsh-autosuggestions \
-  zsh-syntax-highlighting
+echo "Cloning omz plugins..."
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+git clone https://github.com/zsh-users/zsh-completions.git "$ZSH_CUSTOM/plugins/zsh-completions"
 
-if [ -d "$HOME/zsh-git-prompt" ]
-then
-  echo "Updating zsh-git-prompt..."
-  (cd "$HOME/zsh-git-prompt" && git pull)
-else
-  echo "Cloning zsh-git-prompt..."
-  git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/zsh-git-prompt"
-fi
+echo "Cloning zsh-git-prompt..."
+git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/zsh-git-prompt"
 
 echo ""
 echo "🏁 All installed! 🏁"
-
-
-
-# echo "Cloning omz plugins..."
-# git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-# git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-# git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions"
-# git clone https://github.com/olivierverdier/zsh-git-prompt.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-git-prompt"
