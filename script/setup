@@ -35,17 +35,12 @@ fi
 # Check for Oh My Zsh and install if we don't have it
 if [ -d "$ZSH" ]
 then
-  if [ -d "$ZSH_CUSTOM" ]
-  then
-    echo "Oh My Zsh custom folder already exists, deleting and recreating it"
-    rm -rf  "$ZSH_CUSTOM"
-    mkdir -p "$ZSH_CUSTOM"
-  fi
+  echo "Oh My Zsh already installed..."
+  mkdir -p "$ZSH_CUSTOM"
 else
+  echo "Installing Oh My Zsh..."
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" "" --unattended
 fi
-
-# (ssh-keygen -F github.com || ssh-keyscan github.com) >> ~/.ssh/known_hosts
 
 if [ -d "/workspaces/.codespaces/.persistedshare/dotfiles" ]
 then
@@ -64,6 +59,7 @@ then
     echo "Removing default .zshrc..."
     rm -rf "$HOME/.zshrc"
   fi
+
   echo "Copying custom .zshrc..."
   cp "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
 else

@@ -77,9 +77,9 @@ plugins=(
   rbenv                    # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
   screen                   # let the zsh tell screen what the title and hardstatus of the tab should be
   zsh-autosuggestions
-  zsh-completions
   zsh-syntax-highlighting
   ### INACTIVE ###
+  # zsh-completions
   # bundler                  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/bundler
   # encode64                 # encode64/e64; decode64/d64
   # httpie                   # completion for HTTPie
