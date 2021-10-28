@@ -67,10 +67,6 @@ git clone git@github.com:chrisbloom7/improved-initiative.git $HOME/src/chrisbloo
 git clone git@github.com:chrisbloom7/robinina.art.git $HOME/src/chrisbloom7/robinina.art
 git clone git@github.com:chrisbloom7/statblock-shop.git $HOME/src/chrisbloom7/statblock-shop
 
-# Install Oh-My-Zsh - If you've run `mackup restore` or installed OMZ previously this step may fail
-# TODO: What happens when this fails? Can we detect installation status or catch the error?
-curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | zsh
-
 # Install iTerm2 shell integration for Zsh
 curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh
 

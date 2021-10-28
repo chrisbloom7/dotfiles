@@ -1,10 +1,9 @@
 #!/bin/sh
 
+# Check for Oh My Zsh and install if we don't have it
+if test ! $(which omz); then
+  /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)"
+fi
+
 # Make ZSH the default shell environment
 chsh -s $(which zsh)
-
-# Install Oh-My-Zsh
-curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | zsh
-
-cp ".gitconfig" "$HOME/.gitconfig"
-cp ".gitconfig" "$HOME/.gitconfig"

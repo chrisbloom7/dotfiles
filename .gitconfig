@@ -59,3 +59,6 @@
 	rebase = true
 [fetch]
 	prune = true
+[user]
+	name = Chris Bloom
+	email = chrisbloom7@github.com
