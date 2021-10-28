@@ -1,32 +1,8 @@
-#!/usr/bin/env bash
-#
+#!/bin/sh
 # Run by Codespaces after starting
-
-SCRIPT_NAME=${1:-"script/codespaces-post-start"}
-
-# Send all our -x output to this file for later debugging
-LOG_DIR="$HOME/codespaces-post-start.logs"
-mkdir -p "${LOG_DIR}"
-exec 1>"${LOG_DIR}/stdout"
-exec 2>"${LOG_DIR}/stderr"
-exec 19>"${LOG_DIR}/trace"
-BASH_XTRACEFD=19
-
-set -x
-
-echo "${SCRIPT_NAME} start: $(date)"
-
-# DOTFILES_ROOT=$(pwd -P)
-
-set -e
-
-echo ""
 
 # Always want to use ZSH as my default shell (e.g. for SSH)
 if ! grep -q "root.*/bin/zsh" /etc/passwd
 then
   sudo chsh -s /bin/zsh root
 fi
-
-echo ""
-echo "🏁 Post start complete! 🏁"

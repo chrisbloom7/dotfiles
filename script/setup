@@ -27,6 +27,7 @@ then
   then
     echo "Oh My Zsh custom folder already exists, removing it"
     rm -rf  "$HOME/.oh-my-zsh/custom"
+    mkdir -p "$HOME/.oh-my-zsh/custom"
   fi
 else
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" "" --unattended
