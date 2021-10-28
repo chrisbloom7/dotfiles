@@ -3,10 +3,14 @@
 # Check for Oh My Zsh and install if we don't have it
 if [ -d "$HOME/.oh-my-zsh/" ]
 then
-  echo "Oh My Zsh already installed, removing it"
-  rm -rf  "$HOME/.oh-my-zsh/"
+  if [ -d "$HOME/.oh-my-zsh/custom" ]
+  then
+    echo "Oh My Zsh custom folder already exists, removing it"
+    rm -rf  "$HOME/.oh-my-zsh/custom"
+  fi
+else
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" "" --unattended
 fi
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" "" --unattended
 
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
 git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
@@ -20,5 +24,3 @@ ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/path.zsh" "${ZSH_CUSTOM:
 ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.gitconfig" "$HOME/.gitconfig"
 ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.gitignore_global" "$HOME/.gitignore_global"
 ln -s "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
-
-omz reload
