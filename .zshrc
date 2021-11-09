@@ -1,5 +1,3 @@
-PATH="/usr/local/bin:$(getconf PATH)"
-
 # Path to your dotfiles installation.
 export DOTFILES=$HOME/.dotfiles
 
