@@ -1,6 +1,7 @@
 [user]
 	name = Chris Bloom
 	email = chrisbloom7@github.com
+	signingkey = B8BB552ABFFDAE06
 [github]
 	user = chrisbloom7
 [core]
@@ -66,3 +67,7 @@
 	rebase = true
 [fetch]
 	prune = true
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg

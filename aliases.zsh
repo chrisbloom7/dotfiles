@@ -106,11 +106,11 @@ parse_git_branch() {
 }
 git-branch-incoming() {
     echo branch \($1\) has these commits and \($(parse_git_branch)\) does not
-    git log ..$1 --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
+    git log --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local ..$1 | more
 }
 git-branch-outgoing() {
     echo branch \($(parse_git_branch)\) has these commits and \($1\) does not
-    git log $1.. --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
+    git log --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local $1.. | more
 }
 
 # # Java
