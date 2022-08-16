@@ -7,10 +7,11 @@ script/setup
 # Check for Homebrew and install if we don't have it
 if [[ -z $(which brew) ]]; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # Agree to Xcode licenses if necessary
-sudo xcodebuild -runFirstLaunch
+# sudo xcodebuild -runFirstLaunch
 
 # Update Homebrew recipes
 brew update
