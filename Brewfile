@@ -66,6 +66,12 @@ brew "terminal-notifier"
 # brew "yarn" # Prefer using NVM instead
 brew "zoom"
 
+# GPG
+brew "gpg2"
+brew "gnupg"
+brew "pinentry-mac"
+cask "gpg-suite", force: true
+
 # Apps
 cask "alfred", force: true
 cask "authy", force: true
@@ -91,7 +97,6 @@ cask "gemini", force: true
 cask "google-chrome", force: true
 # cask "google-backup-and-sync", force: true # for personal google accounts
 cask "google-drive-file-stream", force: true # only for corporate google accounts
-cask "gpg-suite", force: true
 # cask "gog-galaxy", force: true
 # cask "grammarly", force: true
 cask "graphiql", force: true
