@@ -73,6 +73,7 @@ brew "pinentry-mac"
 cask "gpg-suite", force: true
 
 # Apps
+cask "adobe-acrobat-reader", force: true
 cask "alfred", force: true
 cask "authy", force: true
 cask "beyond-compare", force: true
