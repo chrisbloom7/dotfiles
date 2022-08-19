@@ -84,6 +84,12 @@ ln -s "$HOME/.dotfiles/.zshrc" "$HOME/.zshrc"
 [ -s "$HOME/.gitconfig" ] && rm -rf "$HOME/.gitconfig"
 ln -s "$HOME/.dotfiles/.gitconfig" "$HOME/.gitconfig"
 
+# Codespaces has issues when GPG commit signing is enabled on the containers as
+# well as in gitconfig. Since our global gitconfig gets synced to dotfiles and # thus to codespaces, we can set some system level config here instead.
+git config --system user.signingkey B8BB552ABFFDAE06
+git config --system commit.gpgsign true
+git config --system gpg.program $(which gpg)
+
 # Symlink .gitignore_global
 [ -s "$HOME/.gitignore_global" ] && rm -rf "$HOME/.gitignore_global"
 ln -s "$HOME/.dotfiles/.gitignore_global" "$HOME/.gitignore_global"
