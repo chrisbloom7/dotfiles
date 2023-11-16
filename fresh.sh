@@ -12,6 +12,7 @@ fi
 
 # Agree to Xcode licenses if necessary
 # sudo xcodebuild -runFirstLaunch
+sudo xcodebuild -license accept
 
 # Update Homebrew recipes
 brew update

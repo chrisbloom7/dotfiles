@@ -62,6 +62,7 @@ brew "putty"
 # brew "nvm" # Prefer the official install script (see ./install.sh)
 brew "redis", restart_service: true
 brew "sqlite"
+brew "svn"
 brew "terminal-notifier"
 # brew "yarn" # Prefer using NVM instead
 brew "zoom"
@@ -137,11 +138,11 @@ cask "quicklook-csv", force: true
 cask "qlstephen", force: true
 
 # Fonts
-brew "svn"
 cask "font-source-code-pro-for-powerline"
 cask "font-source-code-pro"
 cask "font-source-sans-pro"
 cask "font-source-serif-pro"
+cask "font-monaspace"
 
 # Mac App Store
 mas "1Password 7 - Password Manager", id: 1333542190, force: true
