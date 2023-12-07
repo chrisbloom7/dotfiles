@@ -8,6 +8,7 @@ tap "homebrew/cask"
 # tap "mongodb/brew"
 # tap "homebrew/services"
 # tap "heroku/brew"
+tap "github/bootstrap"
 tap "github/gh"
 
 # Binaries
@@ -85,6 +86,7 @@ cask "chromedriver", force: true
 # cask "cyberduck", force: true
 # cask "datagrip", force: true
 # cask "db-browser-for-sqlite", force: true
+cask "deckset", force: true
 cask "discord", force: true
 cask "divvy", force: true
 cask "docker", force: true
@@ -108,7 +110,8 @@ cask "imageoptim", force: true
 # cask "insomnia", force: true
 cask "iterm2", force: true
 # cask "java", force: true # Get the JDK, for building jruby
-# cask "macdown", force: true
+cask "macos-vscode-codespaces", force: true
+cask "macdown", force: true
 cask "mailplane", force: true
 cask "monodraw", force: true
 cask "monitorcontrol", force: true
