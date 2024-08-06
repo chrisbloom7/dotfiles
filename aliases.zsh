@@ -22,28 +22,6 @@ alias dotfiles="cd $DOTFILES"
 alias library="cd $HOME/Library"
 function src() { cd "$HOME/src/$@" }
 
-
-# Add local ./bin folders to path if they are whitelisted
-if [[ -n $ZSH_VERSION ]]; then
-  [[ -z $AUTOBIN_LIST ]] && AUTOBIN_LIST=~/.autobin
-
-  _autobin_hook() {
-    if [[ -n $AUTOBIN_DIR ]]; then
-      # remove old dir from path
-      path=(${path:#$AUTOBIN_DIR})
-      unset AUTOBIN_DIR
-    fi
-    if [[ -d "${PWD}/bin" ]] && grep "${PWD}/bin" "$AUTOBIN_LIST" >/dev/null 2>&1; then
-      # add whitelisted dir to path
-      AUTOBIN_DIR="${PWD}/bin"
-      path=($AUTOBIN_DIR $path)
-    fi
-  }
-
-  [[ -z $chpwd_functions ]] && chpwd_functions=()
-  chpwd_functions=($chpwd_functions _autobin_hook)
-fi
-
 # Ruby
 epoch() {
   if [ $1 ]; then
@@ -120,3 +98,8 @@ git-branch-outgoing() {
 # alias java11='export JAVA_HOME=$JAVA_11_HOME'
 # # default to Java 11
 # java11
+
+# Python
+alias python="python3"
+alias py="python3"
+alias pip="pip3"

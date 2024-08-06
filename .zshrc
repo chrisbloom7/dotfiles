@@ -66,24 +66,33 @@ HIST_STAMPS="yyyy-mm-dd"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  common-aliases           # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/common-aliases
-  dotenv                   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/dotenv
-  history                  # h (history); hs (grep); hsi (grep -i)
-  history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
-  nvm                      # auto sources nvm
-  rake-fast                # Fast rake autocompletion plugin that caches output
-  rbenv                    # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
-  screen                   # let the zsh tell screen what the title and hardstatus of the tab should be
-  zsh-autosuggestions
-  zsh-completions
-  zsh-syntax-highlighting
-  ### INACTIVE ###
-  # bundler                  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/bundler
-  # encode64                 # encode64/e64; decode64/d64
-  # httpie                   # completion for HTTPie
-  # jira                     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/jira
-  # jsontools                # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
-  # sudo                     # ESC twice puts sudo in front of the current command or the last one
+  bundler                      # completion for basic bundler commands, as well as aliases and helper functions
+  common-aliases               # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/common-aliases
+  docker                       # auto-completion for docker as well as some aliases for common commands
+  docker-compose               # auto-completion for docker-compose as well as some aliases for common commands
+  dotenv                       # automatically load .env files when you cd into a directory
+  encode64                     # encode64/e64; encodefile64/ef64; decode64/d64
+  gh                           # adds completion for the GitHub CLI
+  git-prompt                   # displays information about the current git repository
+  golang                       # completion for the Go Programming Language
+  history                      # h (history); hl (less); hs (grep); hsi (grep -i)
+  httpie                       # completion for HTTPie, a command line HTTP client, a friendlier cURL replacement
+  jsontools                    # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
+  npm                          # auto-completion for npm as well as many useful aliases
+  nvm                          # auto-completion for nvm and automatically sources nvm
+  rails                        # auto-completion and aliases for rails and rake
+  rake-fast                    # Fast rake autocompletion plugin that caches output
+  rbenv                        # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
+  rvm                          # utility functions and completions for Ruby Version Manager
+  screen                       # sets title and hardstatus of the tab window for screen, the terminal multiplexer
+  sudo                         # Easily prefix your current or previous commands with sudo by pressing esc twice
+  tmux                         # aliases for tmux, the terminal multiplexer
+  virtualenv                   # displays information of the created virtual container and allows background theming
+  yarn                         # completion for the Yarn package manager, as well as some aliases for common commands
+  zsh-autosuggestions          # Fish-like autosuggestions for zsh
+  zsh-completions              # Additional completion definitions for Zsh
+  zsh-history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
+  zsh-syntax-highlighting      # Fish shell like syntax highlighting for Zsh
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -125,3 +134,6 @@ export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Add Java to path
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"

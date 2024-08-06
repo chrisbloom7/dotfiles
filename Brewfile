@@ -1,164 +1,341 @@
-# Taps
-# tap "homebrew/bundle"
-# tap "homebrew/cask-drivers"
-tap "homebrew/cask-fonts"
-# tap "homebrew/cask-versions"
-tap "homebrew/cask"
-# tap "homebrew/core"
-# tap "mongodb/brew"
-# tap "homebrew/services"
-# tap "heroku/brew"
 tap "github/bootstrap"
 tap "github/gh"
+tap "heroku/brew"
+tap "homebrew/bundle"
+tap "homebrew/cask-fonts"
+tap "homebrew/services"
 
-# Binaries
+# Codec library for encoding and decoding AV1 video streams
+brew "aom"
+
+# Official Amazon AWS command-line interface
 brew "awscli"
+
+# Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
+
+# Programmable completion for Bash 3.2
 brew "bash-completion"
+
+# Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
-brew "coreutils" # Those that come with macOS are outdated
-# brew "direnv" # https://github.com/direnv/direnv#direnv----unclutter-your-profile
-brew "git"
-brew "grep"
-brew "httpie"
-brew "icu4c"
-brew "libffi"
-# brew "lynx"
-brew "mackup"
-brew "mas"
-# brew "packer"
-brew "pandoc"
-brew "pkg-config" # https://github.com/driesvints/dotfiles/issues/20
-brew "rbenv"
-# brew "rbenv-gemset"
-brew "ruby-build"
-brew "rbenv-default-gems"
-# brew "rbenv-user-gems" # Have to install manually https://github.com/mislav/rbenv-user-gems
-# brew "rbenv-vars"
-brew "screen"
-# brew "terraform"
-# brew "tree"
-# brew "vaulted"
-brew "zsh"
-# brew "zsh-autosuggestions"     # sourced in script/setup
-# brew "zsh-completions"         # sourced in script/setup
-# brew "zsh-git-prompt"          # sourced in script/setup
-# brew "zsh-syntax-highlighting" # sourced in script/setup
 
-# Development
-# brew "apache-httpd"
-# brew "docker" # Use the cask version instead
-# brew "docker-compose" # Ships with cask version (I think)
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+
+# GitHub command-line tool
 brew "gh"
-brew "grip" # Preview GitHub Markdown files like Readme locally before committing them
-# brew "heroku" # Heroku CLI, from heroku/brew tap
-# brew "hub" # A command-line tool that makes git easier to use with GitHub
-brew "imagemagick"
-# brew "mongodb-community", restart_service: true
-brew "mysql", restart_service: true
-brew "postgresql" # Necessary for libs, but use Postgres.app for service
-brew "putty"
-# brew "python"
-# brew "node" # Prefer using NVM instead
-# brew "nvm" # Prefer the official install script (see ./install.sh)
-brew "redis", restart_service: true
-brew "sqlite"
-brew "svn"
-brew "terminal-notifier"
-# brew "yarn" # Prefer using NVM instead
-brew "zoom"
 
-# GPG
-brew "gpg2"
+# Distributed revision control system
+brew "git"
+
+# GNU Transport Layer Security (TLS) Library
+brew "gnutls"
+
+# GNU Pretty Good Privacy (PGP) package
 brew "gnupg"
+
+# GNU grep, egrep and fgrep
+brew "grep"
+
+# GitHub Markdown previewer
+brew "grip"
+
+# Manage compile and link flags for libraries
+brew "pkg-config"
+
+# User-friendly cURL replacement (command-line HTTP client)
+brew "httpie"
+
+# Tools and libraries to manipulate images in many formats
+brew "imagemagick"
+
+# Portable Foreign Function Interface library
+brew "libffi"
+
+# Text-based web browser
+brew "lynx"
+
+# Keep your Mac's application settings in sync
+brew "mackup"
+
+# Mac App Store command-line interface
+brew "mas"
+
+# Open source relational database management system
+brew "mysql", restart_service: true
+
+# Development kit for the Java programming language
+brew "openjdk"
+
+# Development kit for the Java programming language
+brew "openjdk@11"
+
+# Swiss-army knife of markup format conversion
+brew "pandoc"
+
+# Pinentry for GPG on Mac
 brew "pinentry-mac"
-cask "gpg-suite", force: true
 
-# Apps
-cask "adobe-acrobat-reader", force: true
-cask "alfred", force: true
-cask "authy", force: true
-cask "beyond-compare", force: true
-cask "boinc", force: true
-cask "clamxav", force: true
-cask "cleanmymac", force: true
-cask "chromedriver", force: true
-# cask "cyberduck", force: true
-# cask "datagrip", force: true
-# cask "db-browser-for-sqlite", force: true
-cask "deckset", force: true
-cask "discord", force: true
-cask "divvy", force: true
-cask "docker", force: true
-cask "drivethrurpg", force: true
-cask "dropbox", force: true
-# cask "duplicate-annihilator", force: true # prefer https://www.brattoo.com/propaganda/downloadDap.php?show=true
-# cask "freeze", force: true
-# cask "firefox", force: true
-cask "garmin-express", force: true
-cask "gemini", force: true
-# cask "github", force: true # GitHub Desktop
-cask "google-chrome", force: true
-# cask "google-backup-and-sync", force: true # for personal google accounts
-cask "google-drive-file-stream", force: true # only for corporate google accounts
-# cask "gog-galaxy", force: true
-# cask "grammarly", force: true
-cask "graphiql", force: true
-# cask "homebrew/cask-drivers/sonos", force: true
-cask "hp-easy-start", force: true
-cask "imageoptim", force: true
-# cask "insomnia", force: true
-cask "iterm2", force: true
-# cask "java", force: true # Get the JDK, for building jruby
-cask "macos-vscode-codespaces", force: true
-cask "macdown", force: true
-cask "mailplane", force: true
-cask "monodraw", force: true
-cask "monitorcontrol", force: true
-cask "ngrok", force: true
-# cask "opera", force: true
-# cask "postgres", force: true # multi-version Postgres.app
-# cask "postico", force: true # Prefer DataGrip
-# cask "postman", force: true
-cask "sequel-pro", force: true
-cask "spotify", force: true
-cask "steam", force: true
-cask "transmit", force: true
-# cask "vagrant", force: true
-# cask "virtualbox", force: true
-# cask "virtualbox-extension-pack", force: true
-cask "viscosity", force: true
-cask "visual-studio-code", force: true
-# cask "vlc", force: true
-# cask "voodoopad", force: true
-cask "yubico-yubikey-manager", force: true
+# Object-relational database system
+brew "postgresql", restart_service: true
 
-# Quicklook
-cask "qlcolorcode", force: true
-cask "qlmarkdown", force: true
-cask "quicklook-json", force: true
-cask "quicklook-csv", force: true
-cask "qlstephen", force: true
+# Implementation of Telnet and SSH
+brew "putty"
 
-# Fonts
-cask "font-source-code-pro-for-powerline"
-cask "font-source-code-pro"
-cask "font-source-sans-pro"
-cask "font-source-serif-pro"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.10"
+
+# Install various Ruby versions and implementations
+brew "ruby-build"
+
+# Ruby version manager
+brew "rbenv"
+
+# Auto-installs gems for Ruby installs
+brew "rbenv-default-gems"
+
+# Persistent key-value database, with built-in net interface
+brew "redis", restart_service: true
+
+# Terminal multiplexer with VT100/ANSI terminal emulation
+# brew "screen" # prefer tmux
+
+# Version control system designed to be a better CVS
+brew "subversion"
+
+# User interface to the TELNET protocol
+brew "telnet"
+
+# Send macOS User Notifications from the command-line
+brew "terminal-notifier"
+
+# Terminal multiplexer
+brew "tmux"
+
+# Internet file retriever
+brew "wget"
+
+# UNIX shell (command interpreter)
+brew "zsh"
+
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+
+# Additional completion definitions for zsh
+brew "zsh-completions"
+
+# Informative git prompt for zsh
+brew "zsh-git-prompt"
+
+# Zsh port of Fish shell's history search
+brew "zsh-history-substring-search"
+
+# Fish shell like syntax highlighting for zsh
+brew "zsh-syntax-highlighting"
+
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+
+# View, print, and comment on PDF documents
+cask "adobe-acrobat-reader"
+
+# Application launcher and productivity software
+cask "alfred"
+
+# Compare files and folders
+cask "beyond-compare"
+
+# OpenAI's official ChatGPT desktop app
+cask "chatgpt"
+
+# Automated testing of webapps for Google Chrome
+cask "chromedriver"
+
+# Anti-virus and malware scanner
+cask "clamxav"
+
+# Tool to remove unnecessary files and folders from disk
+cask "cleanmymac"
+
+# Server and cloud storage browser
+cask "cyberduck"
+
+# Browser for SQLite databases
+cask "db-browser-for-sqlite"
+
+# Presentations from Markdown
+cask "deckset"
+
+# Voice and text chat software
+cask "discord"
+
+# Application window manager focusing on simplicity
+cask "divvy"
+
+# App to build and share containerised applications and microservices
+cask "docker"
+
+# Online diagram software
+cask "drawio"
+
+# Client for the Dropbox cloud storage service
+cask "dropbox"
+
+# Sync DriveThruRPG libraries to compatible devices
+cask "drivethrurpg"
+
+# Collaborative team software
+cask "figma"
+
+# Web browser
+cask "firefox"
+
+# Tool to turn any web page into a desktop app
+cask "flotato"
+
+# Monospaced font
 cask "font-monaspace"
 
-# Mac App Store
-mas "1Password 7 - Password Manager", id: 1333542190, force: true
-mas "Bear", id: 1091189122, force: true
-# mas "Encrypto", id: 935235287, force: true
-# mas "Giphy Capture", id: 668208984, force: true
-# mas "LastPass", id: 926036361, force: true
-# mas "MindNode", id: 1289197285, force: true
-# mas "Monosnap", id: 540348655, force: true
-# mas "Pixelmator", id: 407963104, force: true
-# mas "Rested", id: 421879749, force: true
-mas "Slack", id: 803453959, force: true
-mas "Speedtest", id: 1153157709, force: true
-mas "The Unarchiver", id: 425424353, force: true
-# mas "Window Focus", id: 1142625137, force: true
-mas "Xcode", id: 497799835, force: true
+# Source Code Pro font
+cask "font-source-code-pro"
+
+# Source Code Pro for Powerline font
+cask "font-source-code-pro-for-powerline"
+
+# Source Sans 3 font
+cask "font-source-sans-3"
+
+# Source Serif 4 font
+cask "font-source-serif-4"
+
+# Amazon Glacier file transfer client
+cask "freeze"
+
+# Update maps and software, sync with Garmin Connect and register your device
+cask "garmin-express"
+
+# Disk space cleaner that finds and deletes duplicated and similar files
+cask "gemini"
+
+# Client for the Google Drive storage service
+cask "google-drive"
+
+# Tools to protect your emails and files
+cask "gpg-suite"
+
+# Light, Electron-based Wrapper around GraphiQL
+cask "graphiql"
+
+# Tool to optimise images to a smaller size
+cask "imageoptim"
+
+# Terminal emulator as alternative to Apple's Terminal app
+cask "iterm2"
+
+# Enhances Gmail like a full-featured desktop office productivity app
+cask "kiwi-for-gmail"
+
+# Software for Logitech devices
+cask "logi-options-plus"
+
+# Open-source Markdown editor
+cask "macdown"
+
+# Gmail client
+cask "mailplane"
+
+# Tool to control external monitor brightness & volume
+cask "monitorcontrol"
+
+# Tool to create text-based art
+cask "monodraw"
+
+# Reverse proxy, secure introspectable tunnels to localhost
+cask "ngrok"
+
+# Configuration and firmware update utility for OBSBOT Tiny and Meet series
+cask "obsbot-center"
+
+# Web browser
+cask "opera"
+
+# Multi-version Postgres.app
+# cask "postgres" # No longer hosted on homebrew; download from https://postgresapp.com/
+
+# Quick Look plug-in that renders source code with syntax highlighting
+cask "qlcolorcode"
+
+# Quick Look generator for Markdown files
+cask "qlmarkdown"
+
+# Quick Look plugin for plaintext files without an extension
+cask "qlstephen"
+
+# Quick Look plugin for CSV files
+cask "quicklook-csv"
+
+# Quick Look plugin for JSON files
+cask "quicklook-json"
+
+# Control your tools with a few keystrokes
+cask "raycast"
+
+# Integrated development environment focused entirely on AppleScript
+cask "script-debugger"
+
+# MySQL/MariaDB database management platform
+cask "sequel-pro"
+
+# Video, audio and image converter
+cask "shutter-encoder"
+
+# Team communication and collaboration software
+cask "slack"
+
+# Music streaming service
+cask "spotify"
+
+# Workspace to manage all your productivity apps from one place
+# cask "stack-stack" # Prefer v4 beta version from https://stackbrowser.com/
+
+# Video game digital distribution service
+cask "steam"
+
+# File transfer application
+cask "transmit"
+
+# OpenVPN client with AppleScript support
+cask "viscosity"
+
+# Open-source code editor
+cask "visual-studio-code"
+
+# Notes organiser
+cask "voodoopad"
+
+# Rust-based terminal
+cask "warp"
+
+# Web browser
+cask "wavebox"
+
+# Application for configuring any YubiKey
+cask "yubico-yubikey-manager"
+
+# Video communication and virtual meeting platform
+cask "zoom"
+
+mas "1Password for Safari", id: 1569813296
+mas "AnySwitch", id: 6444313776
+mas "Bear", id: 1091189122
+mas "Encrypto", id: 935235287
+mas "Photomator", id: 1444636541
+mas "Pixelmator Pro", id: 1289583905
+mas "Photomator", id: 1444636541
+mas "QuikFlow", id: 1626354390
+mas "Speedtest", id: 1153157709
+mas "TestFlight", id: 899247664
+mas "The Unarchiver", id: 425424353
+# mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/
+mas "Xcode", id: 497799835

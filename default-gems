@@ -1,4 +1,6 @@
 bundler
 debug
+rubocop
+ruby-lsp
 rufo
 solargraph
