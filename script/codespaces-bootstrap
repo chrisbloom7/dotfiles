@@ -25,7 +25,7 @@ echo "Starting codespace specific bootstrap..."
 echo "Unsetting git url config for github.com..."
 git config --global --unset url."git@github.com:".insteadOf
 
-if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+if [ ! -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
   echo "Sourcing linuxbrew into zsh profile..."
   (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ${HOME}/.zprofile
 fi
