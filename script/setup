@@ -1,57 +1,49 @@
-#!/bin/sh
-set -eo pipefail
+#!/usr/bin/env sh
+set -eu
 
-if [ -z "$ZSH" ]
-then
-  echo "Setting ZSH..."
-  ZSH="$HOME/.oh-my-zsh"
+if [ -z "${HOME:-}" ]; then
+  echo "Error: \$HOME is not defined or is empty: Aborting!"
+  exit 1
 fi
 
-if [ -z "$ZSH_CUSTOM" ]
-then
-  echo "Setting ZSH_CUSTOM..."
-  ZSH_CUSTOM="$ZSH/custom"
+if [ -z "${DOTFILES:-}" ]; then
+  echo "Error: \$DOTFILES is not defined or is empty: Aborting!"
+  exit 1
 fi
+
+ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
+ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
 
 # Check for Oh My Zsh and install if we don't have it
-if [ -d "$ZSH" ]
-then
-  echo "Oh My Zsh already installed..."
-  mkdir -p "$ZSH_CUSTOM"
-else
-  echo "Installing Oh My Zsh..."
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" "" --unattended
+if test ! $(command -v omz 2>/dev/null); then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-if [ -d "/workspaces/.codespaces/.persistedshare/dotfiles" ]
-then
-  echo "Copying git config files..."
-  cp "/workspaces/.codespaces/.persistedshare/dotfiles/.gitignore_global" "$HOME/.gitignore_global"
-  cp "/workspaces/.codespaces/.persistedshare/dotfiles/.gitconfig" "$HOME/.gitconfig"
+CODESPACES_DOTFILES="/workspaces/.codespaces/.persistedshare/dotfiles"
+if [ -d "${CODESPACES_DOTFILES}" ]; then
+  echo "Copying git config files into codespace..."
+  cp "${CODESPACES_DOTFILES}/.gitignore_global" "$HOME/.gitignore_global"
+  cp "${CODESPACES_DOTFILES}/.gitconfig" "$HOME/.gitconfig"
   git config --global --unset url."git@github.com:".insteadOf
 
-  echo "Copying omz scripts..."
-  cp "/workspaces/.codespaces/.persistedshare/dotfiles/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
-  cp "/workspaces/.codespaces/.persistedshare/dotfiles/agnoster.zsh-theme" "$ZSH_CUSTOM/agnoster.zsh-theme"
-  cp "/workspaces/.codespaces/.persistedshare/dotfiles/path.zsh" "$ZSH_CUSTOM/path.zsh"
+  echo "Copying omz scripts into codespace..."
+  cp "${CODESPACES_DOTFILES}/aliases.zsh" "$ZSH_CUSTOM/aliases.zsh"
+  cp "${CODESPACES_DOTFILES}/agnoster.zsh-theme" "$ZSH_CUSTOM/agnoster.zsh-theme"
+  cp "${CODESPACES_DOTFILES}/path.zsh" "$ZSH_CUSTOM/path.zsh"
 
-  if [ -f "$HOME/.zshrc" ]
-  then
-    echo "Removing default .zshrc..."
+  if [ -f "$HOME/.zshrc" ]; then
+    echo "Removing default .zshrc from codespace..."
     rm -rf "$HOME/.zshrc"
   fi
 
-  echo "Copying custom .zshrc..."
-  cp "/workspaces/.codespaces/.persistedshare/dotfiles/.zshrc" "$HOME/.zshrc"
+  echo "Copying custom .zshrc into codespace..."
+  cp "${CODESPACES_DOTFILES}/.zshrc" "$HOME/.zshrc"
 else
-  echo "MISSING /workspaces/.codespaces/.persistedshare/dotfiles"
+  echo "${CODESPACES_DOTFILES} not found; Skipping!"
 fi
 
-echo "Cloning omz plugins..."
+echo "Copying omz plugins..."
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
 git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
 git clone https://github.com/zsh-users/zsh-completions.git "$ZSH_CUSTOM/plugins/zsh-completions"
 git clone https://github.com/zsh-users/zsh-history-substring-search "$ZSH_CUSTOM/plugins/zsh-history-substring-search"
-
-echo "Cloning zsh-git-prompt..."
-git clone https://github.com/olivierverdier/zsh-git-prompt.git "$HOME/zsh-git-prompt"

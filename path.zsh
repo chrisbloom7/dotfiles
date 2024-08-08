@@ -1,16 +1,21 @@
-# Load Node global installed binaries
-export PATH="$HOME/.node/bin:$PATH"
+# Add directories to the PATH and prevent to add the same directory multiple times upon shell reload.
+add_to_path() {
+  if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+    export PATH="$1:$PATH"
+  fi
+}
+
+# Load dotfiles binaries
+add_to_path "$DOTFILES/bin"
+
+# Load global Node installed binaries
+add_to_path "$HOME/.node/bin"
 
 # Use project specific binaries before global ones
-export PATH="node_modules/.bin:vendor/bin:$PATH"
-
-# Make sure coreutils are loaded before system commands
-# I've disabled this for now because I only use "ls" which is
-# referenced in my aliases.zsh file directly.
-#export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+add_to_path "vendor/bin"
+add_to_path "node_modules/.bin"
 
 # Local bin directories before anything else
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+add_to_path "/usr/local/bin"
 
-# Load custom commands
-export PATH="$DOTFILES/bin:$PATH"
+export MANPATH="/usr/local/man:$MANPATH"

@@ -1,10 +1,6 @@
-#!/bin/sh
-set -eo pipefail
+#!/usr/bin/env sh
+set -e
 
 # Runs on each container start in github/github
 
-# Always want to use ZSH as my default shell (e.g. for SSH)
-if ! grep -q "root.*/bin/zsh" /etc/passwd
-then
-  chsh -s /bin/zsh root
-fi
+script/default-shell

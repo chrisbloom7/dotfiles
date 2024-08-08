@@ -1,33 +1,41 @@
-#!/bin/sh
-set -euo pipefail
+#!/usr/bin/env sh
+set -eu
+
+if [ -z "${HOME:-}" ]; then
+  echo "Error: \$HOME is not defined or is empty: Aborting!"
+  exit 1
+fi
 
 echo "Setting up your Mac..."
 
+# Run setup steps that apply both locally and in devcontainers
 script/setup
 
 # Check for Homebrew and install if we don't have it
-if [[ -z $(command -v brew) ]]; then
+if test ! $(which brew); then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Agree to Xcode licenses if necessary
-# sudo xcodebuild -runFirstLaunch
-sudo xcodebuild -license accept
+# Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
+rm -rf $HOME/.zshrc
+ln -sw $HOME/.dotfiles/.zshrc $HOME/.zshrc
 
 # Update Homebrew recipes
-brew update
+brew update --force --quiet
 
 # Install all our dependencies with bundle (See Brewfile)
 brew tap homebrew/bundle
-brew bundle
+brew bundle --file ./Brewfile
 brew services cleanup
 
-# Set MySQL root password to null
-mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY ''; FLUSH PRIVILEGES;"
+# Set default MySQL root password and auth type
+mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
 
 # Make ZSH the default shell environment
-chsh -s $(which zsh)
+script/default-shell
 
 # Install latest Ruby version using rbenv
 # rbenv was installed via Brewfile
@@ -37,28 +45,25 @@ export RBENV_VERSION="$(rbenv install -l | grep -E '^\s+(\d|\.)+$' | tail -n 1 |
 # Install Node Version Manager - Make sure to update the version as new versions are published
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
 
-# Install Elixir Version Manager
-# curl -Lqs https://raw.githubusercontent.com/taylor/kiex/master/install | bash -s
-
-# Make sure NPM is available now
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# Make sure NPM is available
+export NVM_DIR="${HOME}/.nvm"
+mkdir -p ${NVM_DIR}
+[ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
 nvm install --latest-npm
 
 # Install global NPM packages
 npm install --global yarn
 
-# Create a source directory and fold for personal projects
-mkdir $HOME/src
-mkdir $HOME/src/chrisbloom7
-mkdir $HOME/src/sandbox
+# Install Elixir Version Manager
+# curl -Lqs https://raw.githubusercontent.com/taylor/kiex/master/install | bash -s
 
-# TODO: Checkout common repos to src
-git clone git@github.com:chrisbloom7/enumpath.git $HOME/src/chrisbloom7/enumpath
-git clone git@github.com:chrisbloom7/enumpath.io.git $HOME/src/chrisbloom7/enumpath.io
-git clone git@github.com:chrisbloom7/improved-initiative.git $HOME/src/chrisbloom7/improved-initiative
-git clone git@github.com:chrisbloom7/robinina.art.git $HOME/src/chrisbloom7/robinina.art
-git clone git@github.com:chrisbloom7/statblock-shop.git $HOME/src/chrisbloom7/statblock-shop
+# Create a source directory and fold for personal projects
+mkdir -p "${HOME}/src"
+mkdir -p "${HOME}/src/chrisbloom7"
+mkdir -p "${HOME}/src/sandbox"
+
+# Clone project repositories
+scripts/clone-projects
 
 # Install iTerm2 shell integration for Zsh
 curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh

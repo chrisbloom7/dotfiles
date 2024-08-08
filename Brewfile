@@ -1,6 +1,5 @@
 tap "github/bootstrap"
 tap "github/gh"
-tap "heroku/brew"
 tap "homebrew/bundle"
 tap "homebrew/cask-fonts"
 tap "homebrew/services"
@@ -41,8 +40,8 @@ brew "grep"
 # GitHub Markdown previewer
 brew "grip"
 
-# Manage compile and link flags for libraries
-brew "pkg-config"
+# Everything you need to get started with Heroku
+brew "heroku"
 
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
@@ -59,11 +58,17 @@ brew "lynx"
 # Keep your Mac's application settings in sync
 brew "mackup"
 
+# Man-page inspired Markdown viewer
+brew "mandown"
+
 # Mac App Store command-line interface
 brew "mas"
 
 # Open source relational database management system
 brew "mysql", restart_service: true
+
+# Stream the output of any CLI and publish it to a variety of supported platforms
+brew "notify"
 
 # Development kit for the Java programming language
 brew "openjdk"
@@ -76,6 +81,9 @@ brew "pandoc"
 
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
+
+# Manage compile and link flags for libraries
+brew "pkg-config"
 
 # Object-relational database system
 brew "postgresql", restart_service: true
@@ -146,6 +154,9 @@ cask "alfred"
 # Compare files and folders
 cask "beyond-compare"
 
+# Web browser focusing on privacy
+cask "brave-browser"
+
 # OpenAI's official ChatGPT desktop app
 cask "chatgpt"
 
@@ -194,8 +205,26 @@ cask "firefox"
 # Tool to turn any web page into a desktop app
 cask "flotato"
 
+# Lato font
+cask 'font-lato'
+
+# Mona-Sans font
+cask "font-mona-sans"
+
 # Monospaced font
 cask "font-monaspace"
+
+# Monaspice Nerd Font families (Monaspace)
+cask "font-monaspace-nerd-font"
+
+# Open Sans font
+cask 'font-open-sans'
+
+# Powerline Symbols font
+cask 'font-powerline-symbols'
+
+# Roboto font
+cask 'font-roboto'
 
 # Source Code Pro font
 cask "font-source-code-pro"
@@ -217,6 +246,9 @@ cask "garmin-express"
 
 # Disk space cleaner that finds and deletes duplicated and similar files
 cask "gemini"
+
+# Web browser
+cask "google-chrome"
 
 # Client for the Google Drive storage service
 cask "google-drive"
@@ -244,6 +276,9 @@ cask "macdown"
 
 # Gmail client
 cask "mailplane"
+
+# Web browser
+cask "microsoft-edge"
 
 # Tool to control external monitor brightness & volume
 cask "monitorcontrol"
@@ -302,6 +337,12 @@ cask "spotify"
 # Video game digital distribution service
 cask "steam"
 
+# Native GUI tool for relational databases
+cask "tableplus"
+
+# Unpacks archive files
+cask "the-unarchiver"
+
 # File transfer application
 cask "transmit"
 
@@ -336,6 +377,5 @@ mas "Photomator", id: 1444636541
 mas "QuikFlow", id: 1626354390
 mas "Speedtest", id: 1153157709
 mas "TestFlight", id: 899247664
-mas "The Unarchiver", id: 425424353
 # mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/
 mas "Xcode", id: 497799835
