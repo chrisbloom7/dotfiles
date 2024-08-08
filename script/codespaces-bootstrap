@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+set -eu
+
+# You can add a script file to your dotfiles repo that will be executed when the
+# dotfiles are loaded into your Codespaces. You do have to give it the proper
+# name, but GitHub gives you several to choose from. When Codespaces detects a
+# script file in your dotfiles repo, it clones the dotfiles repo to
+# "/workspaces/.codespaces/.persistedshare/dotfiles" and then executes your
+# script file if it exists. If it does not find an applicable script file then
+# it will copy and files starting with "." from the dotfiles directory to the
+# $HOME folder in the codespace. If it does find a script, then it expects the
+# script to copy over the dotfiles to the correct place.
+#
+# https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles
+
+[ -z "${CODESPACES:-}" ] && exit 0
+
+if [ -z "${HOME:-}" ]; then
+  echo "Error: \$HOME is not defined or is empty: Aborting!"
+  exit 1
+fi
+
+echo "Starting codespace specific bootstrap..."
+
+echo "Unsetting git url config for github.com..."
+git config --global --unset url."git@github.com:".insteadOf
+
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  echo "Sourcing linuxbrew into zsh profile..."
+  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ${HOME}/.zprofile
+fi
+
+echo "Installing gcc package via brew..."
+eval "$(/opt/homebrew/bin/brew shellenv)"
+brew install gcc 2>/dev/null
+
+echo "Done codespace specific bootstrapping!"

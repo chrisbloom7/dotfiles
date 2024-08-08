@@ -18,4 +18,8 @@ add_to_path "node_modules/.bin"
 # Local bin directories before anything else
 add_to_path "/usr/local/bin"
 
+# Add Java to path
+add_to_path "/opt/homebrew/opt/openjdk/bin"
+
+# Add linux's man to the manpath
 export MANPATH="/usr/local/man:$MANPATH"

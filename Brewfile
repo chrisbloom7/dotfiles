@@ -118,8 +118,14 @@ brew "telnet"
 # Send macOS User Notifications from the command-line
 brew "terminal-notifier"
 
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+
 # Terminal multiplexer
 brew "tmux"
+
+# Executes a program periodically, showing output fullscreen
+brew "watch"
 
 # Internet file retriever
 brew "wget"

@@ -69,7 +69,7 @@ COMPLETION_WAITING_DOTS="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$DOTFILES
+# ZSH_CUSTOM=$DOTFILES
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
@@ -147,10 +147,13 @@ export AWS_DEFAULT_REGION=us-east-1
 # Load fuzzy finder
 [ -e "${HOME}/.fzf.zsh" ] && source "${HOME}/.fzf.zsh"
 
+# Load rbenv
+[ -n $(command -v rbenv 2>/dev/null) ] && eval "$(rbenv init -)"
+
+# Load nodenv
+[ -n $(command -v nodenv 2>/dev/null) ] && eval "$(nodenv init -)"
+
 # Add nvm to path and load completions
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-# Add Java to path
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"

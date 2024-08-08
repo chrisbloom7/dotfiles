@@ -2,5 +2,3 @@
 set -e
 
 # Runs on each container start in github/github
-
-script/default-shell
