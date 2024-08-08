@@ -98,7 +98,6 @@ plugins=(
   screen                       # sets title and hardstatus of the tab window for screen, the terminal multiplexer
   sudo                         # Easily prefix your current or previous commands with sudo by pressing esc twice
   thor                         # completion for Thor, a ruby toolkit for building powerful command-line interfaces
-  tmux                         # aliases for tmux, the terminal multiplexer
   virtualenv                   # displays information of the created virtual container and allows background theming
   yarn                         # completion for the Yarn package manager, as well as some aliases for common commands
   zbell                        # prints a bell character when a command finishes if it has been running for longer than a specified duration
@@ -106,6 +105,7 @@ plugins=(
   zsh-completions              # Additional completion definitions for Zsh
   zsh-history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
   zsh-syntax-highlighting      # Fish shell like syntax highlighting for Zsh
+  # tmux                         # aliases for tmux, the terminal multiplexer
 )
 
 # User configuration for oh-my-zsh and plugins
@@ -148,10 +148,10 @@ export AWS_DEFAULT_REGION=us-east-1
 [ -e "${HOME}/.fzf.zsh" ] && source "${HOME}/.fzf.zsh"
 
 # Load rbenv
-[ -n $(command -v rbenv 2>/dev/null) ] && eval "$(rbenv init -)"
+[ -n "$(command -v rbenv 2>/dev/null)" ] && eval "$(rbenv init -)"
 
 # Load nodenv
-[ -n $(command -v nodenv 2>/dev/null) ] && eval "$(nodenv init -)"
+[ -n "$(command -v nodenv 2>/dev/null)" ] && eval "$(nodenv init -)"
 
 # Add nvm to path and load completions
 export NVM_DIR="$HOME/.nvm"
