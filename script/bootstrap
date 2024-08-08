@@ -45,7 +45,7 @@ zsh_custom_dotfiles=(
 )
 for file in "${zsh_custom_dotfiles[@]}"; do
   echo "Copying ${file}"
-  ln -sfnw "${DOTFILES}/${file}" "${ZSH_CUSTOM}/${file}"
+  ln -sfn "${DOTFILES}/${file}" "${ZSH_CUSTOM}/${file}"
 done
 
 echo "Copying omz plugins..."
