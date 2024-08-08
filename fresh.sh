@@ -11,6 +11,9 @@ echo "Setting up your Mac..."
 # Run setup steps that apply both locally and in devcontainers
 script/bootstrap
 
+echo "Setting ZSH is the default shell..."
+chsh -s $(command -v zsh)
+
 # Symlink the Mackup config files to the home directory.
 # Make sure Mackup is excluded from backing itself up
 [ -s "$HOME/.mackup.cfg" ] && rm -rf "$HOME/.mackup.cfg"

@@ -56,7 +56,4 @@ echo "Copying omz plugins..."
 [ -d "${ZSH_CUSTOM}/plugins/zsh-completions" ] || git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM}/plugins/zsh-completions"
 [ -d "${ZSH_CUSTOM}/plugins/zsh-history-substring-search" ] || git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTOM}/plugins/zsh-history-substring-search"
 
-echo "Setting ZSH is the default shell (e.g. for SSH)..."
-chsh -s $(command -v zsh)
-
 echo "Done bootstrapping!"
