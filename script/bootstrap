@@ -48,17 +48,17 @@ for file in "${zsh_custom_dotfiles[@]}"; do
   ln -sfn "${DOTFILES}/${file}" "${ZSH_CUSTOM}/${file}"
 done
 
+[ -n "${CODESPACES:-}" ] && ./codespaces-bootstrap
+
 echo "Copying omz plugins..."
-[ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone git@github.com:zsh-syntax-highlighting.git "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting"
-[ -d "${ZSH_CUSTOM}/plugins/zsh-autosuggestions" ] || git clone git@github.com:zsh-autosuggestions.git "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
-[ -d "${ZSH_CUSTOM}/plugins/zsh-completions" ] || git clone git@github.com:zsh-completions.git "${ZSH_CUSTOM}/plugins/zsh-completions"
-[ -d "${ZSH_CUSTOM}/plugins/zsh-history-substring-search" ] || git clone git@github.com:zsh-history-substring-search "${ZSH_CUSTOM}/plugins/zsh-history-substring-search"
+[ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting"
+[ -d "${ZSH_CUSTOM}/plugins/zsh-autosuggestions" ] || git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
+[ -d "${ZSH_CUSTOM}/plugins/zsh-completions" ] || git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM}/plugins/zsh-completions"
+[ -d "${ZSH_CUSTOM}/plugins/zsh-history-substring-search" ] || git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTOM}/plugins/zsh-history-substring-search"
 
 echo "Setting ZSH is the default shell (e.g. for SSH)..."
 if [ -z $(grep "^root:.*/bin/zsh$" /etc/passwd 2>/dev/null) ]; then
   chsh -s $(command -v zsh) root
 fi
-
-[ -n "${CODESPACES:-}" ] && ./codespaces-bootstrap
 
 echo "Done bootstrapping!"
