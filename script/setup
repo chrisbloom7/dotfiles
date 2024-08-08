@@ -6,11 +6,6 @@ if [ -z "${HOME:-}" ]; then
   exit 1
 fi
 
-if [ -z "${DOTFILES:-}" ]; then
-  echo "Error: \$DOTFILES is not defined or is empty: Aborting!"
-  exit 1
-fi
-
 ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
 ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
 
