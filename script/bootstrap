@@ -34,7 +34,7 @@ home_dotfiles=(
 )
 for file in "${home_dotfiles[@]}"; do
   echo "Copying ${file}"
-  ln -sfnw "${DOTFILES}/${file}" "${HOME}/${file}"
+  ln -sfn "${DOTFILES}/${file}" "${HOME}/${file}"
 done
 
 echo "Copying dotfiles from '${DOTFILES}' to '${ZSH_CUSTOM}'..."
