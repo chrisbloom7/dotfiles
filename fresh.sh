@@ -22,7 +22,7 @@ ln -s "$HOME/.dotfiles/.mackup" "$HOME/.mackup"
 
 # Check for Homebrew and install if we don't have it
 if [ -z $(command -v brew 2>/dev/null) ]; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /usr/bin/env bash -c "$(wget -qO- https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
@@ -48,12 +48,14 @@ ln -s "$HOME/.dotfiles/default-gems" "$RBENV_ROOT/default-gems"
 rbenv install "$RBENV_VERSION" && rbenv global "$RBENV_VERSION" && rbenv rehash
 
 # Install Node Version Manager - Make sure to update the version as new versions are published
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+if [ -z $(command -v nvm 2>/dev/null) ]; then
+  /usr/bin/env bash -c "$(wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh)"
 
-# Make sure NPM is available
-export NVM_DIR="${HOME}/.nvm"
-mkdir -p ${NVM_DIR}
-[ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
+  # Make sure NPM is available
+  export NVM_DIR="${HOME}/.nvm"
+  mkdir -p ${NVM_DIR}
+  [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
+fi
 nvm install --latest-npm
 
 # Install global NPM packages
