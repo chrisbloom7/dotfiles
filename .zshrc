@@ -9,6 +9,7 @@ export ZSH=$HOME/.oh-my-zsh
 
 # Enable completions
 autoload -Uz compinit && compinit
+autoload -Uz zcalc
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,

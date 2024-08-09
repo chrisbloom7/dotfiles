@@ -1,11 +1,6 @@
 #!/usr/bin/env sh
 set -eu
 
-if [ -z "${HOME:-}" ]; then
-  echo "Error: \$HOME is not defined or is empty: Aborting!"
-  exit 1
-fi
-
 # Create a source directory and fold for personal projects
 SRC="${HOME}/src"
 mkdir -p "${SRC}"

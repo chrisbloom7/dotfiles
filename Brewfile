@@ -37,56 +37,26 @@ brew "gnupg"
 # GNU grep, egrep and fgrep
 brew "grep"
 
-# GitHub Markdown previewer
-brew "grip"
-
-# Everything you need to get started with Heroku
-brew "heroku"
-
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
 
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
 
-# Portable Foreign Function Interface library
-brew "libffi"
-
-# Text-based web browser
-brew "lynx"
-
 # Keep your Mac's application settings in sync
 brew "mackup"
-
-# Man-page inspired Markdown viewer
-brew "mandown"
 
 # Mac App Store command-line interface
 brew "mas"
 
-# Open source relational database management system
-brew "mysql", restart_service: true
-
 # Stream the output of any CLI and publish it to a variety of supported platforms
 brew "notify"
-
-# Development kit for the Java programming language
-brew "openjdk"
-
-# Development kit for the Java programming language
-brew "openjdk@11"
 
 # Swiss-army knife of markup format conversion
 brew "pandoc"
 
-# Pinentry for GPG on Mac
-brew "pinentry-mac"
-
 # Manage compile and link flags for libraries
 brew "pkg-config"
-
-# Object-relational database system
-brew "postgresql", restart_service: true
 
 # Implementation of Telnet and SSH
 brew "putty"
@@ -103,23 +73,11 @@ brew "rbenv"
 # Auto-installs gems for Ruby installs
 brew "rbenv-default-gems"
 
-# Persistent key-value database, with built-in net interface
-brew "redis", restart_service: true
-
-# Terminal multiplexer with VT100/ANSI terminal emulation
-# brew "screen" # prefer tmux
-
-# Version control system designed to be a better CVS
-brew "subversion"
-
 # User interface to the TELNET protocol
 brew "telnet"
 
 # Send macOS User Notifications from the command-line
 brew "terminal-notifier"
-
-# Display directories as trees (with optional color/HTML output)
-brew "tree"
 
 # Terminal multiplexer
 brew "tmux"
@@ -160,9 +118,6 @@ cask "alfred"
 # Compare files and folders
 cask "beyond-compare"
 
-# Web browser focusing on privacy
-cask "brave-browser"
-
 # OpenAI's official ChatGPT desktop app
 cask "chatgpt"
 
@@ -178,9 +133,6 @@ cask "cleanmymac"
 # Server and cloud storage browser
 cask "cyberduck"
 
-# Browser for SQLite databases
-cask "db-browser-for-sqlite"
-
 # Presentations from Markdown
 cask "deckset"
 
@@ -193,9 +145,6 @@ cask "divvy"
 # App to build and share containerised applications and microservices
 cask "docker"
 
-# Online diagram software
-cask "drawio"
-
 # Client for the Dropbox cloud storage service
 cask "dropbox"
 
@@ -205,32 +154,17 @@ cask "drivethrurpg"
 # Collaborative team software
 cask "figma"
 
-# Web browser
-cask "firefox"
-
-# Tool to turn any web page into a desktop app
-cask "flotato"
-
-# Lato font
-cask 'font-lato'
-
 # Mona-Sans font
 cask "font-mona-sans"
 
 # Monospaced font
 cask "font-monaspace"
 
-# Monaspice Nerd Font families (Monaspace)
-cask "font-monaspace-nerd-font"
-
 # Open Sans font
 cask 'font-open-sans'
 
 # Powerline Symbols font
 cask 'font-powerline-symbols'
-
-# Roboto font
-cask 'font-roboto'
 
 # Source Code Pro font
 cask "font-source-code-pro"
@@ -259,9 +193,6 @@ cask "google-chrome"
 # Client for the Google Drive storage service
 cask "google-drive"
 
-# Tools to protect your emails and files
-cask "gpg-suite"
-
 # Light, Electron-based Wrapper around GraphiQL
 cask "graphiql"
 
@@ -270,9 +201,6 @@ cask "imageoptim"
 
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"
-
-# Enhances Gmail like a full-featured desktop office productivity app
-cask "kiwi-for-gmail"
 
 # Software for Logitech devices
 cask "logi-options-plus"
@@ -298,20 +226,23 @@ cask "ngrok"
 # Configuration and firmware update utility for OBSBOT Tiny and Meet series
 cask "obsbot-center"
 
-# Web browser
-cask "opera"
-
-# Multi-version Postgres.app
-# cask "postgres" # No longer hosted on homebrew; download from https://postgresapp.com/
-
 # Quick Look plug-in that renders source code with syntax highlighting
 cask "qlcolorcode"
+
+# Display image info and preview unsupported formats in QuickLook
+cask "qlimagesize"
 
 # Quick Look generator for Markdown files
 cask "qlmarkdown"
 
 # Quick Look plugin for plaintext files without an extension
 cask "qlstephen"
+
+# Thumbnails, static previews, cover art and metadata for video files
+cask "qlvideo"
+
+# List out the contents of a zip file in the QuickLook preview
+cask "qlzipinfo"
 
 # Quick Look plugin for CSV files
 cask "quicklook-csv"
@@ -322,11 +253,14 @@ cask "quicklook-json"
 # Control your tools with a few keystrokes
 cask "raycast"
 
+# Tool to manage multiple screens
+cask "screenfocus"
+
 # Integrated development environment focused entirely on AppleScript
 cask "script-debugger"
 
-# MySQL/MariaDB database management platform
-cask "sequel-pro"
+# AppleScript Quick Look plugin
+cask "scriptql"
 
 # Video, audio and image converter
 cask "shutter-encoder"
@@ -337,14 +271,8 @@ cask "slack"
 # Music streaming service
 cask "spotify"
 
-# Workspace to manage all your productivity apps from one place
-# cask "stack-stack" # Prefer v4 beta version from https://stackbrowser.com/
-
 # Video game digital distribution service
 cask "steam"
-
-# Native GUI tool for relational databases
-cask "tableplus"
 
 # Unpacks archive files
 cask "the-unarchiver"
@@ -367,6 +295,9 @@ cask "warp"
 # Web browser
 cask "wavebox"
 
+# Quick Look plugin for webp files
+cask "webpquicklook"
+
 # Application for configuring any YubiKey
 cask "yubico-yubikey-manager"
 
@@ -379,9 +310,7 @@ mas "Bear", id: 1091189122
 mas "Encrypto", id: 935235287
 mas "Photomator", id: 1444636541
 mas "Pixelmator Pro", id: 1289583905
-mas "Photomator", id: 1444636541
 mas "QuikFlow", id: 1626354390
 mas "Speedtest", id: 1153157709
 mas "TestFlight", id: 899247664
-# mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/
 mas "Xcode", id: 497799835

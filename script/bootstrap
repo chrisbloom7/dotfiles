@@ -3,11 +3,6 @@ set -eu
 
 cd "$(dirname "$0")"
 
-if [ -z "${HOME:-}" ]; then
-  echo "Error: \$HOME is not defined or is empty: Aborting!"
-  exit 1
-fi
-
 echo "Starting bootstrap..."
 
 # Check for Oh My Zsh and install if we don't have it

@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 set -e
 
-# Runs on each container start in github/github
+# This might be a customization that only applies in the github monolith
+echo "Running post-start script from dotfiles..."

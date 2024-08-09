@@ -1,11 +1,6 @@
 #!/usr/bin/env sh
 set -eu
 
-if [ -z "${HOME:-}" ]; then
-  echo "Error: \$HOME is not defined or is empty: Aborting!"
-  exit 1
-fi
-
 echo "Setting up your Mac..."
 
 # Run setup steps that apply both locally and in devcontainers
