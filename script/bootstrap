@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -eu
 
+# Uncomment this next line (and commit the change) to make dotfile installs into
+# any new codespaces a no-op. Useful for debugging devcontainer builds without
+# worrying about whether your dotfiles are causing issues.
+[ -n "${CODESPACES:-}" ] && exit 0
+
 cd "$(dirname "$0")"
 
 echo "Starting bootstrap..."
