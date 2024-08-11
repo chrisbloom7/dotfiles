@@ -58,6 +58,7 @@
 	helper = store
 [credential "https://github.com"]
 	username = chrisbloom7
+	helper = !/opt/homebrew/bin/gh auth git-credential
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [init]
@@ -66,3 +67,6 @@
 	rebase = true
 [fetch]
 	prune = true
+[credential "https://gist.github.com"]
+	username = chrisbloom7
+	helper = !/opt/homebrew/bin/gh auth git-credential
