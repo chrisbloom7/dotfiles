@@ -1,7 +1,51 @@
+# https://github.com/Homebrew/homebrew-bundle
+
+# Handy tips here:
+# https://gist.github.com/ChristopherA/a579274536aab36ea9966f301ff14f3f
+
+# Ways to control which formulae and casks are selected:
+#
+# # install only on specified OS
+# brew "gnupg" if OS.mac?
+# brew "glibc" if OS.linux?
+#
+# # install only if a command succeeds or fails fails
+# cask "java" unless system "/usr/libexec/java_home", "--failfast"
+
+# Options for formulae and casks:
+#
+# conflicts_with array[string]
+# restart_service boolean
+# restart_service boolean
+# start_service
+# link
+
+tap "buo/cask-upgrade" # enables `brew cu` command to update mas apps via brew
 tap "github/bootstrap"
 tap "github/gh"
 tap "homebrew/bundle"
 tap "homebrew/services"
+
+# Docker on MacOS without Docker Desktop
+#
+# https://gist.github.com/juancsr/5927e6660d6ba5d2a34c61802d26e50a
+# https://how.wtf/how-to-use-docker-without-docker-desktop-on-macos.html
+# https://dev.to/elliotalexander/how-to-use-docker-without-docker-desktop-on-macos-217m
+#
+# Container runtimes on MacOS (and Linux) with minimal setup
+brew "colima", restart_service: true
+# Pack, ship and run any application as a lightweight container
+brew "docker"
+# Isolated development environments using Docker
+brew "docker-compose"
+# Platform keystore credential helper for Docker
+brew "docker-credential-helper"
+# Toolkit for embedding hypervisor capabilities in your application
+brew "hyperkit" unless system "test $(uname -p) = arm"
+# Run a Kubernetes cluster locally
+brew "minikube"
+# Generic machine emulator and virtualizer
+brew "qemu" if system "test $(uname -p) = arm"
 
 # Codec library for encoding and decoding AV1 video streams
 brew "aom"
@@ -21,17 +65,14 @@ brew "bat"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 
-# Pack, ship and run any application as a lightweight container
-brew "docker"
-
-# Isolated development environments using Docker
-brew "docker-compose"
-
 # GitHub command-line tool
 brew "gh"
 
 # Distributed revision control system
 brew "git"
+
+# Bootstrap GitHub SSH configuration
+brew "github-keygen"
 
 # GNU Transport Layer Security (TLS) Library
 brew "gnutls"
@@ -62,6 +103,9 @@ brew "notify"
 
 # Swiss-army knife of markup format conversion
 brew "pandoc"
+
+# Pinentry for GPG on Mac
+brew "pinentry-mac"
 
 # Manage compile and link flags for libraries
 brew "pkg-config"
@@ -113,6 +157,9 @@ brew "zsh-history-substring-search"
 
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+
+# set arguments for all 'brew install --cask' commands
+cask_args appdir: "~/Applications", require_sha: true
 
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
@@ -322,6 +369,9 @@ mas "QuikFlow", id: 1626354390
 mas "Speedtest", id: 1153157709
 mas "TestFlight", id: 899247664
 mas "Xcode", id: 497799835
+
+# 'vscode --install-extension'
+vscode "GitHub.codespaces"
 
 # Preferred but currently uninstalled formulae and casks:
 #

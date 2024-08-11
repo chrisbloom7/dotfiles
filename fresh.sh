@@ -77,4 +77,7 @@ git config --system user.signingkey B8BB552ABFFDAE06
 git config --system commit.gpgsign true
 git config --system gpg.program $(which gpg)
 
+# Install Rosetta 2 on M1 Macs to bridge the gap between Intel and Apple processors
+softwareupdate --install-rosetta --agree-to-license
+
 echo "Done. Note that some of these changes require a logout/restart to take effect, and you may still need to set fonts manually in your iTerm2 profile"
