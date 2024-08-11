@@ -1,24 +1,39 @@
 # Shortcuts
-alias beep="say -v Yuri \"My liege, the task is complete\""
 alias cls="clear"
-alias copyssh="pbcopy < ${HOME}/.ssh/id_ed25519.pub"
-alias copyssh="pbcopy < ${HOME}/.ssh/id_rsa.pub"
-alias fixzoom="sudo killall VDCAssistant"
-alias flushdns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
-alias reloadshell="omz reload"
-alias reload="omz reload"
-alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
+
+if [ -n "$(command -v zsh 2>/dev/null)" ]; then
+  alias reloadshell="omz reload"
+  alias reload="omz reload"
+fi
+
+if [ "$(uname -s)" = "Darwin" ]; then
+  alias beep="say -v Yuri \"My liege, the task is complete\""
+  alias copyssh="pbcopy < ${HOME}/.ssh/id_ed25519.pub"
+  alias copyssh="pbcopy < ${HOME}/.ssh/id_rsa.pub"
+  alias fixzoom="sudo killall VDCAssistant"
+  alias flushdns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+  alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
+  alias library="cd ${HOME}/Library"
+fi
 
 # Directories
-alias dotfiles="cd ${DOTFILES}"
-alias library="cd ${HOME}/Library"
+alias dotfiles="cd \"${DOTFILES:?DOTFILES not set}\""
 src () { cd "$HOME/src/$@" }
 
+# Python
+alias python="python3"
+alias py="python3"
+alias pip="pip3"
+
 # Projects and files
-alias edots="${EDITOR} ${DOTFILES}"
-alias ehosts="${EDITOR} /etc/hosts"
-alias edotaliases="${EDITOR} ${HOME}/.aliases"
+alias edots="${EDITOR:-code} \"${DOTFILES}\""
+alias ehosts="${EDITOR:-code} /etc/hosts"
+alias edotaliases="${EDITOR:-code} ${HOME}/.aliases"
 readme () {
+  if [ -z "$(command -v pandoc 2>/dev/null)"] || [ -z "$(command -v lynx 2>/dev/null)"]; then
+    echo "either pandoc or lynx is not installed"
+    exit 1;
+  fi
   if [ -n "${1:-}" ]; then
     pandoc $1 | lynx -stdin
   else
@@ -29,16 +44,22 @@ readme () {
 # General utilities
 epoch () {
   if [ -n "${1:-}" ]; then
-    cmd="puts Time.at(${1})"
+    if [ -n "$(command -v ruby 2>/dev/null)" ]; then
+      cmd="puts Time.at(${1})"
+      $(command -v ruby) -e $cmd
+    else
+      echo Ruby command not found. Try using without a date argument.
+      exit 1
+    fi
   else
-    cmd="puts Time.now.to_i"
+    echo $(date +%s)
   fi
-
-  $(command -v ruby) -e $cmd
 }
 alias timestamp="epoch"
 weather () { curl -4 wttr.in/${1:-SRQ}\?${2:-n2} }
 rvmrc () {
+  [ -n "$(command -v rvm 2>/dev/null)" ] && echo "rvm not installed" && exit 1
+
   if [ -n "${1:-}" ]; then
     rvm --create --ruby-version use $(rvm current)
   else
@@ -103,8 +124,3 @@ git-branch-outgoing () {
   git-branch-diff ${1} $(_parse_git_branch)
 }
 alias git-bout='git-branch-outgoing'
-
-# Python
-alias python="python3"
-alias py="python3"
-alias pip="pip3"

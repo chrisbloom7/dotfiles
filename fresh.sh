@@ -38,6 +38,8 @@ mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_passwor
 
 # Install latest Ruby version using rbenv
 # rbenv was installed via Brewfile
+rbenv init bash || echo "bash shell not found for rbenv to init"
+rbenv init zsh || echo "zsh shell not found for rbenv to init"
 eval "$(rbenv init -)"
 export RBENV_VERSION="$(rbenv install -l | grep -E '^\s+(\d|\.)+$' | tail -n 1 | sed -e 's/^[ \t]*//')"
 export RBENV_ROOT="$HOME/.rbenv"

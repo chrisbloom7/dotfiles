@@ -43,6 +43,9 @@ brew "httpie"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
 
+# Text-based web browser
+brew "lynx"
+
 # Keep your Mac's application settings in sync
 brew "mackup"
 

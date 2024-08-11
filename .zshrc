@@ -9,7 +9,6 @@ export ZSH=$HOME/.oh-my-zsh
 
 # Enable completions
 autoload -Uz compinit && compinit
-autoload -Uz zcalc
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -79,34 +78,15 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 # See https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/
 plugins=(
-  bundler                      # completion for basic bundler commands, as well as aliases and helper functions
   common-aliases               # creates helpful shortcut aliases for many commonly used commands
-  docker                       # auto-completion for docker as well as some aliases for common commands
-  docker-compose               # auto-completion for docker-compose as well as some aliases for common commands
-  dotenv                       # automatically load .env files when you cd into a directory
   encode64                     # encode64/e64; encodefile64/ef64; decode64/d64
-  gh                           # adds completion for the GitHub CLI
-  golang                       # completion for the Go Programming Language
   history                      # h (history); hl (less); hs (grep); hsi (grep -i)
-  httpie                       # completion for HTTPie, a command line HTTP client, a friendlier cURL replacement
   jsontools                    # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
-  npm                          # auto-completion for npm as well as many useful aliases
-  nvm                          # auto-completion for nvm and automatically sources nvm
-  rails                        # auto-completion and aliases for rails and rake
-  rake-fast                    # Fast rake autocompletion plugin that caches output
-  rbenv                        # sources rbenv, adds aliases: rubies, gemsets, current_ruby, current_gemset, gems
-  rvm                          # utility functions and completions for Ruby Version Manager
-  screen                       # sets title and hardstatus of the tab window for screen, the terminal multiplexer
-  sudo                         # Easily prefix your current or previous commands with sudo by pressing esc twice
-  thor                         # completion for Thor, a ruby toolkit for building powerful command-line interfaces
-  virtualenv                   # displays information of the created virtual container and allows background theming
-  yarn                         # completion for the Yarn package manager, as well as some aliases for common commands
   zbell                        # prints a bell character when a command finishes if it has been running for longer than a specified duration
   zsh-autosuggestions          # Fish-like autosuggestions for zsh
   zsh-completions              # Additional completion definitions for Zsh
   zsh-history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
   zsh-syntax-highlighting      # Fish shell like syntax highlighting for Zsh
-  # tmux                         # aliases for tmux, the terminal multiplexer
 )
 
 # User configuration for oh-my-zsh and plugins
@@ -119,22 +99,22 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # You may need to manually set your language environment
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+export LC_ALL="${LC_ALL:-en_US.UTF-8}"
+export LANG="${LANG:-en_US.UTF-8}"
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+  export EDITOR="${EDITOR:-vim}"
 else
-  export EDITOR='code'
-  export GIT_EDITOR='code --wait'
+  export EDITOR="${EDITOR:-code}"
+  export GIT_EDITOR="${GIT_EDITOR:-code --wait}"
 fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
 # Ensure AWS defaults are set
-export AWS_DEFAULT_REGION=us-east-1
+export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -144,9 +124,6 @@ export AWS_DEFAULT_REGION=us-east-1
 
 # Load iTerm2 shell integration
 [[ -e "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# Load fuzzy finder
-[ -e "${HOME}/.fzf.zsh" ] && source "${HOME}/.fzf.zsh"
 
 # Load rbenv
 [ -n "$(command -v rbenv 2>/dev/null)" ] && eval "$(rbenv init -)"

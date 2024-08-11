@@ -15,18 +15,30 @@ set -eu
 
 [ -z "${CODESPACES:-}" ] && exit 0
 
+# ENV variables we could evaluate in a Codespace:
+# CLOUDENV_ENVIRONMENT_ID=very-long-guid-hash
+# CODESPACES=true # Always true if set
+# CODESPACES_RECOVERY_CONTAINER=true|false
+# CODESPACE_NAME=name-plus-guid
+# CODESPACE_VSCODE_FOLDER=/workspaces/mycoolapp
+# CONTAINER_BUILDER_TOKEN=github-token
+# GITHUB_API_URL=https://api.github.com
+# GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN=app.github.dev
+# GITHUB_CODESPACE_TOKEN=LONG_TOKEN
+# GIT_COMMITTER_EMAIL=noreply@github.com
+# GITHUB_GRAPHQL_URL=https://api.github.com/graphql
+# GITHUB_REPOSITORY=me/mycoolapp
+# GITHUB_SERVER_URL=https://github.com
+# GITHUB_TOKEN=another-github-token
+# GITHUB_USER=me
+# HOST=codespaces-${short-token}
+# HOSTNAME=codespaces-${short-token}
+# RepositoryName=mycoolapp
+# TERM_PROGRAM=vscode # Could also be "codespaces"
+
 echo "Starting codespace specific bootstrap..."
 
 echo "Unsetting git url config for github.com..."
 git config --global --unset url."git@github.com:".insteadOf
-
-if [ -e "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
-  echo "Sourcing linuxbrew into zsh profile..."
-  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ${HOME}/.zprofile
-
-  echo "Installing gcc package via brew..."
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  brew install gcc 2>/dev/null
-fi
 
 echo "Done codespace specific bootstrapping!"

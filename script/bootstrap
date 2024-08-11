@@ -4,26 +4,30 @@ set -eu
 # Uncomment this next line (and commit the change) to make dotfile installs into
 # any new codespaces a no-op. Useful for debugging devcontainer builds without
 # worrying about whether your dotfiles are causing issues.
-[ -n "${CODESPACES:-}" ] && exit 0
+# [ -n "${CODESPACES:-}" ] && exit 0
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")../"
 
 echo "Starting bootstrap..."
 
-# Check for Oh My Zsh and install if we don't have it
-if [ -z "$(command -v omz 2>/dev/null)" ]; then
-  echo "Installing Oh My Zsh..."
-  /usr/bin/env bash -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-fi
+export ZSH_PATH="$(command -v zsh 2>/dev/null)"
 
-ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
-ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
-mkdir -p "${ZSH_CUSTOM}"
+if [ -n "${ZSH_PATH}" ]; then
+  # Check for Oh My Zsh and install if we don't have it
+  if [ -z "$(command -v omz 2>/dev/null)" ]; then
+    echo "Installing Oh My Zsh..."
+    /usr/bin/env bash -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  fi
+
+  ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
+  ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
+  mkdir -p "${ZSH_CUSTOM}"
+fi
 
 if [ -n "${CODESPACES:-}" ]; then
   export DOTFILES="/workspaces/.codespaces/.persistedshare/dotfiles"
 else
-  export DOTFILES="${DOTFILES:-${HOME}/.dotfiles}"
+  export DOTFILES="${DOTFILES:-$(pwd)}"
 fi
 
 echo "Copying dotfiles from '${DOTFILES}' to '${HOME}'..."
@@ -37,23 +41,27 @@ for file in "${home_dotfiles[@]}"; do
   ln -sfn "${DOTFILES}/${file}" "${HOME}/${file}"
 done
 
-echo "Copying dotfiles from '${DOTFILES}' to '${ZSH_CUSTOM}'..."
-zsh_custom_dotfiles=(
-  "agnoster.zsh-theme"
-  "aliases.zsh"
-  "path.zsh"
-)
-for file in "${zsh_custom_dotfiles[@]}"; do
-  echo "Copying ${file}"
-  ln -sfn "${DOTFILES}/${file}" "${ZSH_CUSTOM}/${file}"
-done
+if [ -n "${ZSH_PATH}" ]; then
+  echo "Copying dotfiles from '${DOTFILES}' to '${ZSH_CUSTOM}'..."
+  zsh_custom_dotfiles=(
+    "agnoster.zsh-theme"
+    "aliases.zsh"
+    "path.zsh"
+  )
+  for file in "${zsh_custom_dotfiles[@]}"; do
+    echo "Copying ${file}"
+    ln -sfn "${DOTFILES}/${file}" "${ZSH_CUSTOM}/${file}"
+  done
+fi
 
 [ -n "${CODESPACES:-}" ] && ./codespaces-bootstrap
 
-echo "Copying omz plugins..."
-[ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting"
-[ -d "${ZSH_CUSTOM}/plugins/zsh-autosuggestions" ] || git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
-[ -d "${ZSH_CUSTOM}/plugins/zsh-completions" ] || git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM}/plugins/zsh-completions"
-[ -d "${ZSH_CUSTOM}/plugins/zsh-history-substring-search" ] || git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTOM}/plugins/zsh-history-substring-search"
+if [ -n "${ZSH_PATH}" ]; then
+  echo "Copying omz plugins..."
+  [ -d "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ] || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting"
+  [ -d "${ZSH_CUSTOM}/plugins/zsh-autosuggestions" ] || git clone https://github.com/zsh-users/zsh-autosuggestions.git "${ZSH_CUSTOM}/plugins/zsh-autosuggestions"
+  [ -d "${ZSH_CUSTOM}/plugins/zsh-completions" ] || git clone https://github.com/zsh-users/zsh-completions.git "${ZSH_CUSTOM}/plugins/zsh-completions"
+  [ -d "${ZSH_CUSTOM}/plugins/zsh-history-substring-search" ] || git clone https://github.com/zsh-users/zsh-history-substring-search "${ZSH_CUSTOM}/plugins/zsh-history-substring-search"
+fi
 
 echo "Done bootstrapping!"
