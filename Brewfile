@@ -1,7 +1,6 @@
 tap "github/bootstrap"
 tap "github/gh"
 tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
 tap "homebrew/services"
 
 # Codec library for encoding and decoding AV1 video streams
@@ -21,6 +20,12 @@ brew "bat"
 
 # GNU File, Shell, and Text utilities
 brew "coreutils"
+
+# Pack, ship and run any application as a lightweight container
+brew "docker"
+
+# Isolated development environments using Docker
+brew "docker-compose"
 
 # GitHub command-line tool
 brew "gh"
@@ -145,9 +150,6 @@ cask "discord"
 # Application window manager focusing on simplicity
 cask "divvy"
 
-# App to build and share containerised applications and microservices
-cask "docker"
-
 # Client for the Dropbox cloud storage service
 cask "dropbox"
 
@@ -195,6 +197,9 @@ cask "google-chrome"
 
 # Client for the Google Drive storage service
 cask "google-drive"
+
+# Tools to protect your emails and files
+cask "gpg-suite"
 
 # Light, Electron-based Wrapper around GraphiQL
 cask "graphiql"
@@ -317,3 +322,36 @@ mas "QuikFlow", id: 1626354390
 mas "Speedtest", id: 1153157709
 mas "TestFlight", id: 899247664
 mas "Xcode", id: 497799835
+
+# Preferred but currently uninstalled formulae and casks:
+#
+# # Everything you need to get started with Heroku
+# brew "heroku"
+# # Open source relational database management system
+# brew "mysql", restart_service: true
+# # Object-relational database system
+# brew "postgresql", restart_service: true
+# # Persistent key-value database, with built-in net interface
+# brew "redis", restart_service: true
+# # Web browser focusing on privacy
+# cask "brave-browser"
+# # Browser for SQLite databases
+# cask "db-browser-for-sqlite"
+# # App to build and share containerised applications and microservices
+# cask "docker"
+# # Online diagram software
+# cask "drawio"
+# # Web browser
+# cask "firefox"
+# # Tool to turn any web page into a desktop app
+# cask "flotato"
+# # Multi-version Postgres.app
+# cask "postgres" # No longer hosted on homebrew; download from https://postgresapp.com/
+# # MySQL/MariaDB database management platform
+# cask "sequel-pro"
+# # Workspace to manage all your productivity apps from one place
+# cask "stack-stack" # Prefer v4 beta version from https://stackbrowser.com/
+# # Native GUI tool for relational databases
+# cask "tableplus"
+
+# mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/
