@@ -52,14 +52,16 @@ if [ -z $(command -v nvm 2>/dev/null) ]; then
   /usr/bin/env bash -c "$(wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh)"
 
   # Make sure NPM is available
-  export NVM_DIR="${HOME}/.nvm"
-  mkdir -p ${NVM_DIR}
-  [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
-nvm install --latest-npm
 
-# Install global NPM packages
+# Install NPM packages and global packages
+nvm install --latest-npm --lts
+nvm use --lts
 npm install --global yarn
+npm install --global @devcontainers/cli
 
 # Install Elixir Version Manager
 # curl -Lqs https://raw.githubusercontent.com/taylor/kiex/master/install | bash -s

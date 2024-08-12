@@ -26,26 +26,28 @@ tap "github/gh"
 tap "homebrew/bundle"
 tap "homebrew/services"
 
-# Docker on MacOS without Docker Desktop
-#
-# https://gist.github.com/juancsr/5927e6660d6ba5d2a34c61802d26e50a
-# https://how.wtf/how-to-use-docker-without-docker-desktop-on-macos.html
-# https://dev.to/elliotalexander/how-to-use-docker-without-docker-desktop-on-macos-217m
-#
-# Container runtimes on MacOS (and Linux) with minimal setup
-brew "colima", restart_service: true
-# Pack, ship and run any application as a lightweight container
-brew "docker"
-# Isolated development environments using Docker
-brew "docker-compose"
-# Platform keystore credential helper for Docker
-brew "docker-credential-helper"
-# Toolkit for embedding hypervisor capabilities in your application
-brew "hyperkit" unless system "test $(uname -p) = arm"
-# Run a Kubernetes cluster locally
-brew "minikube"
-# Generic machine emulator and virtualizer
-brew "qemu" if system "test $(uname -p) = arm"
+# This might not work after all, at least not for work...
+# # Docker on MacOS without Docker Desktop
+# #
+# # https://gist.github.com/juancsr/5927e6660d6ba5d2a34c61802d26e50a
+# # https://how.wtf/how-to-use-docker-without-docker-desktop-on-macos.html
+# # https://dev.to/elliotalexander/how-to-use-docker-without-docker-desktop-on-macos-217m
+# #
+# # Container runtimes on MacOS (and Linux) with minimal setup
+# brew "colima", restart_service: true
+# # Pack, ship and run any application as a lightweight container
+# brew "docker"
+# # Isolated development environments using Docker
+# brew "docker-compose"
+# # Platform keystore credential helper for Docker
+# brew "docker-credential-helper"
+# # # Toolkit for embedding hypervisor capabilities in your application
+# # brew "hyperkit" unless system "test $(uname -p) = arm"
+# # # Run a Kubernetes cluster locally
+# # brew "minikube"
+# # # Generic machine emulator and virtualizer
+# # brew "qemu" if system "test $(uname -p) = arm"
+cask "docker"
 
 # Codec library for encoding and decoding AV1 video streams
 brew "aom"

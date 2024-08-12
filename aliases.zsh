@@ -1,5 +1,6 @@
 # Shortcuts
 alias cls="clear"
+alias yn="test \$(${@}) && echo yup || echo nope"
 
 if [ -n "$(command -v zsh 2>/dev/null)" ]; then
   alias reloadshell="omz reload"
