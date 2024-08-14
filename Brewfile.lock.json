@@ -11,7 +11,7 @@
         "revision": "cc5cb0e6c08cee0cf499ac8e6a7360c0d1b4c9e8"
       },
       "homebrew/bundle": {
-        "revision": "9530e232315d8d31a3f4f2758b947337e56a5a88"
+        "revision": "6908c482f46130d42065f0a528e749177c2f7418"
       },
       "homebrew/cask-fonts": {
         "revision": "0ed20f35d21ebc3f4f829689b101078718ad5ce1"
@@ -25,45 +25,45 @@
     },
     "brew": {
       "awscli": {
-        "version": "2.17.27",
+        "version": "2.17.29",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
           "files": {
             "arm64_sonoma": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:6abdd4f8750468978bb50b096113952292fea696154e8e5066d12f7c2c279a3a",
-              "sha256": "6abdd4f8750468978bb50b096113952292fea696154e8e5066d12f7c2c279a3a"
+              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:57161f7772ba9cfbd949ea3c55fc91a822d0386b338c7b2fb660ed77ddded8e5",
+              "sha256": "57161f7772ba9cfbd949ea3c55fc91a822d0386b338c7b2fb660ed77ddded8e5"
             },
             "arm64_ventura": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:7557ff9e27f9ea88352ea00abd51e2045894345a8a41ff18bbfdf591b37cf1d8",
-              "sha256": "7557ff9e27f9ea88352ea00abd51e2045894345a8a41ff18bbfdf591b37cf1d8"
+              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:1429e1a53b76a4cc9c6505c492c054fef968e4e97a18d3fee7f6377ffef61f38",
+              "sha256": "1429e1a53b76a4cc9c6505c492c054fef968e4e97a18d3fee7f6377ffef61f38"
             },
             "arm64_monterey": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:70ea934150484e968d3545fbb85773820a35aa0c6e9b8eb2d37de88fcc9d3ef8",
-              "sha256": "70ea934150484e968d3545fbb85773820a35aa0c6e9b8eb2d37de88fcc9d3ef8"
+              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:ecad3e937a9cec33cbffe7cecef848425aa26b3c89da87850169446d7b8909cf",
+              "sha256": "ecad3e937a9cec33cbffe7cecef848425aa26b3c89da87850169446d7b8909cf"
             },
             "sonoma": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:cf9573434fe57b1d8aecf941c0e95eeee61ddf2acf2e6f4aacb6f4a43967ce38",
-              "sha256": "cf9573434fe57b1d8aecf941c0e95eeee61ddf2acf2e6f4aacb6f4a43967ce38"
+              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:ec4d234a4896c32d75bcc35ae3dce71dd16851f6387a4c345455fd507d0cb3ed",
+              "sha256": "ec4d234a4896c32d75bcc35ae3dce71dd16851f6387a4c345455fd507d0cb3ed"
             },
             "ventura": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:c6358f1eb00c7ecc080256cdfd4ea67992a4c579eda46473f843a01f2a3e8727",
-              "sha256": "c6358f1eb00c7ecc080256cdfd4ea67992a4c579eda46473f843a01f2a3e8727"
+              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:ced9035ba1a83f15555b81432fd514970dbbae07bfe153a3166176077f25be17",
+              "sha256": "ced9035ba1a83f15555b81432fd514970dbbae07bfe153a3166176077f25be17"
             },
             "monterey": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:8d447776ecf093406f643e465da45387f51b564e388a40a0dbe4a8799bcf92e7",
-              "sha256": "8d447776ecf093406f643e465da45387f51b564e388a40a0dbe4a8799bcf92e7"
+              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:c10bed8c754b650a86a5b0f11db6978248fd46d5be88630a92ff7342ecc502ab",
+              "sha256": "c10bed8c754b650a86a5b0f11db6978248fd46d5be88630a92ff7342ecc502ab"
             },
             "x86_64_linux": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:139a021681713cfd525d95db45fdd234f648b3baac2fe0abcd03f7df25b3ab9c",
-              "sha256": "139a021681713cfd525d95db45fdd234f648b3baac2fe0abcd03f7df25b3ab9c"
+              "url": "https://ghcr.io/v2/homebrew/core/awscli/blobs/sha256:cee888c2e2c528752ea88b87e62c87f8bb66d76757d7afd08febf5c46aec2db2",
+              "sha256": "cee888c2e2c528752ea88b87e62c87f8bb66d76757d7afd08febf5c46aec2db2"
             }
           }
         }
@@ -2332,26 +2332,248 @@
             }
           }
         }
+      },
+      "docker-buildx": {
+        "version": "0.16.2",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-buildx/blobs/sha256:56a03513c2d6ff1160f6bd71fda2988640017640d9f065839478150dc2e610ed",
+              "sha256": "56a03513c2d6ff1160f6bd71fda2988640017640d9f065839478150dc2e610ed"
+            },
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-buildx/blobs/sha256:654143a8adb5e856f1b26d5da74d8f97a166106cec92ab20f9ee9100d717c338",
+              "sha256": "654143a8adb5e856f1b26d5da74d8f97a166106cec92ab20f9ee9100d717c338"
+            },
+            "arm64_monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-buildx/blobs/sha256:ea586abe24487bf5a3798ee1650cbedea1737c7ea406f0fe762e3e0a0d9f660d",
+              "sha256": "ea586abe24487bf5a3798ee1650cbedea1737c7ea406f0fe762e3e0a0d9f660d"
+            },
+            "sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-buildx/blobs/sha256:6392a90372fe8f4c66419f7adaffdd7ee67b8b1887f8d38fde8a3ff1b4fa39a6",
+              "sha256": "6392a90372fe8f4c66419f7adaffdd7ee67b8b1887f8d38fde8a3ff1b4fa39a6"
+            },
+            "ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-buildx/blobs/sha256:9f25ea1ded3adc1685016ef4a453f7ea97c815702f5942c1d7aeb1ac1d724ce5",
+              "sha256": "9f25ea1ded3adc1685016ef4a453f7ea97c815702f5942c1d7aeb1ac1d724ce5"
+            },
+            "monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-buildx/blobs/sha256:5dcf6b7b5fa75dfeb5273f603c3e1e98772fa2598542f2c32a0c5b6931cbf580",
+              "sha256": "5dcf6b7b5fa75dfeb5273f603c3e1e98772fa2598542f2c32a0c5b6931cbf580"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-buildx/blobs/sha256:fa77690b7745955fa8e4d41f16805b6f0179f18abe90cd55c0cc22ec73ca9e55",
+              "sha256": "fa77690b7745955fa8e4d41f16805b6f0179f18abe90cd55c0cc22ec73ca9e55"
+            }
+          }
+        }
+      },
+      "docker-clean": {
+        "version": "2.0.4",
+        "bottle": {
+          "rebuild": 1,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "all": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-clean/blobs/sha256:8534cd2757101cb7ea6fc68d2175147769009a5b6bbab15d87bd5b83f46a06d6",
+              "sha256": "8534cd2757101cb7ea6fc68d2175147769009a5b6bbab15d87bd5b83f46a06d6"
+            }
+          }
+        }
+      },
+      "docker-completion": {
+        "version": "27.1.2",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "all": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-completion/blobs/sha256:d076db0170b4e7cb19a4f58b953ef6293d24f9a463406efc72f48e6c3d7c8b18",
+              "sha256": "d076db0170b4e7cb19a4f58b953ef6293d24f9a463406efc72f48e6c3d7c8b18"
+            }
+          }
+        }
+      },
+      "docker-ls": {
+        "version": "0.5.1",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:06347d89230140c033d404a279c49dd2d344dec5acb83b918ea6179e1a03f0d1",
+              "sha256": "06347d89230140c033d404a279c49dd2d344dec5acb83b918ea6179e1a03f0d1"
+            },
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:061380ab4b800dd7c9963eff07bf88387b1e7816ebd40c41145fc5492ca89868",
+              "sha256": "061380ab4b800dd7c9963eff07bf88387b1e7816ebd40c41145fc5492ca89868"
+            },
+            "arm64_monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:e8c823d66ba70fe7788f5cf389c71537d3c64776194dfde5b23eec60903f8083",
+              "sha256": "e8c823d66ba70fe7788f5cf389c71537d3c64776194dfde5b23eec60903f8083"
+            },
+            "arm64_big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:146371ff787d25857ec030cb07025e9e7e062b4fba43eb59136aad8ceca57790",
+              "sha256": "146371ff787d25857ec030cb07025e9e7e062b4fba43eb59136aad8ceca57790"
+            },
+            "sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:72ee993efbc61975cadb2bd63a6c32630312083c43cfc821ea3567535f271f52",
+              "sha256": "72ee993efbc61975cadb2bd63a6c32630312083c43cfc821ea3567535f271f52"
+            },
+            "ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:6a504107a216b56ac9b5b9b3f435c791c4dbb56440ca9a39bcf94d285665c580",
+              "sha256": "6a504107a216b56ac9b5b9b3f435c791c4dbb56440ca9a39bcf94d285665c580"
+            },
+            "monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:cbd941bf6005f92598ee1c00165c5eb7101fac547fe0c1d2b84a55a999d940a8",
+              "sha256": "cbd941bf6005f92598ee1c00165c5eb7101fac547fe0c1d2b84a55a999d940a8"
+            },
+            "big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:69d17d15d79bfa1813ad39ae3a0250ddd919a36b4d3923412cfbc17be56316dc",
+              "sha256": "69d17d15d79bfa1813ad39ae3a0250ddd919a36b4d3923412cfbc17be56316dc"
+            },
+            "catalina": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:47231e20bcc919d92de35c537c87c54f52bbcdaa85cf2bb9b27bc03a69f25587",
+              "sha256": "47231e20bcc919d92de35c537c87c54f52bbcdaa85cf2bb9b27bc03a69f25587"
+            },
+            "mojave": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:38eb334f22797271ae8e121030133f6fc3e33cd178cd938940d4ead6565e0225",
+              "sha256": "38eb334f22797271ae8e121030133f6fc3e33cd178cd938940d4ead6565e0225"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-ls/blobs/sha256:0002977a8ff7a2a2607098a743ec898e1aec0efee43095c06b56b873fbfcda15",
+              "sha256": "0002977a8ff7a2a2607098a743ec898e1aec0efee43095c06b56b873fbfcda15"
+            }
+          }
+        }
+      },
+      "docker-slim": {
+        "version": "1.40.11",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-slim/blobs/sha256:855bfe260abb098215f7c1e776e37b00ae1e63f9e633c67675632d94bc1be5e1",
+              "sha256": "855bfe260abb098215f7c1e776e37b00ae1e63f9e633c67675632d94bc1be5e1"
+            },
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-slim/blobs/sha256:c40b91f83138ae4309ca53a6b400847f3a1d27918711861e2b77d2f3bdf95fd8",
+              "sha256": "c40b91f83138ae4309ca53a6b400847f3a1d27918711861e2b77d2f3bdf95fd8"
+            },
+            "arm64_monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-slim/blobs/sha256:9a6f07c033f409f6ec63e16b0094a7b9d4d8565d8a76857f190434db9fa00b11",
+              "sha256": "9a6f07c033f409f6ec63e16b0094a7b9d4d8565d8a76857f190434db9fa00b11"
+            },
+            "sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-slim/blobs/sha256:7b4aabd09784a08f074d2d2957142b6e9cb85d7197b3705d74bd30d9c9f01952",
+              "sha256": "7b4aabd09784a08f074d2d2957142b6e9cb85d7197b3705d74bd30d9c9f01952"
+            },
+            "ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-slim/blobs/sha256:3fa3ca92496b509abb16b694d85a85f4c57e9b6c924529f68b43019605310aa0",
+              "sha256": "3fa3ca92496b509abb16b694d85a85f4c57e9b6c924529f68b43019605310aa0"
+            },
+            "monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-slim/blobs/sha256:0e8b4817f06c7777232ce31e349e9f6b8dbc7532cd6977e0f87a8b97816d07fc",
+              "sha256": "0e8b4817f06c7777232ce31e349e9f6b8dbc7532cd6977e0f87a8b97816d07fc"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/docker-slim/blobs/sha256:d65a744e5c8e376327fa9db30894b0bbc99b2a21603b91a938f0ac2eace45217",
+              "sha256": "d65a744e5c8e376327fa9db30894b0bbc99b2a21603b91a938f0ac2eace45217"
+            }
+          }
+        }
+      },
+      "vsce": {
+        "version": "2.15.0",
+        "bottle": {
+          "rebuild": 1,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sonoma": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/vsce/blobs/sha256:48d0726cf723c7bc8a7cc6dc70ac7264acd991fb754d3f532221b30f46f69b06",
+              "sha256": "48d0726cf723c7bc8a7cc6dc70ac7264acd991fb754d3f532221b30f46f69b06"
+            },
+            "arm64_ventura": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/vsce/blobs/sha256:0c6eb6b03b64e309d96faf44d2472a96d7fbcd3f6159530f46dd735b30ebd8a4",
+              "sha256": "0c6eb6b03b64e309d96faf44d2472a96d7fbcd3f6159530f46dd735b30ebd8a4"
+            },
+            "arm64_monterey": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/vsce/blobs/sha256:3095ea99be11fdcba4cd2e1c5e347c6a11b68e32c401fd0e361262e0328b00ac",
+              "sha256": "3095ea99be11fdcba4cd2e1c5e347c6a11b68e32c401fd0e361262e0328b00ac"
+            },
+            "sonoma": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/vsce/blobs/sha256:afe4a6cf108c2aee2a672a8dff18b1161ca6c66da40a95527f366233000020fd",
+              "sha256": "afe4a6cf108c2aee2a672a8dff18b1161ca6c66da40a95527f366233000020fd"
+            },
+            "ventura": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/vsce/blobs/sha256:aad312e494c4dab3ec434fc833fe4d3390a0e2419b2ab4f9336cb43aafc1d318",
+              "sha256": "aad312e494c4dab3ec434fc833fe4d3390a0e2419b2ab4f9336cb43aafc1d318"
+            },
+            "monterey": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/vsce/blobs/sha256:d6d5b20923a47882415980fd659a0c3b5313811fa747fba41ed47acc2ab91dda",
+              "sha256": "d6d5b20923a47882415980fd659a0c3b5313811fa747fba41ed47acc2ab91dda"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/vsce/blobs/sha256:67ee6be7fadd75c972f68455ac4c3c75a9fa7f8de4ac1205dbb80df6d9889e66",
+              "sha256": "67ee6be7fadd75c972f68455ac4c3c75a9fa7f8de4ac1205dbb80df6d9889e66"
+            }
+          }
+        }
       }
     },
     "cask": {
       "1password": {
-        "version": "8.10.39",
+        "version": "8.10.40",
         "options": {
           "full_name": "1password",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
       "adobe-acrobat-reader": {
-        "version": "24.002.20964",
+        "version": "24.002.21005",
         "options": {
           "full_name": "adobe-acrobat-reader",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2360,8 +2582,7 @@
         "options": {
           "full_name": "alfred",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2370,28 +2591,25 @@
         "options": {
           "full_name": "beyond-compare",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
       "chatgpt": {
-        "version": "1.2024.212,1722628638",
+        "version": "1.2024.219,1723258889",
         "options": {
           "full_name": "chatgpt",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
       "chromedriver": {
-        "version": "127.0.6533.99",
+        "version": "127.0.6533.119",
         "options": {
           "full_name": "chromedriver",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2400,8 +2618,7 @@
         "options": {
           "full_name": "clamxav",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2410,8 +2627,7 @@
         "options": {
           "full_name": "cleanmymac",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2420,8 +2636,7 @@
         "options": {
           "full_name": "cyberduck",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2436,18 +2651,16 @@
         "options": {
           "full_name": "deckset",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
       "discord": {
-        "version": "0.0.314",
+        "version": "0.0.315",
         "options": {
           "full_name": "discord",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2456,15 +2669,17 @@
         "options": {
           "full_name": "divvy",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
       "docker": {
         "version": "4.33.0,160616",
         "options": {
-          "full_name": "docker"
+          "full_name": "docker",
+          "args": {
+            "appdir": "~/Applications"
+          }
         }
       },
       "drawio": {
@@ -2478,8 +2693,7 @@
         "options": {
           "full_name": "dropbox",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2488,8 +2702,7 @@
         "options": {
           "full_name": "drivethrurpg",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2498,8 +2711,7 @@
         "options": {
           "full_name": "figma",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2520,8 +2732,7 @@
         "options": {
           "full_name": "font-monaspace",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2530,8 +2741,7 @@
         "options": {
           "full_name": "font-source-code-pro",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2540,8 +2750,7 @@
         "options": {
           "full_name": "font-source-code-pro-for-powerline",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2550,8 +2759,7 @@
         "options": {
           "full_name": "font-source-sans-3",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2560,8 +2768,7 @@
         "options": {
           "full_name": "font-source-serif-4",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2570,8 +2777,7 @@
         "options": {
           "full_name": "freeze",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2580,8 +2786,7 @@
         "options": {
           "full_name": "garmin-express",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2590,8 +2795,7 @@
         "options": {
           "full_name": "gemini",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2600,8 +2804,7 @@
         "options": {
           "full_name": "google-drive",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2610,8 +2813,7 @@
         "options": {
           "full_name": "gpg-suite",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2620,8 +2822,7 @@
         "options": {
           "full_name": "graphiql",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2630,8 +2831,7 @@
         "options": {
           "full_name": "imageoptim",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2640,8 +2840,7 @@
         "options": {
           "full_name": "iterm2",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2656,8 +2855,7 @@
         "options": {
           "full_name": "logi-options-plus",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2666,8 +2864,7 @@
         "options": {
           "full_name": "macdown",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2676,8 +2873,7 @@
         "options": {
           "full_name": "mailplane",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2686,8 +2882,7 @@
         "options": {
           "full_name": "monitorcontrol",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2696,8 +2891,7 @@
         "options": {
           "full_name": "monodraw",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2706,8 +2900,7 @@
         "options": {
           "full_name": "ngrok",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2716,8 +2909,7 @@
         "options": {
           "full_name": "obsbot-center",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2732,8 +2924,7 @@
         "options": {
           "full_name": "qlcolorcode",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2742,8 +2933,7 @@
         "options": {
           "full_name": "qlmarkdown",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2752,8 +2942,7 @@
         "options": {
           "full_name": "qlstephen",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2762,8 +2951,7 @@
         "options": {
           "full_name": "quicklook-csv",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2772,18 +2960,16 @@
         "options": {
           "full_name": "quicklook-json",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
       "raycast": {
-        "version": "1.80.0",
+        "version": "1.81.0",
         "options": {
           "full_name": "raycast",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2792,8 +2978,7 @@
         "options": {
           "full_name": "script-debugger",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2808,8 +2993,7 @@
         "options": {
           "full_name": "shutter-encoder",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2818,8 +3002,7 @@
         "options": {
           "full_name": "slack",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2828,8 +3011,7 @@
         "options": {
           "full_name": "spotify",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2838,8 +3020,7 @@
         "options": {
           "full_name": "steam",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2848,8 +3029,7 @@
         "options": {
           "full_name": "transmit",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2858,8 +3038,7 @@
         "options": {
           "full_name": "viscosity",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2868,8 +3047,7 @@
         "options": {
           "full_name": "visual-studio-code",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2878,8 +3056,7 @@
         "options": {
           "full_name": "voodoopad",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2888,18 +3065,16 @@
         "options": {
           "full_name": "warp",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
       "wavebox": {
-        "version": "10.127.10.2",
+        "version": "10.127.16.2",
         "options": {
           "full_name": "wavebox",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2908,8 +3083,7 @@
         "options": {
           "full_name": "yubico-yubikey-manager",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2918,8 +3092,7 @@
         "options": {
           "full_name": "zoom",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2940,15 +3113,17 @@
         "options": {
           "full_name": "font-mona-sans",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
       "font-monaspace-nerd-font": {
         "version": "3.2.1",
         "options": {
-          "full_name": "font-monaspace-nerd-font"
+          "full_name": "font-monaspace-nerd-font",
+          "args": {
+            "appdir": "~/Applications"
+          }
         }
       },
       "font-open-sans": {
@@ -2956,8 +3131,7 @@
         "options": {
           "full_name": "font-open-sans",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2966,8 +3140,7 @@
         "options": {
           "full_name": "font-powerline-symbols",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2978,12 +3151,11 @@
         }
       },
       "google-chrome": {
-        "version": "127.0.6533.100",
+        "version": "127.0.6533.120",
         "options": {
           "full_name": "google-chrome",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -2992,8 +3164,7 @@
         "options": {
           "full_name": "microsoft-edge",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -3008,8 +3179,7 @@
         "options": {
           "full_name": "the-unarchiver",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -3018,8 +3188,7 @@
         "options": {
           "full_name": "qlimagesize",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -3028,8 +3197,7 @@
         "options": {
           "full_name": "qlvideo",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -3038,8 +3206,7 @@
         "options": {
           "full_name": "qlzipinfo",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -3048,8 +3215,7 @@
         "options": {
           "full_name": "screenfocus",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -3058,8 +3224,7 @@
         "options": {
           "full_name": "scriptql",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
           }
         }
       },
@@ -3068,8 +3233,160 @@
         "options": {
           "full_name": "webpquicklook",
           "args": {
-            "appdir": "~/Applications",
-            "require_sha": true
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-0xproto": {
+        "version": "2.100",
+        "options": {
+          "full_name": "font-0xproto",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-0xproto-nerd-font": {
+        "version": "3.2.1",
+        "options": {
+          "full_name": "font-0xproto-nerd-font",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-bungee-color": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-bungee-color",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-bungee-hairline": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-bungee-hairline",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-bungee-inline": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-bungee-inline",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-bungee-outline": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-bungee-outline",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-bungee-shade": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-bungee-shade",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-bungee-spice": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-bungee-spice",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-bungee": {
+        "version": "2.001",
+        "options": {
+          "full_name": "font-bungee",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-creepster-caps": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-creepster-caps",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-creepster": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-creepster",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-space-grotesk": {
+        "version": "2.0.0",
+        "options": {
+          "full_name": "font-space-grotesk",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-space-mono-nerd-font": {
+        "version": "3.2.1",
+        "options": {
+          "full_name": "font-space-mono-nerd-font",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-space-mono": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-space-mono",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-sudo": {
+        "version": "1.4",
+        "options": {
+          "full_name": "font-sudo",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-texturina": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-texturina",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "font-tilt-warp": {
+        "version": "latest",
+        "options": {
+          "full_name": "font-tilt-warp",
+          "args": {
+            "appdir": "~/Applications"
           }
         }
       }
@@ -3118,10 +3435,76 @@
       "Xcode": {
         "id": "497799835",
         "version": "15.4"
-      }
+      },
+      "AnySwitch - Powerful switches": null,
+      "Bear: Markdown Notes": null,
+      "Encrypto: Secure Your Files": null,
+      "one sec | screen time + focus": null,
+      "Photomator – Photo Editor": null,
+      "Speedtest by Ookla": null,
+      "Photomator - Photo Editor": null
     },
     "vscode": {
-      "GitHub.codespaces": null
+      "GitHub.codespaces": null,
+      "AlanWalk.markdown-navigation": null,
+      "assisrMatheus.sidebar-markdown-notes": null,
+      "bierner.github-markdown-preview": null,
+      "castwide.solargraph": null,
+      "ciarant.vscode-structurizr": null,
+      "CraigMaslowski.erb": null,
+      "DavidAnson.vscode-markdownlint": null,
+      "dbaeumer.vscode-eslint": null,
+      "deaniusolutions.deckset": null,
+      "DrMerfy.overtype": null,
+      "dustinsanders.an-old-hope-theme-vscode": null,
+      "eamodio.gitlens": null,
+      "erikphansen.vscode-toggle-column-selection": null,
+      "esbenp.prettier-vscode": null,
+      "foxundermoon.shell-format": null,
+      "GitHub.copilot-chat": null,
+      "GitHub.copilot": null,
+      "GitHub.remotehub": null,
+      "github.vscode-github-actions": null,
+      "GitHub.vscode-pull-request-github": null,
+      "golang.go": null,
+      "GraphQL.vscode-graphql-syntax": null,
+      "howardzuo.vscode-git-tags": null,
+      "IBM.output-colorizer": null,
+      "itarato.byesig": null,
+      "janjoerke.align-by-regex": null,
+      "jnbt.vscode-rufo": null,
+      "mechatroner.rainbow-csv": null,
+      "MermaidChart.vscode-mermaid-chart": null,
+      "ms-azuretools.vscode-docker": null,
+      "ms-toolsai.jupyter": null,
+      "ms-vscode-remote.remote-containers": null,
+      "ms-vscode.vscode-github-issue-notebooks": null,
+      "ms-vscode.wordcount": null,
+      "phoihos.csv-to-md-table": null,
+      "PKief.material-icon-theme": null,
+      "redhat.vscode-yaml": null,
+      "rubocop.vscode-rubocop": null,
+      "shardulm94.trailing-spaces": null,
+      "shd101wyy.markdown-preview-enhanced": null,
+      "Shopify.ruby-lsp": null,
+      "sorbet.sorbet-vscode-extension": null,
+      "stkb.rewrap": null,
+      "streetsidesoftware.code-spell-checker": null,
+      "Tyriar.sort-lines": null,
+      "yzhang.markdown-all-in-one": null,
+      "ms-vscode.remote-repositories": null,
+      "stripe.endsmart": null,
+      "nextfaze.json-parse-stringify": null,
+      "bierner.markdown-checkbox": null,
+      "bierner.markdown-emoji": null,
+      "bierner.markdown-footnotes": null,
+      "bierner.markdown-mermaid": null,
+      "bierner.markdown-preview-github-styles": null,
+      "bierner.markdown-yaml-preamble": null,
+      "ms-toolsai.jupyter-keymap": null,
+      "ms-toolsai.jupyter-renderers": null,
+      "ms-toolsai.vscode-jupyter-cell-tags": null,
+      "ms-toolsai.vscode-jupyter-slideshow": null
     }
   },
   "system": {

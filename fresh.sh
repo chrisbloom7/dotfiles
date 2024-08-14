@@ -33,6 +33,12 @@ brew tap homebrew/bundle
 brew bundle --file ./Brewfile
 brew services cleanup
 
+# Uninstall default Mac apps
+mas uninstall 408981434 || true # iMovie
+mas uninstall 409183694 || true # Keynote
+mas uninstall 409201541 || true # Pages
+mas uninstall 409203825 || true # Numbers
+
 # Set default MySQL root password and auth type
 mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
 
