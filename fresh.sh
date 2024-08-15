@@ -1,13 +1,11 @@
 #!/usr/bin/env sh
 set -eu
 
-echo "Setting up your Mac..."
-
 # Run setup steps that apply both locally and in devcontainers
 script/bootstrap
 
-echo "Setting ZSH is the default shell..."
-chsh -s $(command -v zsh)
+# Now for the Mac stuff
+echo "Setting up your Mac..."
 
 # Symlink the Mackup config files to the home directory.
 # Make sure Mackup is excluded from backing itself up
@@ -40,10 +38,15 @@ mas uninstall 409201541 || true # Pages
 mas uninstall 409203825 || true # Numbers
 
 # Set default MySQL root password and auth type
-mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
+if [ -n $(command -v mysql 2>/dev/null) ]; then
+  echo Setting a blank root password for MySQL...
+  brew services start mysql
+  mysql -u root -e "ALTER USER root@localhost IDENTIFIED BY ''; FLUSH PRIVILEGES;"
+  brew services stop mysql
+fi
 
-# Install latest Ruby version using rbenv
 # rbenv was installed via Brewfile
+echo Installing latest Ruby version using rbenv...
 rbenv init bash || echo "bash shell not found for rbenv to init"
 rbenv init zsh || echo "zsh shell not found for rbenv to init"
 eval "$(rbenv init -)"
@@ -56,12 +59,12 @@ rbenv install "$RBENV_VERSION" && rbenv global "$RBENV_VERSION" && rbenv rehash
 # Install Node Version Manager - Make sure to update the version as new versions are published
 if [ -z $(command -v nvm 2>/dev/null) ]; then
   /usr/bin/env bash -c "$(wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh)"
-
-  # Make sure NPM is available
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
+
+# Make sure NPM is available
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Install NPM packages and global packages
 nvm install --latest-npm --lts

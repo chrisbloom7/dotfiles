@@ -7,27 +7,27 @@ mkdir -p "${SRC}"
 mkdir -p "${SRC}/sandbox"
 
 # Personal
-[ -d "${SRC}/chrisbloom7/enumpath" ] || git clone git@github.com:chrisbloom7/enumpath.git ${SRC}/chrisbloom7/enumpath
 [ -d "${SRC}/chrisbloom7/center-notifications-applescript" ] || git clone git@github.com:chrisbloom7/center-notifications-applescript.git ${SRC}/chrisbloom7/center-notifications-applescript
-[ -d "${SRC}/chrisbloom7/enumpath.io" ] || git clone git@github.com:chrisbloom7/enumpath.io.git ${SRC}/chrisbloom7/enumpath.io
-[ -d "${SRC}/chrisbloom7/improved-initiative" ] || git clone git@github.com:chrisbloom7/improved-initiative.git ${SRC}/chrisbloom7/improved-initiative
-[ -d "${SRC}/chrisbloom7/robinina.art" ] || git clone git@github.com:chrisbloom7/robinina.art.git ${SRC}/chrisbloom7/robinina.art
-[ -d "${SRC}/chrisbloom7/statblock-shop" ] || git clone git@github.com:chrisbloom7/statblock-shop.git ${SRC}/chrisbloom7/statblock-shop
-[ -d "${SRC}/chrisbloom7/churnobyl-api" ] || git clone git@github.com:chrisbloom7/churnobyl-api.git ${SRC}/chrisbloom7/churnobyl-api
-[ -d "${SRC}/chrisbloom7/wawasit" ] || git clone git@github.com:chrisbloom7/wawasit.git ${SRC}/chrisbloom7/wawasit
-[ -d "${SRC}/chrisbloom7/simulated-annealing-experiments" ] || git clone git@github.com:chrisbloom7/simulated-annealing-experiments.git ${SRC}/chrisbloom7/simulated-annealing-experiments
+[ -d "${SRC}/chrisbloom7/churnobyl-api" ]                    || git clone git@github.com:chrisbloom7/churnobyl-api.git ${SRC}/chrisbloom7/churnobyl-api
+[ -d "${SRC}/chrisbloom7/enumpath.io" ]                      || git clone git@github.com:chrisbloom7/enumpath.io.git ${SRC}/chrisbloom7/enumpath.io
+[ -d "${SRC}/chrisbloom7/enumpath" ]                         || git clone git@github.com:chrisbloom7/enumpath.git ${SRC}/chrisbloom7/enumpath
+[ -d "${SRC}/chrisbloom7/improved-initiative" ]              || git clone git@github.com:chrisbloom7/improved-initiative.git ${SRC}/chrisbloom7/improved-initiative
+[ -d "${SRC}/chrisbloom7/robinina.art" ]                     || git clone git@github.com:chrisbloom7/robinina.art.git ${SRC}/chrisbloom7/robinina.art
+[ -d "${SRC}/chrisbloom7/simulated-annealing-experiments" ]  || git clone git@github.com:chrisbloom7/simulated-annealing-experiments.git ${SRC}/chrisbloom7/simulated-annealing-experiments
+[ -d "${SRC}/chrisbloom7/statblock-shop" ]                   || git clone git@github.com:chrisbloom7/statblock-shop.git ${SRC}/chrisbloom7/statblock-shop
+[ -d "${SRC}/chrisbloom7/wawasit" ]                          || git clone git@github.com:chrisbloom7/wawasit.git ${SRC}/chrisbloom7/wawasit
 
 # OS Projects
-[ -d "${SRC}/slack-ruby/slack-ruby-client" ] || git clone git@github.com:slack-ruby/slack-ruby-client.git ${SRC}/slack-ruby/slack-ruby-client
-[ -d "${SRC}/slack-ruby/slack-api-ref" ] || git clone git@github.com:slack-ruby/slack-api-ref.git ${SRC}/slack-ruby/slack-api-ref
-[ -d "${SRC}/3zcurdia/annealing" ] || git clone git@github.com:3zcurdia/annealing.git ${SRC}/3zcurdia/annealing
-[ -d "${SRC}/Humblemonk/DiceMaiden" ] || git clone git@github.com:Humblemonk/DiceMaiden.git ${SRC}/Humblemonk/DiceMaiden
-[ -d "${SRC}/rails/rails" ] || git clone git@github.com:rails/rails.git ${SRC}/rails/rails
+[ -d "${SRC}/3zcurdia/annealing" ]                  || git clone git@github.com:3zcurdia/annealing.git ${SRC}/3zcurdia/annealing
+[ -d "${SRC}/Azgaar/Fantasy-Map-Generator" ]        || git clone git@github.com:Azgaar/Fantasy-Map-Generator.git ${SRC}/Azgaar/Fantasy-Map-Generator
 [ -d "${SRC}/cynicaloptimist/improved-initiative" ] || git clone git@github.com:cynicaloptimist/improved-initiative.git ${SRC}/cynicaloptimist/improved-initiative
-[ -d "${SRC}/ruby-grape/grape-rabl" ] || git clone git@github.com:ruby-grape/grape-rabl.git ${SRC}/ruby-grape/grape-rabl
-[ -d "${SRC}/open5e/open5e" ] || git clone git@github.com:open5e/open5e.git ${SRC}/open5e/open5e
-[ -d "${SRC}/samvbeckmann/statblock-shop" ] || git clone git@github.com:samvbeckmann/statblock-shop.git ${SRC}/samvbeckmann/statblock-shop
-[ -d "${SRC}/earrrl/earrrl-ruby" ] || git clone git@github.com:earrrl/earrrl-ruby.git ${SRC}/earrrl/earrrl-ruby
-[ -d "${SRC}/ossf/osv-schema" ] || git clone git@github.com:ossf/osv-schema.git ${SRC}/ossf/osv-schema
-[ -d "${SRC}/rubygems/rubygems" ] || git clone git@github.com:rubygems/rubygems.git ${SRC}/rubygems/rubygems
-[ -d "${SRC}/Azgaar/Fantasy-Map-Generator" ] || git clone git@github.com:Azgaar/Fantasy-Map-Generator.git ${SRC}/Azgaar/Fantasy-Map-Generator
+[ -d "${SRC}/earrrl/earrrl-ruby" ]                  || git clone git@github.com:earrrl/earrrl-ruby.git ${SRC}/earrrl/earrrl-ruby
+[ -d "${SRC}/Humblemonk/DiceMaiden" ]               || git clone git@github.com:Humblemonk/DiceMaiden.git ${SRC}/Humblemonk/DiceMaiden
+[ -d "${SRC}/open5e/open5e" ]                       || git clone git@github.com:open5e/open5e.git ${SRC}/open5e/open5e
+[ -d "${SRC}/ossf/osv-schema" ]                     || git clone git@github.com:ossf/osv-schema.git ${SRC}/ossf/osv-schema
+[ -d "${SRC}/rails/rails" ]                         || git clone git@github.com:rails/rails.git ${SRC}/rails/rails
+[ -d "${SRC}/ruby-grape/grape-rabl" ]               || git clone git@github.com:ruby-grape/grape-rabl.git ${SRC}/ruby-grape/grape-rabl
+[ -d "${SRC}/rubygems/rubygems" ]                   || git clone git@github.com:rubygems/rubygems.git ${SRC}/rubygems/rubygems
+[ -d "${SRC}/samvbeckmann/statblock-shop" ]         || git clone git@github.com:samvbeckmann/statblock-shop.git ${SRC}/samvbeckmann/statblock-shop
+[ -d "${SRC}/slack-ruby/slack-api-ref" ]            || git clone git@github.com:slack-ruby/slack-api-ref.git ${SRC}/slack-ruby/slack-api-ref
+[ -d "${SRC}/slack-ruby/slack-ruby-client" ]        || git clone git@github.com:slack-ruby/slack-ruby-client.git ${SRC}/slack-ruby/slack-ruby-client

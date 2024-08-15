@@ -6,7 +6,7 @@ set -eu
 # worrying about whether your dotfiles are causing issues.
 # [ -n "${CODESPACES:-}" ] && exit 0
 
-cd "$(dirname "$0")../"
+cd "$(dirname "$0")/.."
 
 echo "Starting bootstrap..."
 
@@ -22,6 +22,10 @@ if [ -n "${ZSH_PATH}" ]; then
   ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
   ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
   mkdir -p "${ZSH_CUSTOM}"
+
+  # Set zsh as the default
+  echo "Setting ZSH is the default shell..."
+  chsh -s $(command -v zsh)
 fi
 
 if [ -n "${CODESPACES:-}" ]; then
@@ -54,7 +58,7 @@ if [ -n "${ZSH_PATH}" ]; then
   done
 fi
 
-[ -n "${CODESPACES:-}" ] && ./codespaces-bootstrap
+[ -n "${CODESPACES:-}" ] && script/codespaces-bootstrap
 
 if [ -n "${ZSH_PATH}" ]; then
   echo "Copying omz plugins..."

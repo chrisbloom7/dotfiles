@@ -195,9 +195,6 @@ cask "font-sudo"                          # Sudo font
 cask "font-texturina"                     # Texturina font
 cask "font-tilt-warp"                     # Tilt Warp font
 
-
-
-
 ## Apps from the Mac App Store
 mas "1Password for Safari",          id: 1569813296
 mas "AnySwitch - Powerful switches", id: 6444313776
