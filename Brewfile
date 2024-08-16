@@ -74,6 +74,7 @@ brew "bash-completion"              # Programmable completion for Bash 3.2
 brew "bash"                         # Bourne-Again SHell, a UNIX command interpreter
 brew "bat"                          # Clone of cat(1) with syntax highlighting and Git integration
 brew "coreutils"                    # GNU File, Shell, and Text utilities
+brew "devcontainer"                 # Reference implementation for the Development Containers specification
 brew "gh"                           # GitHub command-line tool
 brew "git"                          # Distributed revision control system
 brew "github-keygen"                # Bootstrap GitHub SSH configuration
