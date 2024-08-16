@@ -8,6 +8,10 @@ export DOTFILES=$HOME/.dotfiles
 export ZSH=$HOME/.oh-my-zsh
 
 # Enable completions
+if [ -n "$(command -v rbenv 2>/dev/null)" ] && [ -e "$(rbenv root)/completions" ]; then
+  # add rbenv completions
+  FPATH="$(rbenv root)/completions:${FPATH}"
+fi
 autoload -Uz compinit && compinit
 
 # Set name of the theme to load --- if set to "random", it will
@@ -131,6 +135,10 @@ export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 # Load nodenv
 [ -n "$(command -v nodenv 2>/dev/null)" ] && eval "$(nodenv init -)"
 
+# NVM completions
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Make sure ruby-build is up to date
+[ -d "$(rbenv root)/plugins/ruby-build" ] && git -C "$(rbenv root)/plugins/ruby-build" pull
