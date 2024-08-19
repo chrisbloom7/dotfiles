@@ -113,6 +113,7 @@ In addition to [Vints' own sentiments](https://github.com/driesvints/dotfiles?ta
 [^bash-abilities]: I'm not a bash expert, so there are likely better ways to do some of the things I've done here. I'm always open to suggestions for improvement!
 [^macos]: The "fresh" setup scripts in this repo are built around setting up MacOS laptops specifically, which are my preferred choice for development machines. YMMV if you're using a different OS.
 [^codespaces]: I tend to use [GitHub Codespaces](https://github.com/features/codespaces) for most of my development these days, so having a local development environment where I [INSTALL ALL THE THINGS](https://web.archive.org/web/20240807175656if_/https://www.simplybusiness.co.uk/wp-content/uploads/sites/3/2024/05/things.webp) is much less important than it used to be. As such, the "fresh" setup scrips are focused on installing daily productivity tools and configuration rather than the more resource intensive development services that I would have installed in the past, like databases, memcache servers, etc.
+
 [mackup-sonoma]: https://github.com/lra/mackup/issues/1924
 [workaround]: https://github.com/lra/mackup/issues/1924#issuecomment-1756330534
 [storages]: https://github.com/lra/mackup?tab=readme-ov-file#supported-storages
