@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+set -e
+
+# This script should be codespace agnosic. It is intended to be run as part of a
+# devcontainer's `postAttachCommand` lifecycle event to perform additional setup
+# steps specific to these dotfiles and my development preferences.
+#
+# Note that this is not based on any built-in mechanism of devcontainers or
+# codespaces, it's something you must manually enable via one of the lifecycle
+# event hooks - the most obvious targets being `postCreateCommand` and
+# `postAttachCommand` events - by adding something like the following to a
+# script that's assigned to the event in your .devcontainer.json file:
+#
+# ```sh
+# # Run any additional user-specific hooks. This runs every time the container is attached.
+# for i in /workspaces/.codespaces/.persistedshare/dotfiles/script/codespaces-post-attach \
+#           /workspaces/.codespaces/.persistedshare/dotfiles/codespaces-post-attach; do
+#   if [ -f "$i" ] && [ -x "$i" ]; then
+#     echo "Running $i..."
+#     "$i"
+#     break
+#   fi
+# done
+# ```
+#
+# The file names `codespaces-post-attach` and `codespaces-post-create` are the
+# convention used at GitHub, but you can use any name you like. The script will
+# be executed in the context of whatever user account the devcontainer is
+# configured to use, and remember to make sure the scripts are executable.
+#
+# Caveat lector: While codespaces are typically isolated environments, you
+# should still take care to only enable this for devcontainers in repos that you
+# control and that have a reasonable level security and observability.
+
+echo "Running post-start script from dotfiles..."

@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-set -e
-
-# This might be a customization that only applies in the github monolith
-echo "Running post-start script from dotfiles..."
