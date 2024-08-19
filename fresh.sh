@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -eu
+set -euxo pipefail
 
 # Run setup steps that apply both locally and in devcontainers
 script/bootstrap
@@ -51,7 +51,7 @@ rbenv init bash || echo "bash shell not found for rbenv to init"
 rbenv init zsh || echo "zsh shell not found for rbenv to init"
 eval "$(rbenv init -)"
 export RBENV_VERSION="$(rbenv install -l | grep -E '^\s+(\d|\.)+$' | tail -n 1 | sed -e 's/^[ \t]*//')"
-export RBENV_ROOT="$HOME/.rbenv"
+export RBENV_ROOT="$(rbenv root)"
 [ -s "$RBENV_ROOT/default-gems" ] && rm -rf "$RBENV_ROOT/default-gems"
 ln -s "$HOME/.dotfiles/default-gems" "$RBENV_ROOT/default-gems"
 rbenv install "$RBENV_VERSION" && rbenv global "$RBENV_VERSION" && rbenv rehash

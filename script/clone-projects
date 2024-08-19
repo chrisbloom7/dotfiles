@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -eu
+set -euxo pipefail
 
 # Create a source directory and fold for personal projects
 SRC="${HOME}/src"
