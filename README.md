@@ -21,6 +21,18 @@ These instructions are for when you've already set up your dotfiles. If you want
 >
 > Also note that this process probably cannot run unattended - you'll likely be prompted for your password several times.
 
+> [!WARNING]
+> As of this writing, `mackup` [does not work on MacOS 14
+> (Sonoma)][mackup-sonoma] due to changes in the way the OS handles file
+> permissions. Using it could result in data loss. There is a
+> [workaround][workaround] that some folks have found success with, but you
+> should be aware of the risks before proceeding. You can always skip the
+> `mackup` steps if you're not comfortable with the risk.
+>
+> Secondly, if you do choose to use `mackup`, I would strongly recommend using a
+> [storage provider][storages] that supports versioning, i.e. not iCloud, in
+> case you need to recover from a bad `mackup backup` or `mackup restore`.
+
 ### 1. Backup your data
 
 If you're migrating from an existing Mac, you should first make sure to backup all of your existing data. Go through the checklist below to make sure you didn't forget anything before you migrate.
@@ -101,3 +113,6 @@ In addition to [Vints' own sentiments](https://github.com/driesvints/dotfiles?ta
 [^bash-abilities]: I'm not a bash expert, so there are likely better ways to do some of the things I've done here. I'm always open to suggestions for improvement!
 [^macos]: The "fresh" setup scripts in this repo are built around setting up MacOS laptops specifically, which are my preferred choice for development machines. YMMV if you're using a different OS.
 [^codespaces]: I tend to use [GitHub Codespaces](https://github.com/features/codespaces) for most of my development these days, so having a local development environment where I [INSTALL ALL THE THINGS](https://web.archive.org/web/20240807175656if_/https://www.simplybusiness.co.uk/wp-content/uploads/sites/3/2024/05/things.webp) is much less important than it used to be. As such, the "fresh" setup scrips are focused on installing daily productivity tools and configuration rather than the more resource intensive development services that I would have installed in the past, like databases, memcache servers, etc.
+[mackup-sonoma]: https://github.com/lra/mackup/issues/1924
+[workaround]: https://github.com/lra/mackup/issues/1924#issuecomment-1756330534
+[storages]: https://github.com/lra/mackup?tab=readme-ov-file#supported-storages

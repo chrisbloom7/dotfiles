@@ -210,7 +210,7 @@ mas "TestFlight",                    id: 899247664
 mas "Xcode",                         id: 497799835
 
 ## VS code extensions
-vscode "AlanWalk.markdown-navigation"               # Auto genreate markdown navigation panel to the activity bar.                                                                                                                                                                                                                                            # 'vscode --install-extension'
+vscode "AlanWalk.markdown-navigation"               # Auto generate markdown navigation panel to the activity bar.
 vscode "assisrMatheus.sidebar-markdown-notes"       # Take notes in your sidebar using markdown
 vscode "bierner.github-markdown-preview"            # Extension pack of VS Code markdown preview extensions
 vscode "castwide.solargraph"                        # A Ruby language server featuring code completion, intellisense, and inline documentation
@@ -295,8 +295,8 @@ vscode "ms-toolsai.vscode-jupyter-slideshow"    # Jupyter Slide Show support for
 # cask "drawio"                            # Online diagram software
 # cask "firefox"                           # Web browser
 # cask "flotato"                           # Tool to turn any web page into a desktop app
-# cask "postgres"                          # No longer hosted on homebrew; download from https://postgresapp.com/        # Multi-version Postgres.app
+# cask "postgres-unofficial"               # App wrapper for PostgreSQL with support for multiple versions and databases
 # cask "sequel-pro"                        # MySQL/MariaDB database management platform
-# cask "stack-stack"                       # Prefer v4 beta version from https://stackbrowser.com/                       # Workspace to manage all your productivity apps from one place
+# cask "stack-stack"                       # Workspace to manage all your productivity apps from one place; Prefer v4 beta version from https://stackbrowser.com/
 # cask "tableplus"                         # Native GUI tool for relational databases
 # mas "Window Focus", id: 1142625137       # License purchased directly from developer. Download from https://fiplab.com/
