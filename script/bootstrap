@@ -24,7 +24,7 @@ if [ -n "$(command -v zsh 2>/dev/null)" ]; then
 
   # Set zsh as the default
   echo "Setting ZSH is the default shell..."
-  chsh -s $(command -v zsh)
+  sudo chsh -s $(command -v zsh)
 fi
 
 if [ -n "${CODESPACES:-}" ]; then
