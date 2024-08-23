@@ -213,7 +213,7 @@ mas "Xcode",                         id: 497799835
 vscode "AlanWalk.markdown-navigation"               # Auto generate markdown navigation panel to the activity bar.
 vscode "assisrMatheus.sidebar-markdown-notes"       # Take notes in your sidebar using markdown
 vscode "bierner.github-markdown-preview"            # Extension pack of VS Code markdown preview extensions
-vscode "castwide.solargraph"                        # A Ruby language server featuring code completion, intellisense, and inline documentation
+# vscode "castwide.solargraph"                        # A Ruby language server featuring code completion, intellisense, and inline documentation
 vscode "ciarant.vscode-structurizr"                 # Structurizr DSL syntax highlighting
 vscode "CraigMaslowski.erb"                         # Syntax Highlighting for Ruby ERB files
 vscode "DavidAnson.vscode-markdownlint"             # Markdown linting and style checking for Visual Studio Code
@@ -237,7 +237,7 @@ vscode "howardzuo.vscode-git-tags"                  # quick manage tags for a gi
 vscode "IBM.output-colorizer"                       # Syntax highlighting for log files
 vscode "itarato.byesig"                             # Hide Ruby Sorbet signatures
 vscode "janjoerke.align-by-regex"                   # Aligns selected lines of text by a regular expression.
-vscode "jnbt.vscode-rufo"                           # VS Code plugin for ruby-formatter/rufo
+# vscode "jnbt.vscode-rufo"                         # VS Code plugin for ruby-formatter/rufo
 vscode "mechatroner.rainbow-csv"                    # Highlight CSV and TSV files, Run SQL-like queries
 vscode "MermaidChart.vscode-mermaid-chart"          # The Mermaid Chart extension for Visual Studio Code enables developers to view and edit diagrams stored in Mermaid charts within the Visual Studio Code. With integration to the Mermaid Chart service, this extension allows users to attach diagrams to their code. Gain quick access to edit diagrams.
 vscode "ms-azuretools.vscode-docker"                # Makes it easy to create, manage, and debug containerized applications.
@@ -250,10 +250,10 @@ vscode "nextfaze.json-parse-stringify"              # Quickly flick between stri
 vscode "phoihos.csv-to-md-table"                    # Convert CSV/TSV/PSV text to GitHub Flavored Markdown table
 vscode "PKief.material-icon-theme"                  # Material Design Icons for Visual Studio Code
 vscode "redhat.vscode-yaml"                         # YAML Language Support by Red Hat, with built-in Kubernetes syntax support
-vscode "rubocop.vscode-rubocop"                     # VS Code extension for the RuboCop linter and code formatter.
+# vscode "rubocop.vscode-rubocop"                     # VS Code extension for the RuboCop linter and code formatter.
 vscode "shardulm94.trailing-spaces"                 # Highlight trailing spaces and delete them in a flash!
 vscode "shd101wyy.markdown-preview-enhanced"        # Markdown Preview Enhanced ported to vscode
-vscode "Shopify.ruby-lsp"                           # VS Code plugin for connecting with the Ruby LSP
+# vscode "Shopify.ruby-lsp"                           # VS Code plugin for connecting with the Ruby LSP
 vscode "sorbet.sorbet-vscode-extension"             # Ruby IDE features, powered by Sorbet.
 vscode "stkb.rewrap"                                # Hard word wrapping for comments and other text at a given column.
 vscode "streetsidesoftware.code-spell-checker"      # Spelling checker for source code
