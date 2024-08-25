@@ -123,6 +123,9 @@ export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
+# Always show progress on Docker builds
+export BUILDKIT_PROGRESS=plain
+
 # Load project aliases (backed up by mackup to prevent leaking sensitive info)
 [[ -e "${HOME}/.aliases" ]] && source "${HOME}/.aliases"
 
