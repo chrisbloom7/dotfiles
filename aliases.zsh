@@ -96,11 +96,11 @@ git-branch-diff () {
     echo "Alias: git-bdiff"
     return 0
   else
-    log=$(git log --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local ${1}..${2} 2>/dev/null)
+    log=$(git log --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local ${1}..${2} --)
     if [ -z "$log" ]; then
-      echo "'${1}' has no commits that '${2}' does not also have"
+      echo "'${2}' has no commits that '${1}' does not also have"
     else
-      echo "'${1}' has these commits and '${2}' does not:"
+      echo "'${2}' has these commits and '${1}' does not:"
       echo "$log"
     fi
   fi
@@ -113,16 +113,16 @@ git-branch-incoming () {
     echo "Alias: git-bin"
     return 0
   fi
-  git-branch-diff $(_parse_git_branch) ${1}
+  git-branch-diff "$(_parse_git_branch)" "${1}"
 }
 alias git-bin='git-branch-incoming'
 git-branch-outgoing () {
   if [ "$#" -ne 1 ]; then
-    echo "Lists commits in the current working branch that are not in the target commitish, i.e. outgoing commits if you merged the working branch into the target commitish."
+    echo "Lists commits in the current working branch that are not in the target commitish, i.e. outgoing commits if you merged the working branch into the target."
     echo "Usage: git-branch-outgoing <target-commitish>"
     echo "Alias: git-bout"
     return 0
   fi
-  git-branch-diff ${1} $(_parse_git_branch)
+  git-branch-diff "${1}" "$(_parse_git_branch)"
 }
 alias git-bout='git-branch-outgoing'
