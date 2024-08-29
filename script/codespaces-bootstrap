@@ -42,8 +42,10 @@ echo "Cconfiguring git for codespaces..."
 # This insteadOf line doesn't work on Codespaces, so we need to unset it
 git config --global --unset url."git@github.com:".insteadOf
 
-# Fixes an issue caused when using the GH CLI _feature_ instead of the linuxbrew version
-git config --global --replace-all credential.https://github.com.helper "\!$(which gh) auth git-credential"
+if [ -n $(command -v gh) ]; then
+  echo "Installing credentials helper via gh CLI..."
+  gh auth setup-git
+fi
 
 echo "Checking if linuxbrew is installed..."
 if [ -d "/home/linuxbrew/.linuxbrew" ]; then

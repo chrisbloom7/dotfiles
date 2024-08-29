@@ -33,3 +33,8 @@ set -eu
 # control and that have a reasonable level security and observability.
 
 echo "Running post-start script from dotfiles..."
+
+if [ -n $(command -v gh) ]; then
+  echo "Checking gh auth status..."
+  gh auth status
+fi
