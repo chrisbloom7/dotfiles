@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eu
+set -eux
 
 # Uncomment this next line (and commit the change) to make dotfile installs into
 # any new codespaces a no-op. Useful for debugging devcontainer builds without

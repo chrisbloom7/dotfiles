@@ -69,6 +69,12 @@ rvmrc () {
 }
 
 # Git
+alias gcom='git com'                  # Short for `git checkout [default_branch]`, typically `main` or `master`
+alias git-bdiff='git-branch-diff' .   # Show commits in <source> that are not in <target>
+alias git-bin='git-branch-incoming'   # Lists commits in the <source> that are not in the current working branch
+alias git-bout='git-branch-outgoing'  # Lists commits in the current working branch that are not in the <target>
+alias git-mb='git-make-branch'        # Create a new branch from the current branch with a name based on the supplied arguments
+alias gpom='git pom'                  # Short for `git pull origin [default_branch]`, typically `main` or `master`
 git-make-branch () {
   if [ "$#" -gt 0 ]; then
     branch=$(ruby -e 'puts ARGV.join(" ").strip.gsub(/[\W\s_]+/, " ").downcase.split(" ").join("_")' "$@")
@@ -84,7 +90,6 @@ git-make-branch () {
     return 1
   fi
 }
-alias git-mb='git-make-branch'
 _parse_git_branch () {
   # From http://stackoverflow.com/a/2831173/83743
   git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
@@ -105,17 +110,15 @@ git-branch-diff () {
     fi
   fi
 }
-alias git-bdiff='git-branch-diff'
 git-branch-incoming () {
   if [ "$#" -lt 1 ] || [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
-    echo "Lists commits in the current working branch that are not in the source commitish, i.e. incoming commits if you merged the source commitish into the working branch."
+    echo "Lists commits in the source commitish that are not in the current working branch, i.e. incoming commits if you merged the source commitish into the working branch."
     echo "Usage: git-branch-incoming <source-commitish>"
     echo "Alias: git-bin"
     return 0
   fi
   git-branch-diff "$(_parse_git_branch)" "${1}"
 }
-alias git-bin='git-branch-incoming'
 git-branch-outgoing () {
   if [ "$#" -ne 1 ]; then
     echo "Lists commits in the current working branch that are not in the target commitish, i.e. outgoing commits if you merged the working branch into the target."
@@ -125,4 +128,3 @@ git-branch-outgoing () {
   fi
   git-branch-diff "${1}" "$(_parse_git_branch)"
 }
-alias git-bout='git-branch-outgoing'

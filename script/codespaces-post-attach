@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eu
+set -eux
 
 # This script should be codespace agnosic. It is intended to be run as part of a
 # devcontainer's `postAttachCommand` lifecycle event to perform additional setup

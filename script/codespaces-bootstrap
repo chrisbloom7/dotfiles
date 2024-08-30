@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -eu
+set -eux
 
 # You can add a script file to your dotfiles repo that will be executed when the
 # dotfiles are loaded into your Codespaces. You do have to give it the proper
