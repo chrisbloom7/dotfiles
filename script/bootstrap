@@ -38,6 +38,7 @@ echo "Copying dotfiles from '${DOTFILES}' to '${HOME}'..."
 home_dotfiles=(
   ".gitconfig"
   ".gitignore_global"
+  ".irbrc"
   ".zshrc"
 )
 for file in "${home_dotfiles[@]}"; do

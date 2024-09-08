@@ -1,6 +1,9 @@
+amazing_print
 bundler
 debug
+dotenv
 rubocop
 ruby-lsp
 rufo
+semantic_logger
 solargraph
