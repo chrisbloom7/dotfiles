@@ -145,3 +145,8 @@ export NVM_DIR="$HOME/.nvm"
 
 # Make sure ruby-build is up to date
 [ -d "$(rbenv root)/plugins/ruby-build" ] && git -C "$(rbenv root)/plugins/ruby-build" pull
+
+# ngrok autocompletion
+if command -v ngrok &>/dev/null; then
+  eval "$(ngrok completion)"
+fi

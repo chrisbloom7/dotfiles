@@ -59,6 +59,11 @@ if [ -n "${ZSH_PATH}" ] && [ -d "${ZSH_CUSTOM}" ]; then
   done
 fi
 
+# Symlink our docker config files to the home directory
+mkdir -p "${HOME}/.docker"
+[ -s "${HOME}/.docker/config.json" ] && rm -rf "${HOME}/.docker/config.json"
+ln -sfn "${DOTFILES}/.docker/config.json" "${HOME}/.docker/config.json"
+
 [ -n "${CODESPACES:-}" ] && script/codespaces-bootstrap
 
 if [ -n "${ZSH_PATH}" ] && [ -d "${ZSH_CUSTOM}" ]; then

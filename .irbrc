@@ -15,14 +15,14 @@ IRB.conf[:SAVE_HISTORY] = 200
 begin
   require "amazing_print"
   AmazingPrint.irb!
-  # alias pp ap
+  alias pp ap
   # alias puts ap
   puts "Loaded AmazingPrint"
 rescue LoadError
   begin
     require "awesome_print"
     AwesomePrint.irb!
-    # alias pp ap
+    alias pp ap
     # alias puts ap
     puts "Loaded AwesomePrint"
   rescue LoadError
@@ -37,21 +37,31 @@ begin
   puts "Loaded Dotenv"
 rescue LoadError
   nil
+rescue Errno::ENOENT
+  puts "Loaded Dotenv, but no .env file found"
 end
 
-# Exit IRB with `q` instead of `exit`
+# Exit IRB with `q` or `quit` as well as `exit`
 alias q exit
+alias quit exit
 
 # Load project-specific .irbrc
 begin
-  if Dir.pwd != __dir__
+  # puts "\n\n\n"
+  # puts "Dir.pwd: #{Dir.pwd}"
+  # puts "__dir__: #{__dir__}"
+  # puts "File.dirname(__FILE__): #{File.dirname(__FILE__)}"
+  # puts "\n\n\n"
+
+  if Dir.pwd != File.dirname(__FILE__) && Dir.pwd != __dir__
+    puts "Looking for project-specific .irbrc file in #{Dir.pwd}"
     local_irbrc = File.expand_path(".irbrc")
     if File.exist?(local_irbrc)
       load local_irbrc
       puts "Loaded #{local_irbrc}"
     end
   end
-rescue
+rescue StandardError
   nil
 end
 
