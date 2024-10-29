@@ -38,5 +38,3 @@ if [ -n $(command -v gh) ]; then
   echo "Checking gh auth status..."
   gh auth status
 fi
-
-export OVERMIND_AUTO_RESTART=alive,js-assets
