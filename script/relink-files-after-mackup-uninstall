@@ -11,15 +11,7 @@ cd "$(dirname "$0")/.."
 # original locations. This script will then symlink files that were linked in
 # the fresh script in case mackup trampled on them.
 
-# Symlink the Mackup config files to the home directory.
-# Make sure Mackup is excluded from backing itself up
-[ -s "$HOME/.mackup.cfg" ] && rm -rf "$HOME/.mackup.cfg"
-ln -s "$HOME/.dotfiles/.mackup.cfg" "$HOME/.mackup.cfg"
-
-# Symlink the Mackup custom app config files to the home directory.
-[ -s "$HOME/.mackup" ] && rm -rf "$HOME/.mackup"
-ln -s "$HOME/.dotfiles/.mackup" "$HOME/.mackup"
-
-export RBENV_ROOT="$(rbenv root)"
-[ -s "$RBENV_ROOT/default-gems" ] && rm -rf "$RBENV_ROOT/default-gems"
-ln -s "$HOME/.dotfiles/default-gems" "$RBENV_ROOT/default-gems"
+script/symlink-common-files
+script/symlink-mackup-files
+script/symlink-mise-files
+script/symlink-rbenv-files

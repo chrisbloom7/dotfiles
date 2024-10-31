@@ -72,14 +72,12 @@ brew "imagemagick"                                  # Tools and libraries to man
 brew "lynx"                                         # Text-based web browser
 brew "mackup"                                       # Keep your Mac's application settings in sync
 brew "mas"                                          # Mac App Store command-line interface
+brew "mise"                                         # Polyglot runtime manager (asdf rust clone)
 brew "notify"                                       # Stream the output of any CLI and publish it to a variety of supported platforms
 brew "pandoc"                                       # Swiss-army knife of markup format conversion
 brew "pinentry-mac"                                 # Pinentry for GPG on Mac
 brew "pkg-config"                                   # Manage compile and link flags for libraries
 brew "putty"                                        # Implementation of Telnet and SSH
-brew "python@3.10"                                  # Interpreted, interactive, object-oriented programming language
-brew "rbenv-default-gems"                           # Auto-installs gems for Ruby installs
-brew "rbenv"                                        # Ruby version manager
 brew "ruby-build"                                   # Install various Ruby versions and implementations
 brew "telnet"                                       # User interface to the TELNET protocol
 brew "terminal-notifier"                            # Send macOS User Notifications from the command-line
@@ -290,6 +288,8 @@ vscode "ms-toolsai.vscode-jupyter-slideshow"        # Jupyter Slide Show support
 # brew "heroku"                                     # Everything you need to get started with Heroku
 # brew "mysql", restart_service: true               # Open source relational database management system
 # brew "postgresql", restart_service: true          # Object-relational database system
+# brew "rbenv-default-gems"                         # Auto-installs gems for Ruby installs
+# brew "rbenv"                                      # Ruby version manager
 # brew "redis", restart_service: true               # Persistent key-value database, with built-in net interface
 # cask "brave-browser"                              # Web browser focusing on privacy
 # cask "db-browser-for-sqlite"                      # Browser for SQLite databases

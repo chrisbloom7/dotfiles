@@ -41,7 +41,7 @@ If you're migrating from an existing Mac, you should first make sure to backup a
 - Did you remember to save all important documents from non-iCloud directories?
 - Did you backup all important files which aren't synced through iCloud, such as Dropbox, Google Drive, Adobe Cloud, etc?
 - Did you remember to export important data from your local database?
-- Did you update [mackup](https://github.com/lra/mackup) to the latest version and have you already run `mackup backup`?
+- Did you update [mackup](https://github.com/lra/mackup) to the latest version and have you already run `mackup backup --force && mackup uninstall --force`? (See warning above!)
 
 ### 2. Setting up your Mac
 
@@ -68,7 +68,7 @@ After backing up your old Mac you may now follow these install instructions to s
     cd ~/.dotfiles && ./fresh.sh
     ```
 
-5. After mackup is synced with your cloud storage provider, restore preferences by running `mackup restore`
+5. After mackup is synced with your cloud storage provider, restore preferences by running `mackup restore --force && mackup uninstall --force` followed by `script/relink-files`. (See warning above!)
 6. Restart your computer to finalize the process
 
 Your Mac is now ready to use!

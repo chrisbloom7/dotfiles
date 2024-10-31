@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -eux pipefail
+
+cd "$(dirname "$0")/.."
+
+DOTFILES="${DOTFILES:-$(pwd)}"
+
+echo "Symlinking mise config from '${DOTFILES}' to '${HOME}'..."
+[ -s "${HOME}/.mise.toml" ] && rm -rf "${HOME}/.mise.toml"
+ln -sfn "${DOTFILES}/mise-config.toml" "${HOME}/.mise.toml"
+
+echo "Symlinking default gems for mise from '${DOTFILES}' to '${HOME}'..."
+[ -s "${HOME}/.default-gems" ] && rm -rf "${HOME}/.default-gems"
+ln -sfn "${DOTFILES}/default-gems" "${HOME}/.default-gems"

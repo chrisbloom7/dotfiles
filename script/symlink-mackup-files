@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -eux pipefail
+
+cd "$(dirname "$0")/.."
+
+DOTFILES="${DOTFILES:-$(pwd)}"
+
+# NOTE: Make sure Mackup is excluded from backing itself up!
+echo "Symlinking Mackup config from '${DOTFILES}' to '${HOME}'..."
+[ -s "$HOME/.mackup.cfg" ] && rm -rf "$HOME/.mackup.cfg"
+ln -sfn "$DOTFILES/.mackup.cfg" "$HOME/.mackup.cfg"
+
+echo "Symlinking Mackup custom app config folder from '${DOTFILES}' to '${HOME}'..."
+[ -s "$HOME/.mackup" ] && rm -rf "$HOME/.mackup"
+ln -sfn "$DOTFILES/.mackup" "$HOME/.mackup"

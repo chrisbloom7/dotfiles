@@ -1,0 +1,5 @@
+[settings]
+experimental = false
+legacy_version_file = true
+lockfile = false
+trusted_config_paths = ["~/.config/mise/config.toml"]

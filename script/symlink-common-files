@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -eux pipefail
+
+cd "$(dirname "$0")/.."
+
+DOTFILES="${DOTFILES:-$(pwd)}"
+ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
+ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
+ZSH_PATH="${ZSH_PATH:-$(command -v zsh 2>/dev/null)}"
+
+echo "Symlinking dotfiles from '${DOTFILES}' to '${HOME}'..."
+home_dotfiles=(
+  ".gitconfig"
+  ".gitignore_global"
+  ".irbrc"
+  ".zshrc"
+)
+for file in "${home_dotfiles[@]}"; do
+  echo "Symlinking ${file}"
+  ln -sfn "${DOTFILES}/${file}" "${HOME}/${file}"
+done
+
+if [ -n "${ZSH_PATH}" ] && [ -d "${ZSH_CUSTOM}" ]; then
+  echo "Symlinking dotfiles from '${DOTFILES}' to '${ZSH_CUSTOM}'..."
+  zsh_custom_dotfiles=(
+    "agnoster.zsh-theme"
+    "aliases.zsh"
+    "path.zsh"
+  )
+  for file in "${zsh_custom_dotfiles[@]}"; do
+    echo "Symlinking ${file}"
+    ln -sfn "${DOTFILES}/${file}" "${ZSH_CUSTOM}/${file}"
+  done
+fi
+
+echo "Symlinking docker config from '${DOTFILES}' to '${HOME}'..."
+mkdir -p "${HOME}/.docker"
+[ -s "${HOME}/.docker/config.json" ] && rm -rf "${HOME}/.docker/config.json"
+ln -sfn "${DOTFILES}/.docker/config.json" "${HOME}/.docker/config.json"
