@@ -36,7 +36,8 @@
 #    start_service   : boolean
 
 # Set arguments for all 'brew install --cask' commands
-cask_args appdir: "~/Applications"
+# https://github.com/homebrew/homebrew-cask/blob/master/USAGE.md#options
+cask_args appdir: "~/Applications", fontdir: "~/Library/Fonts", require_sha: true, no_quarantine: true
 
 ## Taps
 tap "buo/cask-upgrade"                              # A command line tool for upgrading every outdated app installed by Homebrew Cask

@@ -1,6 +1,12 @@
 #!/usr/bin/env sh
 set -euxo pipefail
 
+# Ask for the administrator password upfront
+sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until script has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 # Run setup steps that apply both locally and in devcontainers
 script/bootstrap
 
@@ -11,19 +17,18 @@ echo "Setting up your Mac..."
 script/symlink-mackup-files
 
 # Check for Homebrew and install if we don't have it
-if [ -z $(command -v brew 2>/dev/null) ]; then
-  /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+script/homebrew-install
+echo 'eval "$('$(command -v brew)' shellenv)"' >> $HOME/.zprofile
+eval "$($(command -v brew) shellenv)"
 
 # Update Homebrew recipes
-brew update --force --quiet
+brew update --force --verbose 2>&1 | tee /tmp/brew-update.log
 
 # Install all our dependencies with bundle (See Brewfile)
-unset HOMEBREW_BUNDLE_INSTALL_CLEANUP
 brew tap homebrew/bundle
-brew bundle --file ./Brewfile
+set +e # Disable halt on failures
+brew bundle --file ./Brewfile --force --verbose --no-lock 2>&1 | tee /tmp/brew-bundle.log
+set -e # Reenable halt on failures
 brew services cleanup
 
 # Uninstall default Mac apps
@@ -33,7 +38,7 @@ brew services cleanup
 # mas uninstall 409203825 || true # Numbers
 
 # Set default MySQL root password and auth type
-if [ -n $(command -v mysql 2>/dev/null) ]; then
+if [ -n "$(command -v mysql 2>/dev/null)" ]; then
   echo Setting a blank root password for MySQL...
   brew services start mysql
   mysql -u root -e "ALTER USER root@localhost IDENTIFIED BY ''; FLUSH PRIVILEGES;"
@@ -71,32 +76,32 @@ fi
 # npm install --global @devcontainers/cli
 
 # Let's try mise instead, which was installed via our Brewfile
-echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
-echo 'eval "$(~/.local/bin/mise completion bash"' > /etc/bash_completion.d/mise
-echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> $HOME/.bash_profile
+echo 'eval "$(~/.local/bin/mise completion bash"' >> $HOME/.bash_completion
+echo 'eval "$(~/.local/bin/mise activate zsh)"' >> $HOME/.zprofile
 echo 'eval "$(~/.local/bin/mise completion zsh"' > /usr/local/share/zsh/site-functions/_mise
-eval "$(~/.local/bin/mise activate)"
+eval "$(~/.local/bin/mise activate bash)"
 script/symlink-mise-files
-mise use --path ~/.mise.local.toml go
-mise use --path ~/.mise.local.toml java
-mise use --path ~/.mise.local.toml node
-mise use --path ~/.mise.local.toml python
-mise use --path ~/.mise.local.toml ruby
+
+mise use --cd $HOME --env local --verbose --yes \
+  go \
+  java \
+  node \
+  python \
+  ruby \
+  rust
+mise reshim --cd $HOME --profile local --verbose --yes
 
 # Clone project repositories
-scripts/clone-projects
+script/clone-projects
 
 # Install iTerm2 shell integration for Zsh
 curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh
 
-# Codespaces has issues when GPG commit signing is enabled on the containers as
-# well as in gitconfig. Since our global gitconfig gets synced to dotfiles and
-# thus to codespaces, we can set some system level config here instead.
-git config --system user.signingkey B8BB552ABFFDAE06
-git config --system commit.gpgsign true
-git config --system gpg.program $(which gpg)
-
 # Install Rosetta 2 on M1 Macs to bridge the gap between Intel and Apple processors
-softwareupdate --install-rosetta --agree-to-license
+softwareupdate --install-rosetta --agree-to-license || true
+
+# Set macOS preferences - we run this last because this will reload the shell
+source ./.macos
 
 echo "Done. Note that some of these changes require a logout/restart to take effect, and you may still need to set fonts manually in your iTerm2 profile"

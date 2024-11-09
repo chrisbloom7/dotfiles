@@ -23,14 +23,14 @@ These instructions are for when you've already set up your dotfiles. If you want
 
 > [!WARNING]
 > As of this writing, `mackup` [does not work on MacOS 14
-> (Sonoma)][mackup-sonoma] due to changes in the way the OS handles file
+> (Sonoma)][mackup-sonoma] and later versions due to changes in the way the OS handles file
 > permissions. Using it could result in data loss. There is a
 > [workaround][workaround] that some folks have found success with, but you
 > should be aware of the risks before proceeding. You can always skip the
 > `mackup` steps if you're not comfortable with the risk.
 >
 > Secondly, if you do choose to use `mackup`, I would strongly recommend using a
-> [storage provider][storages] that supports versioning, i.e. not iCloud, in
+> [storage provider][storages] that supports versioning, i.e. **not** iCloud, in
 > case you need to recover from a bad `mackup backup` or `mackup restore`.
 
 ### 1. Backup your data
@@ -41,44 +41,72 @@ If you're migrating from an existing Mac, you should first make sure to backup a
 - Did you remember to save all important documents from non-iCloud directories?
 - Did you backup all important files which aren't synced through iCloud, such as Dropbox, Google Drive, Adobe Cloud, etc?
 - Did you remember to export important data from your local database?
-- Did you update [mackup](https://github.com/lra/mackup) to the latest version and have you already run `mackup backup --force && mackup uninstall --force`? (See warning above!)
+- Did you update [mackup](https://github.com/lra/mackup) to the latest version and have you already run `mackup backup --force && mackup uninstall --force`? (⚠️ See warning above!)
 
 ### 2. Setting up your Mac
-
-After backing up your old Mac you may now follow these install instructions to setup a new one.
-
-1. Update macOS to the latest version through system preferences
-2. Setup an SSH key by using one of the two following methods
-   2.1. If you use 1Password, install it with the 1Password [SSH agent](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent) and sync your SSH keys locally.
-   2.2. Otherwise [generate a new public and private SSH key](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) by running:
-
-   ```zsh
-   curl https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/ssh.sh | sh -s "<your-email-address>"
-   ```
-
-3. Clone this repo to `~/.dotfiles` with:
-
-    ```zsh
-    git clone --recursive git@github.com:chrisbloom7/dotfiles.git ~/.dotfiles
-    ```
-
-4. Run the installation with:
-
-    ```zsh
-    cd ~/.dotfiles && ./fresh.sh
-    ```
-
-5. After mackup is synced with your cloud storage provider, restore preferences by running `mackup restore --force && mackup uninstall --force` followed by `script/relink-files`. (See warning above!)
-6. Restart your computer to finalize the process
-
-Your Mac is now ready to use!
 
 > [!NOTE]
 > You can use a different location than `~/.dotfiles` if you want. Make sure you also update the references in the [`.zshrc`](./.zshrc) and [`fresh.sh`](./fresh.sh) files.
 
+After backing up your old Mac you may now follow these install instructions to setup a new one.
+
+1. Update macOS to the latest version through system preferences
+2. Install the prerequisites:
+
+   ```shell
+   /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/prerequisites)"
+   ```
+
+   This script will install the following tools:
+
+   - [Git](https://git-scm.com)
+   - [GPG Suite](https://gpgtools.org)
+   - [Homebrew](https://brew.sh) and core utilities
+   - [Mac App Store CLI](https://github.com/mas-cli/mas)
+   - [Xcode Command Line Tools](https://developer.apple.com/downloads)
+
+3. If you use a password manager like 1Password, install it now and sync your passwords
+4. Setup an SSH key. You can either use an existing SSH key or create a new one.
+   1. Sync an existing SSH key from another machine, such as via 1Password's [SSH agent](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent), etc.
+   2. [Generate a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) by running:
+
+   ```shell
+    curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-ssh | /usr/bin/env bash -s "<your@email.address>"
+   ```
+
+5. [Add your SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+6. Setup a GPG key. You can either use an existing GPG key or create a new one.
+   1. Sync an existing GPG key from another machine
+   2. [Generate a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) by running:
+
+   ```shell
+   curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-gpg | /usr/bin/env bash -s "Your Name <your@email.address>"
+   ```
+
+   Follow the prompts to enter a passphrase and generate the key.
+
+7. [Add your GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account)
+8. Clone this repo to `~/.dotfiles` with:
+
+    ```shell
+    git clone --recursive git@github.com:chrisbloom7/dotfiles.git ~/.dotfiles
+    ```
+
+9. Run the installation with:
+
+    ```shell
+    cd ~/.dotfiles && ./fresh.sh 2>&1 | tee /tmp/fresh.log
+    ```
+
+10. After mackup is synced with your cloud storage provider, restore preferences by running `mackup restore --force && mackup uninstall --force` followed by `script/relink-files`. (⚠️ See warning above!)
+11. Restart your computer to ensure all changes take effect.
+12. Be sure to open any applications that you expect to run on startup to ensure they're working correctly.
+
+Your Mac is now ready to use!
+
 ### 3. Cleaning your old Mac (optionally)
 
-After you've set up your new Mac you may want to wipe and clean install your old Mac. Follow [this article](https://support.apple.com/guide/mac-help/erase-and-reinstall-macos-mh27903/mac) to do that. Remember to [backup your data](#backup-your-data) first!
+After you've set up your new Mac you may want to wipe and clean install your old Mac. Follow [this article](https://support.apple.com/guide/mac-help/erase-and-reinstall-macos-mh27903/mac) to do that. Remember to [backup your data](#1-backup-your-data) first!
 
 ## Your Own Dotfiles
 

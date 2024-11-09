@@ -1,6 +1,9 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+set -euxo pipefail
 
-echo "Generating a new SSH key for GitHub..."
+cd "$(dirname "$0")/.."
+
+echo "Generating a new SSH key..."
 
 # Generating a new SSH key
 # https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key
@@ -17,4 +20,4 @@ ssh-add -K ~/.ssh/id_ed25519
 
 # Adding your SSH key to your GitHub account
 # https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account
-echo "run 'pbcopy < ~/.ssh/id_ed25519.pub' and paste that into GitHub"
+echo "To add your public key to GitHub, etc., run 'pbcopy < ~/.ssh/id_ed25519.pub' to copy the key to your clipboard."
