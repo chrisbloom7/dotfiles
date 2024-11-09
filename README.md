@@ -71,7 +71,7 @@ After backing up your old Mac you may now follow these install instructions to s
    2. [Generate a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) by running:
 
    ```shell
-    curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-ssh | /usr/bin/env bash -i -s "<your@email.address>"
+    curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-ssh | /usr/bin/env bash -is "<your@email.address>"
    ```
 
 5. [Add your SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
@@ -80,7 +80,7 @@ After backing up your old Mac you may now follow these install instructions to s
    2. [Generate a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) by running:
 
    ```shell
-   curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-gpg | /usr/bin/env bash -s "Your Name <your@email.address>"
+   curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-gpg | /usr/bin/env bash -is "Your Name <your@email.address>"
    ```
 
    Follow the prompts to enter a passphrase and generate the key.
