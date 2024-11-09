@@ -54,7 +54,7 @@ After backing up your old Mac you may now follow these install instructions to s
 2. Install the prerequisites:
 
    ```shell
-   /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/prerequisites)"
+   /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/install-prerequisites)"
    ```
 
    This script will install the following tools:
@@ -71,7 +71,7 @@ After backing up your old Mac you may now follow these install instructions to s
    2. [Generate a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) by running:
 
    ```shell
-    curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-ssh | /usr/bin/env bash -s "<your@email.address>"
+    curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-ssh | /usr/bin/env bash -i -s "<your@email.address>"
    ```
 
 5. [Add your SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
