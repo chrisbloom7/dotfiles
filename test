@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source scripts/helpers.sh
+
+log_info "Testing..."
+
+source scripts/sudo-keep-alive.sh
+
+# Run setup steps that apply both locally and in devcontainers
+log_info "Running bootstrap"
+scripts/bootstrap
+
+log_success "Test complete!"

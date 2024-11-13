@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ../../scripts/helpers.sh
+
+log_info "Symlinking mackup configs"
+
+if [[ -n $(command -v mackup 2>/dev/null) ]]; then
+  # NOTE: Be sure Mackup is excluded from backing itself up!
+  log_debug "Symlinking mackup config to ${HOME}/.mackup.cfg"
+  ln -sfnw "$(dirname "$0")/.mackup.cfg" "$HOME/.mackup.cfg"
+
+  log_debug "Symlinking mackup app configs folder to '${HOME}/.mackup'"
+  ln -sFnw "$(dirname "$0")/app-configs" "$HOME/.mackup"
+fi

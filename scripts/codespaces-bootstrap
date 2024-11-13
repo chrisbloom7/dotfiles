@@ -1,5 +1,6 @@
-#!/usr/bin/env sh
-set -eux
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ./helpers.sh
 
 # You can add a script file to your dotfiles repo that will be executed when the
 # dotfiles are loaded into your Codespaces. You do have to give it the proper
@@ -13,7 +14,12 @@ set -eux
 #
 # https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles
 
-[ -z "${CODESPACES:-}" ] && exit 0
+log_info "Bootstrapping codespaces"
+
+if [[ -z "${CODESPACES:-}" ]]; then
+  log_attention "Not a codespace; skipping codespace specific bootstrapping"
+  exit 0
+fi
 
 # ENV variables we could evaluate in a Codespace:
 # CLOUDENV_ENVIRONMENT_ID=very-long-guid-hash
@@ -36,22 +42,23 @@ set -eux
 # RepositoryName=mycoolapp
 # TERM_PROGRAM=vscode # Could also be "codespaces"
 
-echo "Starting codespace specific bootstrap..."
-
-echo "Cconfiguring git for codespaces..."
+log_info "Cconfiguring git for codespaces"
 # This insteadOf line doesn't work on Codespaces, so we need to unset it
-git config --global --unset url."git@github.com:".insteadOf
+git config unset --global --value url."git@github.com:".insteadOf
 
-if [ -n $(command -v gh) ]; then
-  echo "Installing credentials helper via gh CLI..."
+log_debug "Checking if gh CLI is installed"
+if [[ -n $(command -v gh 2>/dev/null) ]]; then
+  log_info "Installing credentials helper via gh CLI"
   gh auth setup-git
+else
+  log_attention "gh CLI not found; skipping credentials helper installation"
 fi
 
-echo "Checking if linuxbrew is installed..."
-if [ -d "/home/linuxbrew/.linuxbrew" ]; then
-  echo "Initializing linuxbrew into zprofile..."
+log_debug "Checking if linuxbrew is installed"
+if [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
+  log_info "Initializing linuxbrew into zprofile"
   echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "${HOME}/.zprofile"
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
-echo "Done codespace specific bootstrapping!"
+log_success "Done codespace specific bootstrapping!"

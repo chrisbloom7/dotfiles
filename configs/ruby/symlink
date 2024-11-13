@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ../../scripts/helpers.sh
+
+log_info "Symlinking ruby configs"
+
+configs=(
+  ".irbrc"
+)
+for config in "${configs[@]}"; do
+  config_source="$(dirname "$0")/${config}"
+  log_debug "Symlinking ${config_source} to ${HOME}/${config}"
+  ln -sfnw "${config_source}" "${HOME}/${config}"
+done
+
+if [[ -n $(command -v rbenv 2>/dev/null) ]]; then
+  RBENV_ROOT="${RBENV_ROOT:-$(rbenv root)}"
+
+  log_debug "Symlinking default gems for rbenv to ${RBENV_ROOT}/default-gems"
+  ln -sfnw default-gems "$RBENV_ROOT/default-gems"
+fi
+
+if [[ -n $(command -v mise 2>/dev/null) ]]; then
+  log_debug "Symlinking default gems for mise to ${HOME}/.default-gems"
+  ln -sfnw default-gems "${HOME}/.default-gems"
+fi

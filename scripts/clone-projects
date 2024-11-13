@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ./helpers.sh
+
+log_info "Cloning projects"
+
+# Create a source directory and fold for personal projects
+SRC="${HOME}/src"
+mkdir -p "${SRC}"
+
+log_debug "Creating sandbox directory"
+mkdir -p "${SRC}/sandbox"
+
+projects=(
+  "3zcurdia/annealing"
+  "Azgaar/Fantasy-Map-Generator"
+  "chrisbloom7/center-notifications-applescript"
+  "chrisbloom7/churnobyl-api"
+  "chrisbloom7/enumpath.io"
+  "chrisbloom7/enumpath"
+  "chrisbloom7/improved-initiative"
+  "chrisbloom7/robinina.art"
+  "chrisbloom7/simulated-annealing-experiments"
+  "chrisbloom7/statblock-shop"
+  "chrisbloom7/wawasit"
+  "cynicaloptimist/improved-initiative"
+  "earrrl/earrrl-ruby"
+  "Humblemonk/DiceMaiden"
+  "open5e/open5e"
+  "ossf/osv-schema"
+  "rails/rails"
+  "ruby-grape/grape-rabl"
+  "rubygems/rubygems"
+  "samvbeckmann/statblock-shop"
+  "slack-ruby/slack-api-ref"
+  "slack-ruby/slack-ruby-client"
+)
+for project in "${projects[@]}"; do
+  owner=$(echo "${project}" | cut -d '/' -f1)
+  if [[ ! -d "${SRC}/${project}" ]]; then
+    mkdir -p "${SRC}/${owner}"
+    log_debug "Cloning ${project} to ${SRC}/${project}"
+    git clone git@github.com:${project}.git ${SRC}/${project}
+  fi
+done
+
+log_success "Done cloning projects!"

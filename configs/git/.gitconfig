@@ -24,7 +24,7 @@
 	tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
 	# Navigation
-	default-branch = !git config --global init.defaultBranch || echo 'master'
+	default-branch = !git config get --global --default="master" init.defaultBranch
 	ignored = ls-files -o -i --exclude-standard
 	ls = ls-files
 	upstream-name = !git remote | egrep -o '(upstream|origin)' | tail -1

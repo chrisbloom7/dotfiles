@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-set -euxo pipefail
+cd "$(dirname "$0")"
+source ./helpers.sh
 
-cd "$(dirname "$0")/.."
+log_info "Restoring symlinks after mackup uninstall"
 
 # Mackup currently has a bug that makes it dangerous to use with Sonoma. The
 # workaround is to run `mackup backup -f` or `mackup restore -f` and then
@@ -9,9 +10,6 @@ cd "$(dirname "$0")/.."
 # restoring the backup files, during which it's usual symlinking process will
 # fail. Then, when it tries to uninstall, it will copy the files back to their
 # original locations. This script will then symlink files that were linked in
-# the fresh script in case mackup trampled on them.
-
-script/symlink-common-files
-script/symlink-mackup-files
-script/symlink-mise-files
-script/symlink-rbenv-files
+# the setup script in case mackup trampled on them.
+log_debug "calling config symlink script"
+./symlink-config-files

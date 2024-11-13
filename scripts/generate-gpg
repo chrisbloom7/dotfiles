@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ./helpers.sh
+
+log_attention "Enter your name and email address to generate a new GPG key."
+until [[ "${confirm:-}" == "y" ]]; do
+  read -p "Your Name: " USER_ID
+  read -p "Your email address: " USER_EMAIL
+  USER_ID="${USER_ID} <${USER_EMAIL}>"
+  log_attention "Your GPG key will be generated with the following USER ID: ${USER_ID}"
+  read -p "Is this correct? [y/n] " confirm
+done
+
+# Generating a new GPG key
+# https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
+log_info "Generating a new GPG key for USER ID \"${USER_ID}\""
+gpg --quiet --quick-generate-key "${USER_ID}" default default none
+
+# Parse the secret key ID from the list, e.g. `sec   rsa4096/0x1234567890ABCDEF 2021-01-01 [SC]`
+sec_key="$(gpg --list-secret-keys --keyid-format=long "${1}" | grep -m1 "^sec" | cut -w -f2 | cut -d '/' -f2)"
+log_info "Registering GPG key ${sec_key}"
+
+# Codespaces has issues when GPG commit signing is enabled on the containers as
+# well as in gitconfig. Since our global gitconfig gets synced to dotfiles and
+# thus to codespaces, we can set some system level config here instead.
+# https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key
+log_info "Configuring git for GPG"
+git config unset --global --all gpg.format
+git config set --global --all user.signingkey $sec_key
+git config set --global --all commit.gpgsign true # sign all commits
+git config set --global --all push.gpgsign "if-asked" # sign pushes if asked
+git config set --global --all tag.gpgsign true # sign all tags
+git config set --global --all gpg.program "$(command -v gpg 2>/dev/null)"
+
+# Adding your GPG key to your GitHub account
+# https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account
+log_success "To add your public key to GitHub, etc., run 'gpg --armor --\"${USER_ID}\" | pbcopy' to copy the key to your clipboard."

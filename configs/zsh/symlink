@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ../../scripts/helpers.sh
+
+ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
+ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
+ZSH_PATH="${ZSH_PATH:-$(command -v zsh 2>/dev/null)}"
+
+log_info "Symlinking zsh configs"
+
+if [[ -n "${ZSH_PATH}" ]]; then
+  configs=(
+    ".zshrc"
+  )
+  for config in "${configs[@]}"; do
+    config_source="$(dirname "$0")/${config}"
+    log_debug "Symlinking ${config_source} to ${HOME}/${config}"
+    ln -sfnw "${config_source}" "${HOME}/${config}"
+  done
+
+  mkdir -p "${ZSH_CUSTOM}"
+
+  log_info "Symlinking OMZ configs"
+  configs=(
+    "agnoster.zsh-theme"
+    "aliases.zsh"
+    "path.zsh"
+  )
+  for config in "${configs[@]}"; do
+    config_source="$(dirname "$0")/${config}"
+    log_debug "Symlinking ${config_source} to ${ZSH_CUSTOM}/${config}"
+    ln -sfnw "${config_source}" "${ZSH_CUSTOM}/${config}"
+  done
+else
+  log_attention "Zsh not found; skipping symlinking zsh configs"
+fi

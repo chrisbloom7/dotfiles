@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ../../scripts/helpers.sh
+
+log_info "Symlinking docker configs"
+
+if [[ -n $(command -v docker 2>/dev/null) ]]; then
+  TARGET="${HOME}/.docker"
+  mkdir -p "${TARGET}"
+
+  configs=(
+    "config.json"
+  )
+  for config in "${configs[@]}"; do
+    config_source="$(dirname "$0")/${config}"
+    log_debug "Symlinking ${config_source} to ${TARGET}/${config}"
+    ln -sfnw "${config_source}" "${TARGET}/${config}"
+  done
+else
+  log_attention "Docker not found; skipping symlinking docker configs"
+fi

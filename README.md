@@ -12,6 +12,30 @@ This repo serves a number of functions:
 
 Please feel free to explore, learn, copy parts from, and fork this repo for [your own dotfiles](#your-own-dotfiles), or check out the original inspiration for this repository: [driesvints/dotfiles#your-own-dotfiles](https://github.com/driesvints/dotfiles?tab=readme-ov-file#your-own-dotfiles).
 
+## Files
+
+> [!TIP]
+> The scripts in this repository are designed to be idempotent, meaning they can be run multiple times without causing problems.
+
+> [!TIP]
+> Pay special attention to the names of the files and directories in this repository. While they don't matter so much for setting up a local development environment, they can be important when setting up a Codespace or other devcontainer where [assumptions are made][codespaces-script-names] about the location of certain files and directories.
+
+- [`setup`](./setup) The main setup script. This script installs all the necessary tools and applications, symlinks the dotfiles, and sets up the MacOS preferences. It runs most but not all of the other scripts in this repository. Refer to [Setting up your Mac](#2-setting-up-your-mac) below for more information.
+- [`Brewfile`](./Brewfile) A list of all the applications that will be installed by Homebrew. You can adjust this file to your liking.
+- [`configs`](./configs) A directory containing all the configuration files that will be symlinked to the home directory. A few of the most important files are:
+   - `**/symlink` ([Example](./configs/zsh/symlink)) Scripts that symlink the files in the directory to the home directory. These scripts are run by the main setup scripts and typically do not need to be run manually, though you can if you want to.
+   - [`mackup/.mackup.cfg`](./configs/mackup/.mackup.cfg) A configuration file for Mackup, including the storage provider to backup settings to and the list of applications to ignore when backing up. You can adjust this file to your liking.
+   - [`zsh/aliases.zsh`](./configs/zsh/aliases.zsh) A list of aliases that will be loaded by Oh My Zsh. You can add your own aliases here.
+   - [`zsh/path.zsh`](./configs/zsh/path.zsh) A list of directories that will be added to the `$PATH` by Oh My Zsh. You can add your own directories here.
+   - [`.macos`](./.macos) A script that sets up MacOS preferences. You can adjust this file to your liking.
+- [`scripts`](./scripts) A directory containing various scripts that are used by the setup script.
+   - [`bootstrap`](./scripts/bootstrap) Setup tasks that are run by the main setup script. This script installs Homebrew, Git, and Xcode Command Line Tools.
+   - [`install-prerequisites`](./scripts/install-prerequisites) A script that installs the prerequisites for the setup script, including Homebrew, Git, GPG Suite, and Xcode Command Line Tools.
+   - [`generate-ssh`](./scripts/generate-ssh) A script that generates an SSH key.
+   - [`generate-gpg`](./scripts/generate-gpg) A script that generates a GPG key.
+   - [`restore-symlinks-after-mackup-uninstall`](./scripts/restore-symlinks-after-mackup-uninstall) A script that restores the symlinks after running `mackup uninstall --force`.
+   -
+
 ## A Fresh macOS Setup
 
 These instructions are for when you've already set up your dotfiles. If you want to get started with your own dotfiles you can [find instructions below](#your-own-dotfiles).
@@ -46,7 +70,7 @@ If you're migrating from an existing Mac, you should first make sure to backup a
 ### 2. Setting up your Mac
 
 > [!NOTE]
-> You can use a different location than `~/.dotfiles` if you want. Make sure you also update the references in the [`.zshrc`](./.zshrc) and [`fresh.sh`](./fresh.sh) files.
+> You can use a different location than `~/.dotfiles` if you want. Make sure you also update the references in the [`configs/zsh/.zshrc`](./configs/zsh/.zshrc) and [`setup`](./setup) files.
 
 After backing up your old Mac you may now follow these install instructions to setup a new one.
 
@@ -54,7 +78,7 @@ After backing up your old Mac you may now follow these install instructions to s
 2. Install the prerequisites:
 
    ```shell
-   /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/install-prerequisites)"
+   /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/scripts/install-prerequisites)"
    ```
 
    This script will install the following tools:
@@ -65,44 +89,44 @@ After backing up your old Mac you may now follow these install instructions to s
    - [Mac App Store CLI](https://github.com/mas-cli/mas)
    - [Xcode Command Line Tools](https://developer.apple.com/downloads)
 
-3. If you use a password manager like 1Password, install it now and sync your passwords
-4. Setup an SSH key. You can either use an existing SSH key or create a new one.
-   1. Sync an existing SSH key from another machine, such as via 1Password's [SSH agent](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent), etc.
-   2. [Generate a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) by running:
+3. Clone this repo to `~/.dotfiles` with:
 
    ```shell
-    curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-ssh | /usr/bin/env bash -is "<your@email.address>"
+   git clone --recursive git@github.com:chrisbloom7/dotfiles.git ~/.dotfiles
    ```
 
-5. [Add your SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
-6. Setup a GPG key. You can either use an existing GPG key or create a new one.
-   1. Sync an existing GPG key from another machine
-   2. [Generate a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) by running:
+4. Run the installation with:
 
    ```shell
-   curl -fsSL https://raw.githubusercontent.com/chrisbloom7/dotfiles/HEAD/script/generate-gpg | /usr/bin/env bash -is "Your Name <your@email.address>"
+   cd ~/.dotfiles && ./setup
    ```
 
-   Follow the prompts to enter a passphrase and generate the key.
+5. If you use a password manager like 1Password, set it up now and sync your passwords.
+6. Setup whatever cloud storage provider you use with mackup (Dropbox, Google Drive, etc.) and sync your files. Be sure your mackup backup folder is available locally. Run `mackup restore --dry-run` to see what files will be restored.
+7. Once your mackup cloud storage provider is ready, restore preferences by running `mackup restore --force && mackup uninstall --force && scripts/restore-symlinks-after-mackup-uninstall`. (⚠️ See warning above!)
+8. Restart your computer to ensure all changes take effect.
+9. Open any applications that you expect to run on startup like 1Password, Dropbox, etc. and make sure they're configured correctly.
+10. Setup an SSH key. You can either use an existing SSH key or create a new one.
+    1. Sync an existing SSH key from another machine, such as via 1Password's [SSH agent](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent), etc.
+    2. [Generate a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) by running:
 
-7. [Add your GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account)
-8. Clone this repo to `~/.dotfiles` with:
+       ```shell
+       ./scripts/generate-ssh "<your@email.address>"
+       ```
 
-    ```shell
-    git clone --recursive git@github.com:chrisbloom7/dotfiles.git ~/.dotfiles
-    ```
+11. [Add your SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+12. Setup a GPG key. You can either use an existing GPG key or create a new one.
+    1. Sync an existing GPG key from another machine
+    2. [Generate a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) by running:
 
-9. Run the installation with:
+       ```shell
+       ./scripts/generate-gpg "Your Name <your@email.address>"
+       ```
 
-    ```shell
-    cd ~/.dotfiles && ./fresh.sh 2>&1 | tee /tmp/fresh.log
-    ```
+    Follow the prompts to enter a passphrase and generate the key.
+13. [Add your GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account)
 
-10. After mackup is synced with your cloud storage provider, restore preferences by running `mackup restore --force && mackup uninstall --force` followed by `script/relink-files`. (⚠️ See warning above!)
-11. Restart your computer to ensure all changes take effect.
-12. Be sure to open any applications that you expect to run on startup to ensure they're working correctly.
-
-Your Mac is now ready to use!
+🎉 **Your Mac is now ready to use!**
 
 ### 3. Cleaning your old Mac (optionally)
 
@@ -119,13 +143,14 @@ Go through the [`.macos`](./.macos) file and adjust the settings to your liking.
 
 Check out the [`Brewfile`](./Brewfile) file and adjust the apps you want to install for your machine. Use `brew search` or [their search page](https://formulae.brew.sh/cask/) to check if the app you want to install is available.
 
-Check out the [`aliases.zsh`](./aliases.zsh) file and add your own aliases. If you need to tweak your `$PATH` check out the [`path.zsh`](./path.zsh) file. These files get loaded in because the `$ZSH_CUSTOM` setting points to the `.dotfiles` directory. You can adjust the [`.zshrc`](./.zshrc) file to your liking to tweak your Oh My Zsh setup. More info about how to customize Oh My Zsh can be found [here](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization).
+Check out the [`aliases.zsh`](./configs/zsh/aliases.zsh) file and add your own aliases. If you need to tweak your `$PATH` check out the [`path.zsh`](./configs/zsh/path.zsh) file. These files get loaded in because the `$ZSH_CUSTOM` setting points to the `.dotfiles/configs/zsh` directory. You can adjust the [`.zshrc`](./configs/zsh/.zshrc) file to your liking to tweak your Oh My Zsh setup. More info about how to customize Oh My Zsh can be found [here](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization). Make sure your `~/.zshrc` file is symlinked from your dotfiles repo to your home directory.
 
-When installing these dotfiles for the first time you'll need to backup all of your settings with Mackup. Install Mackup and backup your settings with the commands below. Your settings will be synced to iCloud so you can use them to sync between computers and reinstall them when reinstalling your Mac. If you want to save your settings to a different directory or different storage than iCloud, [checkout the documentation](https://github.com/lra/mackup/blob/master/doc/README.md#storage). Also make sure your `.zshrc` file is symlinked from your dotfiles repo to your home directory.
+When installing these dotfiles for the first time you'll need to backup all of your settings with Mackup. (⚠️ See warning above!) Install Mackup and backup your settings with the commands below. Your settings will be synced to iCloud so you can use them to sync between computers and reinstall them when reinstalling your Mac. If you want to save your settings to a different directory or different storage than iCloud, [checkout the documentation](https://github.com/lra/mackup/blob/master/doc/README.md#storage).
+
 
 ```zsh
 brew install mackup
-mackup backup
+mackup backup --force && mackup uninstall --force
 ```
 
 You can tweak the shell theme, the Oh My Zsh settings and much more. Go through the files in this repo and tweak everything to your liking.
@@ -139,9 +164,10 @@ Thanks first and foremost to [Dries Vints](https://github.com/driesvints) who's 
 In addition to [Vints' own sentiments](https://github.com/driesvints/dotfiles?tab=readme-ov-file#thanks-to), which I enthusiastically `+1` & 👍, thank you to anyone who has open-sourced their own projects, dotfiles or otherwise, present, past, or future, for contributing something to the open-source community. It's often a thankless job, but I appreciate everyone who has and will pay it forward. 🙏
 
 [^bash-abilities]: I'm not a bash expert, so there are likely better ways to do some of the things I've done here. I'm always open to suggestions for improvement!
-[^macos]: The "fresh" setup scripts in this repo are built around setting up MacOS laptops specifically, which are my preferred choice for development machines. YMMV if you're using a different OS.
-[^codespaces]: I tend to use [GitHub Codespaces](https://github.com/features/codespaces) for most of my development these days, so having a local development environment where I [INSTALL ALL THE THINGS](https://web.archive.org/web/20240807175656if_/https://www.simplybusiness.co.uk/wp-content/uploads/sites/3/2024/05/things.webp) is much less important than it used to be. As such, the "fresh" setup scrips are focused on installing daily productivity tools and configuration rather than the more resource intensive development services that I would have installed in the past, like databases, memcache servers, etc.
+[^macos]: The setup scripts in this repo are built around setting up MacOS laptops specifically, which are my preferred choice for development machines. YMMV if you're using a different OS.
+[^codespaces]: I tend to use [GitHub Codespaces](https://github.com/features/codespaces) for most of my development these days, so having a local development environment where I [INSTALL ALL THE THINGS](https://web.archive.org/web/20240807175656if_/https://www.simplybusiness.co.uk/wp-content/uploads/sites/3/2024/05/things.webp) is much less important than it used to be. As such, the setup scrips are focused on installing daily productivity tools and configuration rather than the more resource intensive development services that I would have installed in the past, like databases, memcache servers, etc.
 
+[codespaces-script-names]: https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles
 [mackup-sonoma]: https://github.com/lra/mackup/issues/1924
 [workaround]: https://github.com/lra/mackup/issues/1924#issuecomment-1756330534
 [storages]: https://github.com/lra/mackup?tab=readme-ov-file#supported-storages

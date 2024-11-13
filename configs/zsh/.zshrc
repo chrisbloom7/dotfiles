@@ -8,7 +8,7 @@ export DOTFILES=$HOME/.dotfiles
 export ZSH=$HOME/.oh-my-zsh
 
 # Enable completions
-if [ -n "$(command -v rbenv 2>/dev/null)" ] && [ -e "$(rbenv root)/completions" ]; then
+if [[ -n "$(command -v rbenv 2>/dev/null)" ]] && [[ -e "$(rbenv root)/completions" ]]; then
   # add rbenv completions
   FPATH="$(rbenv root)/completions:${FPATH}"
 fi
@@ -133,18 +133,18 @@ export BUILDKIT_PROGRESS=plain
 [[ -e "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Load rbenv
-[ -n "$(command -v rbenv 2>/dev/null)" ] && eval "$(rbenv init -)"
+[[ -n "$(command -v rbenv 2>/dev/null)" ]] && eval "$(rbenv init -)"
 
 # Load nodenv
-[ -n "$(command -v nodenv 2>/dev/null)" ] && eval "$(nodenv init -)"
+[[ -n "$(command -v nodenv 2>/dev/null)" ]] && eval "$(nodenv init -)"
 
 # NVM completions
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Make sure ruby-build is up to date
-[ -d "$(rbenv root)/plugins/ruby-build" ] && git -C "$(rbenv root)/plugins/ruby-build" pull
+[[ -d "$(rbenv root)/plugins/ruby-build" ]] && git -C "$(rbenv root)/plugins/ruby-build" pull
 
 # ngrok autocompletion
 if command -v ngrok &>/dev/null; then

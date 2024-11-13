@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -o nounset   # Error on unset variables. Same as -u.
+set -o pipefail  # Pipes return last non-zero status.
+
+if [[ -n "${DEBUG:-}" ]]; then
+  set -o errtrace  # Functions and subcommands inherit ERR traps. Same as -E.
+  set -o functrace # Functions and subcommands inherit DEBUG and RETURN traps. Same as -T.
+  set -o verbose   # Print shell input lines as they are read. Same as -v.
+  set -o xtrace    # Print a trace of simple commands. Same as -x.
+fi
+
+readonly ANSI_RESET="\033[0m"
+readonly ANSI_BOLD_GREEN="\033[1;32m"
+readonly ANSI_BOLD_BLUE="\033[1;34m"
+
+log_info() {
+  echo -e "${ANSI_BOLD_BLUE}Info:${ANSI_RESET} $@"
+}
+
+log_success() {
+  echo -e "${ANSI_BOLD_GREEN}Success:${ANSI_RESET} $@"
+}
+
+# Check for Homebrew and install if we don't have it
+log_info "Checking for Homebrew"
+if [[ -z $(command -v brew 2>/dev/null) ]]; then
+  log_info "Installing Homebrew"
+  /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+log_info "Homebrew installed at $(command -v brew)"
+eval "$($(command -v brew) shellenv)"
+
+log_info "Setting up Homebrew taps"
+[[ -n "$(brew tap | grep homebrew/bundle)" ]] || brew tap --quiet homebrew/bundle
+[[ -n "$(brew tap | grep homebrew/services)" ]] || brew tap --quiet homebrew/services
+
+# Install prerequisite Homebrew formulae
+log_info "Installing prerequisite Homebrew formulae"
+brew_args="--require-sha --no-quarantine --force --overwrite"
+if [[ -n "${VERBOSE_MODE:-}" ]]; then
+  brew_args="$brew_args --verbose"
+else
+  brew_args="$brew_args --quiet"
+fi
+brew install $brew_args coreutils \
+                        git \
+                        gpg-suite \
+                        mas \
+                        zsh
+
+# Install Xcode via mas
+# https://github.com/mas-cli/mas
+log_info "Installing Xcode via Mac App Store"
+mas install 497799835
+
+# Install Xcode Command Line Tools
+log_info "Installing Xcode Command Line Tools"
+xcode-select --install
+
+log_success "Prerequisites installed!"

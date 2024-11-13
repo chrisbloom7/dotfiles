@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ./helpers.sh
+
+log_info "Creating symlinks for config files"
+
+find "$(dirname "$0")/.." -depth -path "./configs/**/symlink" -perm -u+x | while read link_file; do
+  log_debug "Running $link_file"
+  "$link_file"
+done
+
+log_success "Symlinks created successfully!"
