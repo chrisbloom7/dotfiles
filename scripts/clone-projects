@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-source ./helpers.sh
+source ./helpers/runtime.sh
+source ../bin/helpers/trap_and_trace.sh
 
 log_info "Cloning projects"
 
@@ -12,20 +13,20 @@ log_debug "Creating sandbox directory"
 mkdir -p "${SRC}/sandbox"
 
 projects=(
-  "3zcurdia/annealing"
-  "Azgaar/Fantasy-Map-Generator"
-  "chrisbloom7/center-notifications-applescript"
-  "chrisbloom7/churnobyl-api"
-  "chrisbloom7/enumpath.io"
-  "chrisbloom7/enumpath"
-  "chrisbloom7/improved-initiative"
-  "chrisbloom7/robinina.art"
-  "chrisbloom7/simulated-annealing-experiments"
-  "chrisbloom7/statblock-shop"
-  "chrisbloom7/wawasit"
-  "cynicaloptimist/improved-initiative"
-  "earrrl/earrrl-ruby"
-  "Humblemonk/DiceMaiden"
+  # "3zcurdia/annealing"
+  # "Azgaar/Fantasy-Map-Generator"
+  # "chrisbloom7/center-notifications-applescript"
+  # "chrisbloom7/churnobyl-api"
+  # "chrisbloom7/enumpath.io"
+  # "chrisbloom7/enumpath"
+  # "chrisbloom7/improved-initiative"
+  # "chrisbloom7/robinina.art"
+  # "chrisbloom7/simulated-annealing-experiments"
+  # "chrisbloom7/statblock-shop"
+  # "chrisbloom7/wawasit"
+  # "cynicaloptimist/improved-initiative"
+  # "earrrl/earrrl-ruby"
+  # "Humblemonk/DiceMaiden"
   "open5e/open5e"
   "ossf/osv-schema"
   "rails/rails"
@@ -36,12 +37,7 @@ projects=(
   "slack-ruby/slack-ruby-client"
 )
 for project in "${projects[@]}"; do
-  owner=$(echo "${project}" | cut -d '/' -f1)
-  if [[ ! -d "${SRC}/${project}" ]]; then
-    mkdir -p "${SRC}/${owner}"
-    log_debug "Cloning ${project} to ${SRC}/${project}"
-    git clone git@github.com:${project}.git ${SRC}/${project}
-  fi
+  clone_project "${project}" "${SRC}"
 done
 
 log_success "Done cloning projects!"

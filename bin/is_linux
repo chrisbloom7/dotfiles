@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+[[ "$(uname -a)" =~ "Linux" ]] && echo true || echo false

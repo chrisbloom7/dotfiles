@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:$PATH"
+
+gate=${1:?"Gate condition is required (but can be empty)"}
+subject=${2:?Subject is required}
+: ${3:?You must provide at least one target file}
+targets=("${@:3}")
+
+log_debug "Checking for \`${subject}\` in ${targets[@]}"
+new_eval="eval \"\$(${subject})\""
+for target in ${@:3}; do
+  if [[ ! -f $target ]]; then
+    log_error "Target file does not exist: ${target}"
+    exit 1
+  elif [[ "$(cat $target)" =~ "${new_eval}" ]]; then
+    log_attention "\`${new_eval}\` already exists in ${target}; skipping"
+  else
+    if [[ -n "${gate:-}" ]]; then
+      new_val="${gate} && ${new_eval} || true"
+    fi
+    log_debug "Adding \`${new_eval}\` to ${target}"
+    echo "${new_val}" >> "${target}"
+  fi
+done

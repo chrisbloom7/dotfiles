@@ -1,15 +1,14 @@
 # Shortcuts
 alias cls="clear"
-alias yn="test \$(${@}) && echo yup || echo nope"
+alias yn='test "$@" && echo yup || echo nope'
 
 if [[ -n "$(command -v zsh 2>/dev/null)" ]]; then
   alias reloadshell="omz reload"
   alias reload="omz reload"
 fi
 
-if [[ "$(uname -s)" = "Darwin" ]]; then
+if [[ "$(uname -a)" =~ "Darwin" ]]; then
   alias beep="say -v Yuri \"My liege, the task is complete\""
-  alias copyssh="pbcopy < ${HOME}/.ssh/id_ed25519.pub"
   alias copyssh="pbcopy < ${HOME}/.ssh/id_rsa.pub"
   alias fixzoom="sudo killall VDCAssistant"
   alias flushdns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
@@ -31,8 +30,7 @@ alias edots="${EDITOR:-code} \"${DOTFILES}\""
 alias ehosts="${EDITOR:-code} /etc/hosts"
 alias edotaliases="${EDITOR:-code} ${HOME}/.aliases"
 readme () {
-  if [[ -z "$(command -v pandoc 2>/dev/null)"]] || [[ -z "$(command -v lynx 2>/dev/null)"]]; then
-    echo "either pandoc or lynx is not installed"
+  if [[ -z "$(command -v pandoc 2>/dev/null)" ]] || [[ -z "$(command -v lynx 2>/dev/null)" ]]; then
     return 1;
   fi
   if [[ -n "${1:-}" ]]; then

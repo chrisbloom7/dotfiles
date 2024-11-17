@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-source ./helpers.sh
+source ./helpers/runtime.sh
+source ../bin/helpers/trap_and_trace.sh
 
 log_info "Creating symlinks for config files"
 
-find "$(dirname "$0")/.." -depth -path "./configs/**/symlink" -perm -u+x | while read link_file; do
-  log_debug "Running $link_file"
-  "$link_file"
+find ../configs -depth -name "symlink*" -perm -u+x | while read link_file; do
+  log_debug "Calling $link_file"
+  ${link_file}
 done
 
 log_success "Symlinks created successfully!"

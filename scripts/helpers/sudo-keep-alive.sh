@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-source $(dirname "${BASH_SOURCE[0]}")/helpers.sh
 
 # Check if the script is being sourced and if not, exit with an error message
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  log_error "This script must be sourced, not executed"
+  echo -e "\033[1;31mError:\033[0m This script must be sourced, not executed" >&2
   exit 1
 fi
 
@@ -15,9 +14,9 @@ fi
 
 # Keep-alive: update existing `sudo` time stamp until script has finished
 # Runs in the background and dies when the script is done
+log_debug "Starting keep-alive loop"
 while true; do
   sudo -n true
-  log_debug "Sleeping for 60..."
-  sleep 60
+  sleep 30
   kill -0 "$$" || exit
 done 2>/dev/null &

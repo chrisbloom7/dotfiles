@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-source ./helpers.sh
+source ./helpers/runtime.sh
+source ../bin/helpers/trap_and_trace.sh
 
-# Uncomment this next line and commit the change to make dotfile installs into
-# any new codespaces a no-op. Useful for debugging devcontainer builds without
-# worrying about whether your dotfiles are causing issues.
-# [[ -n "${CODESPACES:-}" ]] && exit 0
-
-log_info "Bootstrapping"
+log_info "Performing common bootstrapping steps"
 
 ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
 ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
@@ -18,7 +14,7 @@ if [[ -n "${ZSH_PATH}" ]]; then
   # Check for Oh My Zsh and install if we don't have it
   if [[ ! -d "${ZSH}" ]]; then
     log_info "Installing Oh My Zsh"
-    /usr/bin/env bash -c "$(wget -qO- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
   fi
 
   mkdir -p "${ZSH_CUSTOM}"
@@ -28,22 +24,9 @@ if [[ -n "${ZSH_PATH}" ]]; then
   sudo chsh -s "$(command -v zsh 2>/dev/null)"
 fi
 
-if [[ -n "${CODESPACES:-}" ]]; then
-  log_debug "Using codepsaces dotfiles"
-  DOTFILES="/workspaces/.codespaces/.persistedshare/dotfiles"
-else
-  log_debug "Using local dotfiles"
-  DOTFILES="${DOTFILES:-$(pwd)}"
-fi
-
 # Symlink config files applicable to local and remote development
 log_debug "calling config symlink script"
 ./symlink-config-files
-
-if [[ -n "${CODESPACES:-}" ]]; then
-  log_debug "calling codespaces bootstrap script"
-  ./codespaces-bootstrap
-fi
 
 if [[ -n "${ZSH_PATH}" ]] && [[ -d "${ZSH_CUSTOM}" ]]; then
   log_debug "Installing OMZ plugins"
@@ -57,7 +40,7 @@ if [[ -n "${ZSH_PATH}" ]] && [[ -d "${ZSH_CUSTOM}" ]]; then
   for plugin in "${plugins[@]}"; do
     if [[ ! -d "${ZSH_CUSTOM}/plugins/${plugin}" ]]; then
       log_debug "Installing ${plugin} to ${ZSH_CUSTOM}/plugins"
-      git clone https://github.com/zsh-users/${plugin}.git "${ZSH_CUSTOM}/plugins/${plugin}"
+      clone_project "zsh-users/${plugin}" "${ZSH_CUSTOM}/plugins/"
     fi
   done
 fi

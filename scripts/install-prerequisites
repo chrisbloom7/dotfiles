@@ -1,25 +1,14 @@
 #!/usr/bin/env bash
-set -o nounset   # Error on unset variables. Same as -u.
-set -o pipefail  # Pipes return last non-zero status.
+cd "$(dirname "$0")"
+source ./helpers/runtime.sh
+source ../bin/helpers/trap_and_trace.sh
 
-if [[ -n "${DEBUG:-}" ]]; then
-  set -o errtrace  # Functions and subcommands inherit ERR traps. Same as -E.
-  set -o functrace # Functions and subcommands inherit DEBUG and RETURN traps. Same as -T.
-  set -o verbose   # Print shell input lines as they are read. Same as -v.
-  set -o xtrace    # Print a trace of simple commands. Same as -x.
+if [[ "$(is_macos)" != "true" && "$(is_linux)" != "true" ]]; then
+  log_error "This script only supports macOS and Linux"
+  exit 1
 fi
 
-readonly ANSI_RESET="\033[0m"
-readonly ANSI_BOLD_GREEN="\033[1;32m"
-readonly ANSI_BOLD_BLUE="\033[1;34m"
-
-log_info() {
-  echo -e "${ANSI_BOLD_BLUE}Info:${ANSI_RESET} $@"
-}
-
-log_success() {
-  echo -e "${ANSI_BOLD_GREEN}Success:${ANSI_RESET} $@"
-}
+log_info "Installing prerequisites"
 
 # Check for Homebrew and install if we don't have it
 log_info "Checking for Homebrew"
@@ -27,8 +16,15 @@ if [[ -z $(command -v brew 2>/dev/null) ]]; then
   log_info "Installing Homebrew"
   /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
-log_info "Homebrew installed at $(command -v brew)"
-eval "$($(command -v brew) shellenv)"
+
+log_debug "Homebrew installed at $(command -v brew 2>/dev/null)"
+if [[ -d ~/.linuxbrew ]]; then
+  eval "$(~/.linuxbrew/bin/brew shellenv)"
+elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+else
+  eval "$($(command -v brew 2>/dev/null) shellenv)"
+fi
 
 log_info "Setting up Homebrew taps"
 [[ -n "$(brew tap | grep homebrew/bundle)" ]] || brew tap --quiet homebrew/bundle
@@ -37,24 +33,60 @@ log_info "Setting up Homebrew taps"
 # Install prerequisite Homebrew formulae
 log_info "Installing prerequisite Homebrew formulae"
 brew_args="--require-sha --no-quarantine --force --overwrite"
-if [[ -n "${VERBOSE_MODE:-}" ]]; then
+if is_verbose_mode; then
   brew_args="$brew_args --verbose"
 else
   brew_args="$brew_args --quiet"
 fi
-brew install $brew_args coreutils \
-                        git \
-                        gpg-suite \
-                        mas \
-                        zsh
 
-# Install Xcode via mas
-# https://github.com/mas-cli/mas
-log_info "Installing Xcode via Mac App Store"
-mas install 497799835
+log_debug "Checking for coreutils formulae"
+if [ -z "$(brew ls coreutils)" ]; then
+  log_info "Installing coreutils formulae"
+  brew install $brew_args coreutils
+fi
 
-# Install Xcode Command Line Tools
-log_info "Installing Xcode Command Line Tools"
-xcode-select --install
+log_debug "Checking for git formulae"
+if [ -z "$(brew ls git)" ]; then
+  log_info "Installing git formulae"
+  brew install $brew_args git
+fi
+
+log_debug "Checking for gpg-suite formulae"
+if [ -z "$(brew ls gpg-suite)" ]; then
+  log_info "Installing gpg-suite formulae"
+  brew install $brew_args gpg-suite
+fi
+
+log_debug "Checking for zsh formulae"
+if [ -z "$(brew ls zsh)" ]; then
+  log_info "Installing zsh formulae"
+  brew install $brew_args zsh
+fi
+
+# Check for bats-core
+log_debug "Checking for bats-core formulae"
+if [ -z "$(brew ls bats-core)" ]; then
+  log_info "Installing bats-core formulae"
+  brew install $brew_args bats-core
+fi
+
+if [[ "$(is_macos)" == "true" ]]; then
+  log_debug "Checking for mas formulae"
+  if [ -z "$(brew ls mas)" ]; then
+    log_info "Installing mas formulae"
+    brew install $brew_args mas
+  fi
+
+  # Install Xcode via mas
+  # https://github.com/mas-cli/mas
+  log_info "Installing Xcode via Mac App Store"
+  mas install 497799835
+
+  # Install Xcode Command Line Tools
+  log_info "Installing Xcode Command Line Tools"
+  if [[ -z "$(xcode-select --print-path 2>/dev/null)" ]]; then
+    xcode-select --install
+  fi
+fi
 
 log_success "Prerequisites installed!"

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/color_codes.sh"
+
+[[ "${VERBOSE_MODE:-}" != true ]] && exit 0
+echo -e "${ANSI_GRAY}$@${ANSI_RESET}"

@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ./helpers/runtime.sh
+source ../bin/helpers/trap_and_trace.sh
+
+# You can add a script file to your dotfiles repo that will be executed when the
+# dotfiles are loaded into your Codespaces. You do have to give it the proper
+# name, but GitHub gives you several to choose from. When Codespaces detects a
+# script file in your dotfiles repo, it clones the dotfiles repo to
+# "/workspaces/.codespaces/.persistedshare/dotfiles" and then executes your
+# script file if it exists. If it does not find an applicable script file then
+# it will copy and files starting with "." from the dotfiles directory to the
+# $HOME folder in the codespace. If it does find a script, then it expects the
+# script to copy over the dotfiles to the correct place.
+#
+# https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles
+
+log_info "Bootstrapping codespaces"
+
+if [[ "$(is_codespace)" != "true" ]]; then
+  log_attention "Not a codespace; skipping $0"
+  exit 0
+fi
+
+# Run setup steps that apply both locally and in devcontainers
+log_debug "calling common boostrap script"
+./bootstrap-common
+
+# ENV variables we could evaluate in a Codespace:
+#  CLOUDENV_ENVIRONMENT_ID=very-long-guid-hash
+#  CODESPACES=true # Always true if set
+#  CODESPACES_RECOVERY_CONTAINER=true|false
+#  CODESPACE_NAME=name-plus-guid
+#  CODESPACE_VSCODE_FOLDER=/workspaces/mycoolapp
+#  CONTAINER_BUILDER_TOKEN=github-token
+#  GITHUB_API_URL=https://api.github.com
+#  GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN=app.github.dev
+#  GITHUB_CODESPACE_TOKEN=LONG_TOKEN
+#  GIT_COMMITTER_EMAIL=noreply@github.com
+#  GITHUB_GRAPHQL_URL=https://api.github.com/graphql
+#  GITHUB_REPOSITORY=me/mycoolapp
+#  GITHUB_SERVER_URL=https://github.com
+#  GITHUB_TOKEN=another-github-token
+#  GITHUB_USER=me
+#  HOST=codespaces-${short-token}
+#  HOSTNAME=codespaces-${short-token}
+#  RepositoryName=mycoolapp
+#  TERM_PROGRAM=vscode # Could also be "codespaces"
+
+log_info "Cconfiguring git for codespaces"
+# This insteadOf line doesn't work on Codespaces, so we need to unset it
+git config unset --global --value url."git@github.com:".insteadOf
+
+log_debug "Checking if gh CLI is installed"
+if [[ -n $(command -v gh 2>/dev/null) ]]; then
+  log_attention "Installing credentials helper via gh CLI. Watch for prompts."
+  gh auth setup-git
+else
+  log_attention "gh CLI not found; skipping credentials helper installation"
+fi
+
+log_debug "Checking if linuxbrew is installed"
+if [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
+  log_info "Initializing linuxbrew"
+
+  test -d "${HOME}/.linuxbrew" && eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
+  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  add_eval_to_dotfile '[[ -n "$(command -v brew 2>/dev/null)" ]]' "$(brew --prefix)/bin/brew shellenv" "${HOME}/.bashrc" "${HOME}/.zprofile"
+fi
+
+brew tap homebrew/bundle
+
+log_success "Done codespace specific bootstrapping!"

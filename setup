@@ -1,126 +1,38 @@
 #!/usr/bin/env bash
+
+# Uncomment this next line and commit the change to make dotfile installs into
+# any new codespaces a no-op. Useful for debugging devcontainer builds without
+# worrying about whether your dotfiles are causing issues.
+# [[ -n "${CODESPACES:-}" ]] && exit 0
+
 cd "$(dirname "$0")"
-source scripts/helpers.sh
+[[ -n "${DEBUG:-}" ]] && echo -e "\033[90mSourcing runtime script\033[0m" || true
+source ./scripts/helpers/runtime.sh
+[[ -n "${DEBUG:-}" ]] && echo -e "\033[90mSourcing trap and trace script\033[0m" || true
+source ./bin/helpers/trap_and_trace.sh
 
 log_info "Beginning setup"
 
-source scripts/sudo-keep-alive.sh
+log_debug "Sourcing sudo keep alive script"
+source ./scripts/helpers/sudo-keep-alive.sh
 
-# Run setup steps that apply both locally and in devcontainers
-log_debug "calling boostrap script"
-scripts/bootstrap
+log_info "Checking prerequisites"
+if [[ "$(is_codespace)" != "true" ]]; then
+  log_debug "calling prerequisites script"
+  scripts/install-prerequisites
+else
+  log_attention "Prerequisites mode not supported in Codespaces; skipping $0"
+fi
 
 log_debug "Checking runtime environment"
-if [[ -z "${CODESPACES:-}" ]] && [[ "$(uname)" == "Darwin" ]]; then
-  # Local macOS setup, not in a devcontainer
-  log_info "Setting up your Mac"
-
-  # Symlink Mackup config files to the home directory
-  log_debug "calling config symlink script"
-  scripts/symlink-config-files
-
-  log_debug "Loading Homebrew"
-  eval "$($(command -v brew) shellenv)"
-
-  log_debug "Updating Homebrew"
-  if [[ "${VERBOSE_MODE:-}" == true ]]; then
-    brew_args="--verbose"
-  else
-    brew_args="--quiet"
-  fi
-  brew update $brew_args
-
-  log_info "Installing Homebrew dependencies from Brewfile"
-  brew tap homebrew/bundle
-
-  log_info "Installing minimal Homebrew packages"
-  bundle_args="--force --no-lock"
-  if [[ "${VERBOSE_MODE:-}" == true ]]; then
-    bundle_args="${bundle_args} --verbose"
-  else
-    bundle_args="${bundle_args} --quiet"
-  fi
-  brew bundle --file ./Brewfile.minimal $bundle_args
-
-  if [[ "${MINIMAL_MODE:-}" == false ]]; then
-    log_info "Installing additional Homebrew packages"
-    brew bundle --file ./Brewfile $bundle_args
-  fi
-
-  log_info "Cleaning up Homebrew services"
-  brew services cleanup
-
-  if [[ "${MINIMAL_MODE:-}" == false ]]; then
-    # Uninstall default Mac apps
-    log_info "Uninstalling default Mac apps"
-    mas uninstall 408981434 || true # iMovie
-    mas uninstall 409183694 || true # Keynote
-    mas uninstall 409201541 || true # Pages
-    mas uninstall 409203825 || true # Numbers
-
-    # Set default MySQL root password and auth type
-    if [[ -n "$(command -v mysql 2>/dev/null)" ]]; then
-      log_info Setting a blank root password for MySQL...
-      brew services start mysql
-      mysql -u root -e "ALTER USER root@localhost IDENTIFIED BY ''; FLUSH PRIVILEGES;"
-      brew services stop mysql
-    fi
-  fi
-
-  log_info "Configuring Mise"
-  echo 'eval "$(~/.local/bin/mise activate bash)"' >> $HOME/.bash_profile
-  echo 'eval "$(~/.local/bin/mise completion bash"' >> $HOME/.bash_completion
-  echo 'eval "$(~/.local/bin/mise activate zsh)"' >> $HOME/.zprofile
-  echo 'eval "$(~/.local/bin/mise completion zsh"' > /usr/local/share/zsh/site-functions/_mise
-  eval "$(~/.local/bin/mise activate bash)"
-  log_debug "calling mise symlink script"
-  scripts/symlink-mise-files
-
-  log_info "Installing Mise plugins"
-  mise_args="--cd $HOME --env local --yes"
-  if [[ "${VERBOSE_MODE:-}" == true ]]; then
-    mise_args="${mise_args} --verbose"
-  else
-    mise_args="${mise_args} --quiet"
-  fi
-  if [[ "${MINIMAL_MODE:-}" == false ]]; then
-    mise_plugins="go java node python ruby rust"
-  else
-    mise_plugins="go node python ruby"
-  fi
-  mise use $mise_args $mise_plugins
-
-  log_info "Reshimming Mise plugins"
-  mise reshim $mise_args
-
-  # Clone project repositories
-  if [[ "${MINIMAL_MODE:-}" == false ]]; then
-    log_debug "calling clone-projects script"
-    scripts/clone-projects
-  fi
-
-  # Install iTerm2 shell integration for Zsh
-  log_info "Installing iTerm2 shell integration for Zsh"
-  curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh
-
-  # Install Rosetta 2 on M1+ Macs to bridge the gap between Intel and Apple processors
-  if [[ "$(uname -m)" != "x86_64" ]]; then
-    log_info "Installing Rosetta 2"
-    softwareupdate --install-rosetta --agree-to-license || true
-  fi
-
-  # Set macOS preferences - we run this last because this will reload the shell
-  if [[ "${MINIMAL_MODE:-}" == false ]]; then
-    log_debug "calling configure-macos script"
-    scripts/configure-macos
-  fi
-
-  # Symlink Mackup config files to the home directory
-  log_debug "calling config symlink script"
-  scripts/symlink-config-files
-
-  log_info "Some changes may require a logout/restart to take effect"
-  log_info "You may need to manually set fonts in your iTerm2 profile"
+if [[ "$(is_codespace)" == "true" ]]; then
+  log_debug "calling bootstrap-codespaces script"
+  scripts/bootstrap-codespaces
+elif [[ "$(is_macos)" == "true" || "$(is_linux)" == "true" ]]; then
+  log_debug "calling bootstrap-workstation script"
+  scripts/bootstrap-workstation
+else
+  log_attention "Unrecognized environment; skipping $0"
 fi
 
 log_success "Setup complete!"

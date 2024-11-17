@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+set -euo pipefail
 cd "$(dirname "$0")"
-source ./helpers.sh
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:$PATH"
 
 log_attention "Enter your name and email address to generate a new GPG key."
 until [[ "${confirm:-}" == "y" ]]; do

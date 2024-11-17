@@ -145,6 +145,7 @@ vscode "ciarant.vscode-structurizr"                 # Structurizr DSL syntax hig
 vscode "emilast.logfilehighlighter"
 vscode "erikphansen.vscode-toggle-column-selection" # Turn a selection into a column selection à la TextMate
 vscode "GraphQL.vscode-graphql-syntax"              # Adds syntax highlighting support for .graphql & embedded support for javascript, typescript, vue, markdown, python, php, reason, ocaml and rescript
+vscode "jetmartin.bats"                             # Bats (Bash Automated Testing System) language support for VSCode.
 vscode "loginspector.loginspector"
 vscode "mechatroner.rainbow-csv"                    # Highlight CSV and TSV files, Run SQL-like queries
 vscode "MermaidChart.vscode-mermaid-chart"          # The Mermaid Chart extension for Visual Studio Code enables developers to view and edit diagrams stored in Mermaid charts within the Visual Studio Code. With integration to the Mermaid Chart service, this extension allows users to attach diagrams to their code. Gain quick access to edit diagrams.
@@ -159,6 +160,7 @@ vscode "phoihos.csv-to-md-table"                    # Convert CSV/TSV/PSV text t
 vscode "rubocop.vscode-rubocop"                     # VS Code extension for the RuboCop linter and code formatter.
 vscode "Shopify.ruby-lsp"                           # VS Code plugin for connecting with the Ruby LSP
 vscode "streetsidesoftware.code-spell-checker"      # Spelling checker for source code
+vscode "tamagui.batsignal"                          # A color theme for bats
 
 ## Extension Packs
 #

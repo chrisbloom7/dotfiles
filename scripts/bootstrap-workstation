@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ./helpers/runtime.sh
+source ../bin/helpers/trap_and_trace.sh
+
+# Local macOS setup, not in a devcontainer
+log_info "Bootstrapping macOS"
+
+if [[ "$(is_macos)" != "true" ]]; then
+  log_attention "Not macOS; skipping $0"
+  exit 0
+fi
+
+# Symlink Mackup config files to the home directory
+log_debug "calling config symlink script"
+./symlink-config-files
+
+log_debug "Loading Homebrew"
+eval "$($(command -v brew) shellenv)"
+
+log_debug "Updating Homebrew"
+if is_verbose_mode; then
+  brew_args="--verbose"
+else
+  brew_args="--quiet"
+fi
+brew update $brew_args
+
+log_info "Installing Homebrew dependencies from Brewfile"
+brew tap homebrew/bundle
+
+log_info "Installing minimal Homebrew packages"
+bundle_args="--force --no-lock"
+if is_verbose_mode; then
+  bundle_args="${bundle_args} --verbose"
+else
+  bundle_args="${bundle_args} --quiet"
+fi
+brew bundle --file ../Brewfile.minimal $bundle_args
+
+if !is_minimal_mode; then
+  log_info "Installing additional Homebrew packages"
+  brew bundle --file ../Brewfile $bundle_args
+fi
+
+log_info "Cleaning up Homebrew services"
+brew services cleanup
+
+if ! is_minimal_mode; then
+  # Uninstall default Mac apps
+  log_debug "Checking for mas CLI"
+  if [[ -n "$(command -v mas 2>/dev/null)" ]]; then
+    log_info "Uninstalling default Mac apps"
+    mas uninstall 408981434 || true # iMovie
+    mas uninstall 409183694 || true # Keynote
+    mas uninstall 409201541 || true # Pages
+    mas uninstall 409203825 || true # Numbers
+  fi
+
+  # Set default MySQL root password and auth type
+  log_debug "Checking for MySQL"
+  if [[ -n "$(command -v mysql 2>/dev/null)" ]]; then
+    log_info Setting a blank root password for MySQL...
+    brew services start mysql
+    mysql -u root -e "ALTER USER root@localhost IDENTIFIED BY ''; FLUSH PRIVILEGES;"
+    brew services stop mysql
+  fi
+fi
+
+if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
+  log_info "Activating Mise"
+  add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise activate bash"   "${HOME}/.bash_profile"
+  add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise completion bash" "${HOME}/.bash_completion"
+  add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise activate zsh"    "${HOME}/.zprofile"
+  add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise completion zsh"  "/usr/local/share/zsh/site-functions/_mise"
+  eval "$(~/.local/bin/mise activate bash)"
+
+  log_debug "calling mise symlink script"
+  ../configs/mise/symlink_mise
+
+  log_info "Installing Mise plugins"
+  mise_args="--cd $HOME --env local --yes"
+  if is_verbose_mode; then
+    mise_args="${mise_args} --verbose"
+  else
+    mise_args="${mise_args} --quiet"
+  fi
+  mise_plugins="python node"
+  if ! is_minimal_mode; then
+    mise_plugins="${mise_plugins} go java ruby rust"
+  fi
+  mise use $mise_args $mise_plugins
+
+  log_info "Reshimming Mise plugins"
+  mise_reshim_args="--cd $HOME --yes"
+  if is_force_mode; then
+    mise_reshim_args="${mise_reshim_args} --force"
+  fi
+  mise reshim $mise_reshim_args
+else
+  log_attention "Mise not found; skipping Mise setup"
+fi
+
+# Clone project repositories
+if ! is_minimal_mode; then
+  log_debug "calling clone-projects script"
+  ./clone-projects
+fi
+
+# Install iTerm2 shell integration for Zsh
+log_info "Installing iTerm2 shell integration for Zsh"
+curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh
+
+# Install Rosetta 2 on M1+ Macs to bridge the gap between Intel and Apple processors
+if [[ "$(uname -m)" != "x86_64" ]]; then
+  log_info "Installing Rosetta 2"
+  softwareupdate --install-rosetta --agree-to-license || true
+fi
+
+# Set macOS preferences - we run this last because this will reload the shell
+if ! is_minimal_mode; then
+  log_debug "calling configure-macos script"
+  ./configure-macos
+fi
+
+# Symlink Mackup config files to the home directory
+log_debug "calling config symlink script"
+./symlink-config-files
+
+log_info "Some changes may require a logout/restart to take effect"
+log_info "You may need to manually set fonts in your iTerm2 profile"
+
+log_success "Done codespace specific bootstrapping!"

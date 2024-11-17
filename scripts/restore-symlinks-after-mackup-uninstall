@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-source ./helpers.sh
+source ./helpers/runtime.sh
+source ../bin/helpers/trap_and_trace.sh
 
 log_info "Restoring symlinks after mackup uninstall"
 

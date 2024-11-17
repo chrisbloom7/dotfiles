@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
-source scripts/helpers.sh
+[[ -n "${DEBUG:-}" ]] && echo -e "\033[90mSourcing runtime script\033[0m" || true
+source scripts/helpers/runtime.sh
 
 log_info "Testing..."
 
-source scripts/sudo-keep-alive.sh
+log_debug "Sourcing sudo keep alive script"
+source scripts/helpers/sudo-keep-alive.sh
 
 # Run setup steps that apply both locally and in devcontainers
-log_info "Running bootstrap"
-scripts/bootstrap
+log_info "Running bootstrap test"
+NO_INSTALL_MODE=true scripts/bootstrap-common
 
 log_success "Test complete!"

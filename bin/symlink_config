@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:$PATH"
+
+subject=${1:?Subject is required}
+target=${2:?Target is required}
+
+log_debug "Symlinking ${subject} to ${target}"
+if [[ ! -L "${target}" ]] && ([[ -f "${target}" ]] || [[ -d "${target}" ]]); then
+  if [[ "${FORCE_MODE:-}" != true ]]; then
+    log_attention "${target} already exists; move it or use FORCE_MODE to rename it"
+    exit 0
+  else
+    suffix="presetup"
+    last_index="$(find $(dirname "${target}") -maxdepth 1 -name "$(basename "${target}").presetup*" | sort -V | tail -n1 | sed -E 's/^.+\.presetup(\.0*([1-9]+))?/\2/')"
+    if [[ -n "${last_index}" ]]; then
+      suffix="${suffix}.$((last_index + 1))"
+    fi
+    log_attention "${target} already exists; renaming to ${target}.${suffix}"
+    mv -n "${target}" "${target}.${suffix}"
+  fi
+elif [[ -L "${target}" ]]; then
+  log_debug "Unlinking existing soft target ${target}"
+  unlink "${target}"
+fi
+
+link_args="-s"
+if [[ "${VERBOSE_MODE:-}" == true ]]; then
+  link_args="${link_args} -v"
+fi
+ln $link_args "${subject}" "${target}"

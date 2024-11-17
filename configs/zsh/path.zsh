@@ -1,25 +1,29 @@
 # Prepend directories to $PATH and prevent adding the same directory multiple times upon shell reload.
-add_to_path() {
-  if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
-    export PATH="$1:$PATH"
+_add_to_path() {
+  NEW_PATH="${1:?Path is required}"
+  if [[ -d "${NEW_PATH}" ]] && [[ ":${PATH}:" != *":${NEW_PATH}:"* ]]; then
+    export PATH="$NEW_PATH:$PATH"
   fi
 }
 
-# Load dotfiles binaries
-add_to_path "$DOTFILES/bin"
+# Load personal binaries
+_add_to_path "${HOME}/bin"
+
+# Add Homebrew coreutils to path for GNU utilities
+_add_to_path "/usr/local/opt/coreutils/libexec/gnubin"
 
 # Load global Node installed binaries
-add_to_path "$HOME/.node/bin"
+_add_to_path "${HOME}/.node/bin"
 
 # Use project specific binaries before global ones
-add_to_path "vendor/bin"
-add_to_path "node_modules/.bin"
+_add_to_path "vendor/bin"
+_add_to_path "node_modules/.bin"
 
 # Local bin directories before anything else
-add_to_path "/usr/local/bin"
+_add_to_path "/usr/local/bin"
 
 # Add Java to path
-add_to_path "/opt/homebrew/opt/openjdk/bin"
+_add_to_path "/opt/homebrew/opt/openjdk/bin"
 
 # Add linux's man to the manpath
-export MANPATH="/usr/local/man:$MANPATH"
+export MANPATH="/usr/local/man:${MANPATH}"

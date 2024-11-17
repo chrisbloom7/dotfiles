@@ -4,7 +4,7 @@ source ./helpers/runtime.sh
 source ../bin/helpers/trap_and_trace.sh
 
 # This script should be codespace agnosic. It is intended to be run as part of a
-# codespaces' `postAttachCommand` lifecycle event to perform additional setup
+# codespaces' `postCreateCommand` lifecycle event to perform additional setup
 # steps specific to these dotfiles and my development preferences.
 #
 # NOTE: THIS IS NOT BASED ON ANY BUILT-IN MECHANISM of devcontainers or
@@ -15,8 +15,8 @@ source ../bin/helpers/trap_and_trace.sh
 #
 # ```sh
 # # Run any additional user-specific hooks. This runs every time the container is attached.
-# if [[ -f /workspaces/.codespaces/.persistedshare/dotfiles/scripts/codespaces-post-attach ]]; then
-#   /workspaces/.codespaces/.persistedshare/dotfiles/codespaces-post-attach
+# if [[ -f /workspaces/.codespaces/.persistedshare/dotfiles/scripts/codespaces-post-create ]]; then
+#   /workspaces/.codespaces/.persistedshare/dotfiles/codespaces-post-create
 # fi
 # ```
 #
@@ -29,17 +29,11 @@ source ../bin/helpers/trap_and_trace.sh
 # should still take care to only enable this for devcontainers in repos that you
 # trust and that have a reasonable level security and observability.
 
-log_info "Running post attach script from dotfiles"
+log_info "Running post create script from dotfiles"
 
 if [[ "$(is_codespace)" != "true" ]]; then
   log_attention "Not a codespace; skipping $0"
   exit 0
 fi
 
-log_debug "Checking if gh CLI is installed"
-if [[ -n $(command -v gh 2>/dev/null) ]]; then
-  log_info "Checking gh auth status"
-  echo $(gh auth status)
-fi
-
-log_success "Done running post attach script!"
+log_success "Done running post create script!"

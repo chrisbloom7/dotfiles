@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ../../scripts/helpers/runtime.sh
+source ../../bin/helpers/trap_and_trace.sh
+
+log_info "Symlinking mise configs"
+
+TARGET="${HOME}/.config/mise"
+mkdir -p "${TARGET}"
+
+configs=(
+  "config.toml"
+)
+for config in "${configs[@]}"; do
+  symlink_config "${PWD}/${config}" "${TARGET}/${config}"
+done
