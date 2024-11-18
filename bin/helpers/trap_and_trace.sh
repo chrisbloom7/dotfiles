@@ -10,11 +10,11 @@ trap '_trace_on_error $? $LINENO' ERR
 
 # Trap function
 function _trace_on_error {
-  local error_code=$1
   set +xv # turns off debug logging, just in case
+  local error_code=$1
+  local line_number=$2
+  local command="${BASH_COMMAND}"
   if [[ $- =~ e ]] && [[ "${error_code}" != "0" ]]; then
-    local line_number=$2
-    local command="${BASH_COMMAND}"
     local script_name="${BASH_SOURCE[1]}"
     local script_path="${PWD%/}/$(basename "${script_name}")"
     # echo ""
