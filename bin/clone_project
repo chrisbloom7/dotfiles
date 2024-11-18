@@ -11,7 +11,7 @@ owner=$(echo "${subject}" | cut -d '/' -f1)
 if [[ ! -d "${target}/${subject}" ]]; then
   log_info "Cloning ${subject} to ${target}/${subject}"
   mkdir -p "${target}/${owner}"
-  git clone git@github.com:${subject}.git ${target}/${subject} 1>/dev/null
+  git clone https://github.com/${subject}.git ${target}/${subject} 1>/dev/null
 else
   log_info "Updating ${subject} in ${target}/${subject}"
   cd "${target}/${subject}"
