@@ -1267,6 +1267,9 @@ for app in "Activity Monitor" \
 done
 
 log_debug "Re-enabling Exit on error"
-[[ ${RESTORE_EXIT_ON_ERROR:-} == true ]] && set -e || true
+if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
+  set -e
+  unset RESTORE_EXIT_ON_ERROR
+fi
 
 log_success "macOS configured. Note that some of these changes require a logout/restart to take effect."

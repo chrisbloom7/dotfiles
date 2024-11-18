@@ -37,11 +37,32 @@ if is_verbose_mode; then
 else
   bundle_args="${bundle_args} --quiet"
 fi
+
+log_debug "Disabling Exit on error for Brewfile.minimal"
+if [[  $- =~ e ]]; then
+  set +e
+  RESTORE_EXIT_ON_ERROR=true
+fi
 brew bundle --file ../Brewfile.minimal $bundle_args
+log_debug "Re-enabling Exit on error"
+if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
+  set -e
+  unset RESTORE_EXIT_ON_ERROR
+fi
 
 if !is_minimal_mode; then
   log_info "Installing additional Homebrew packages"
+  log_debug "Disabling Exit on error for Brewfile"
+  if [[  $- =~ e ]]; then
+    set +e
+    RESTORE_EXIT_ON_ERROR=true
+  fi
   brew bundle --file ../Brewfile $bundle_args
+  log_debug "Re-enabling Exit on error"
+  if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
+    set -e
+    unset RESTORE_EXIT_ON_ERROR
+  fi
 fi
 
 log_info "Cleaning up Homebrew services"
