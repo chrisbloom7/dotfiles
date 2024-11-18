@@ -24,7 +24,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
     export DOTFILES="${DOTFILES:-"/workspaces/.codespaces/.persistedshare/dotfiles"}"
   else
     # Complicated because this file is sourced from other files that may not be in this directory
-    export DOTFILES="${DOTFILES:-"${PWD%/}/$(dirname "${BASH_SOURCE[0]}")/..}"
+    export DOTFILES="${DOTFILES:-${PWD%/}/$(dirname "${BASH_SOURCE[0]}")/..}"
   fi
 
   # Add setup bin directory to PATH
