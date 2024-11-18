@@ -79,7 +79,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                            ;;
         -v | --verbose   ) _can_use_verbose_mode && VERBOSE_MODE=true
                            ;;
-        *                ) if [[ "$1" =~ "^-[:alpha:][:alpha:]" ]]; then
+        *                ) if [[ "$1" =~ ^-[a-z]{2,} ]]; then
                              args=""
                              for (( i=1; i<${#1}; i++ )); do
                                args="${args} -${1:$i:1}"
