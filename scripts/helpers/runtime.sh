@@ -79,7 +79,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                            ;;
         -v | --verbose   ) _can_use_verbose_mode && VERBOSE_MODE=true
                            ;;
-        *                ) if [[ "${1:0:1}" == "-" && "${1:1:2}" != "-" ]]; then
+        *                ) if [[ "${1:0:1}" == "-" && "${1:1:1}" != "-" ]]; then
                              args=""
                              for (( i=1; i<${#1}; i++ )); do
                                args="${args} -${1:$i:1}"
