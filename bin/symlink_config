@@ -16,12 +16,22 @@ if [[ ! -L "${target}" ]] && ([[ -f "${target}" ]] || [[ -d "${target}" ]]); the
     suffix="presetup"
     last_index="$(find $(dirname "${target}") -maxdepth 1 -name "$(basename "${target}").presetup*" | sort -V | tail -n1 | sed -E 's/^.+\.presetup(\.0*([1-9]+))?/\2/')"
     if [[ -n "${last_index}" ]]; then
-      suffix="${suffix}.$((last_index + 1))"
+      next_index=$((last_index + 1))
+      suffix="${suffix}.$(printf %5s "${next_index}" | tr ' ' 0)"
+    elif [[ -e "${target}.${suffix}" ]]; then
+      suffix="${suffix}.00001"
     fi
     log_attention "${target} already exists; renaming to ${target}.${suffix}"
-    mv -n "${target}" "${target}.${suffix}"
+
+    mv_args="-n"
+    if [[ "${VERBOSE_MODE:-}" == true ]]; then
+      mv_args="${mv_args} -v"
+    fi
+    mv $mv_args "${target}" "${target}.${suffix}"
   fi
-elif [[ -L "${target}" ]]; then
+fi
+
+if [[ -L "${target}" ]]; then
   log_debug "Unlinking existing soft target ${target}"
   unlink "${target}"
 fi

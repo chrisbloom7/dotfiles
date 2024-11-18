@@ -6,6 +6,17 @@ source ../bin/helpers/trap_and_trace.sh
 # Thanks to Mathias Bynens!
 # ~/.macos — https://mths.be/macos
 
+# For more information about these settings, see:
+# - https://github.com/kevinSuttle/macOS-Defaults/blob/9aed141a1f0abdb3581d3439131fad176ca01682/REFERENCE.md
+# - The man pages for `chflags`, `defaults`, `killall`, `launchctl`, `mdutil`, `nvram`, `osascript`,
+#   `PlistBuddy`, `pmset`, `scutil`, `systemsetup`, and `tmutil`
+# - `/usr/libexec/PlistBuddy -h`
+# - `systemsetup -help` and `systemsetup -printCommands`
+# - `pmset -g` or `pmset -g ps`
+
+# Note that Mackup synchronizes some macOS settings
+# https://github.com/lra/mackup/blob/master/mackup/applications/macosx.cfg
+
 log_info "Applying macOS defaults"
 
 log_debug "Disabling Exit on error for this script"
