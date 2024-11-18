@@ -57,11 +57,11 @@
 	clean = git-lfs clean -- %f
 [credential]
 	helper = store
-[credential "https://github.com"]
-	username = chrisbloom7
-	helper = !/opt/homebrew/bin/gh auth git-credential
-[url "git@github.com:"]
-	insteadOf = https://github.com/
+# [credential "https://github.com"]
+# 	username = chrisbloom7
+# 	helper = !/opt/homebrew/bin/gh auth git-credential
+# [url "git@github.com:"]
+# 	insteadOf = https://github.com/
 [init]
 	defaultBranch = main
 [pull]
@@ -71,7 +71,7 @@
 [credential "https://gist.github.com"]
 	username = chrisbloom7
 	helper = !/opt/homebrew/bin/gh auth git-credential
-[commit]
-	gpgsign = true
+# [commit]
+# 	gpgsign = true
 [gpg]
 	program = /usr/local/bin/gpg
