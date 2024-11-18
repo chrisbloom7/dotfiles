@@ -24,7 +24,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
     export DOTFILES="${DOTFILES:-"/workspaces/.codespaces/.persistedshare/dotfiles"}"
   else
     # Complicated because this file is sourced from other files that may not be in this directory
-    export DOTFILES="${DOTFILES:-$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")}"
+    export DOTFILES="${DOTFILES:-$(dirname "${BASH_SOURCE[0]}")/..}"
   fi
 
   # Add setup bin directory to PATH
@@ -79,7 +79,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                            ;;
         -v | --verbose   ) _can_use_verbose_mode && VERBOSE_MODE=true
                            ;;
-        *                ) if [[ "${1:0:1}" == "-" && "${1:1:1}" != "-" ]]; then
+        *                ) if [[ "$1" =~ "^-[:alpha:][:alpha:]" ]]; then
                              args=""
                              for (( i=1; i<${#1}; i++ )); do
                                args="${args} -${1:$i:1}"
