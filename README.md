@@ -123,10 +123,8 @@ After backing up your old workstation you may now follow these install instructi
 
    1. To run a full setup:
 
-      > [!TIP]
-      > You can pass the `--help` flag to the setup script to see all available options.
-
       ```shell
+      # Tip: You can pass the `--help` flag to the setup script to see available options.
       ./setup
       ```
 
@@ -152,10 +150,8 @@ After backing up your old workstation you may now follow these install instructi
 
    4. You can also run the individual scripts in the `scripts` directory if you prefer a more granular approach. For example, to perform only the configuration settings for macOS:
 
-      > [!TIP]
-      > As with the `setup` script, use the `--help` with any file in the `scripts/` directory to see available options.
-
       ```shell
+      # Tip: Use the `--help` option with any file in the `scripts/` directory to see available options.
       ./scripts/configure-macos
       ```
 
