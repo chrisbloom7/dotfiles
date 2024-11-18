@@ -51,22 +51,22 @@ You can use these dotfiles to configure transient development environments such 
 
 A brief overview of some of the most important files and directories in this repository:
 
-- `Brewfile*`s: a set of files tell Homebrew what applications to install.
-  - [`Brewfile`](./Brewfile) Non-essential applications that I like to have installed on my development machines. This file will be skipped if the `--minimal` flag is passed to `setup`.
-  - [`Brewfile.minimal`](./Brewfile.minimal) A list of applications I consider to be essential. If the `--minimal` flag is passed to `setup` then only these programs will be installed.
 - [`bin`](./bin) A directory containing various utility programs that are used during the setup process and elsewhere in these dotfiles.
-  - [`bin/generate-ssh`](./bin/generate-ssh) A script that generates an SSH key and walks you through the process of adding it to your GitHub account. Must be run manually as needed.  [More details](#2-setting-up-your-workstation).
-  - [`bin/generate-gpg`](./bin/generate-gpg) A script that generates a GPG key to use for signing commits, and walks you through the process of adding it to your GitHub account. Must be run manually as needed. [More details](#2-setting-up-your-workstation).
-- [`configs/`](./configs) A directory containing program specific configuration files that will be symlinked to your home directory as necessary. A few of the most important files are:
-  - `configs/**/symlink*` ([Example](./configs/zsh/symlink_zsh)) Scripts that symlink the files in their directory to the home directory. These scripts are run by the bootstrap scripts and typically do not need to be called manually, though you can if you want to.
-  - [`configs/mackup/.mackup.cfg`](./configs/mackup/.mackup.cfg) A configuration file for [Mackup][mackup], the program used to backup configuration settings on macOS and Linux. The file specifies the storage provider where settings will be backed up to and restored from, as well as a list of applications to ignore when backing up. You can adjust this file to your liking.
+  - [`bin/generate-ssh`](./bin/generate-ssh) A script that generates an SSH key and walks you through the process of adding it to your GitHub account.
+  - [`bin/generate-gpg`](./bin/generate-gpg) A script that generates a GPG key to use for signing commits, and walks you through the process of adding it to your GitHub account.
+  - [`bin/restore_symlinks_after_mackup_uninstall`](./bin/restore_symlinks_after_mackup_uninstall) A utility script to help workaround a bug in Mackup commands on macOS Sonoma and up.[^mackup-sonoma]
+- [`configs/`](./configs) A directory containing program specific configuration files that will be symlinked to your home directory as necessary. Because they are symlinked, they can be treated like any other config file and changes will be reflected here in this repo to commit. If you find that you are frequently discarding these changes without commiting them, that's likely a sign that config file shouldn't be managed by this repo. A few notable config files are:
+  - `configs/**/symlink*` (Example: [configs/zsh/symlink_zsh](./configs/zsh/symlink_zsh)) Scripts that handle symlinking the config files in the parent directory to their typical home. These scripts are run automatically by the setup scripts and do not need to be called manually, though you can if you want to. Each of these files' names must start with `symlink` but may include any suffix for identification purposes, and must be marked as executable. If you add a new directory to the `configs` directory, be sure to include a symlink script for it. If you modify the contents of a directory, you may need to update the symlink script to reflect those changes.
+  - [`configs/mackup/.mackup.cfg`](./configs/mackup/.mackup.cfg) A configuration file for [Mackup][mackup], the program used to backup configuration settings on macOS and Linux. The file specifies the storage provider where settings will be backed up to and restored from, as well as a list of applications to ignore when backing up. You can adjust this file to your liking, but at a minimum it must include an entry for `mackup` under the `[applications_to_ignore]` section.
   - [`configs/zsh/aliases.zsh`](./configs/zsh/aliases.zsh) A list of aliases that will be loaded into zsh by Oh My Zsh.
   - [`configs/zsh/path.zsh`](./configs/zsh/path.zsh) A list of directories that will be added to the zsh `$PATH` by Oh My Zsh.
-- [`scripts`](./scripts) A directory containing various scripts that are used during the setup process.
-  - `scripts/bootstrap-*`s: Subscripts that run common and application specific setup steps. Called automatically by the `setup` script.
-  - `scripts/configure-macos`s Updates various settings on macOS to my preferred configuration. Called automatically by the `setup` script.
-  - [`scripts/install-prerequisites`](./scripts/install-prerequisites) A script that installs several prerequisite applications. These will be installed automatically before the full `setup` script runs, but you can also run it anytime before that if necessary or if you just need a bare bones setup.
-  - [`scripts/restore-symlinks-after-mackup-uninstall`](./scripts/restore-symlinks-after-mackup-uninstall) A utility script that addresses a bug in Mackup commands on macOS Sonoma and up.[^mackup-sonoma]
+- [`scripts`](./scripts) A directory containing various scripts that are used during the setup process. They are called automatically by the `setup` script as needed, but can also be run manually if necessary. A few of the most important files are:
+  - `scripts/bootstrap-*`s: (Example: [scripts/bootstrap-common](./scripts/bootstrap-common)) Subscripts that run common and platform specific setup steps.
+  - [`scripts/configure-macos`](./scripts/configure-macos) Updates various settings on macOS to my preferred configuration. (This tends to be the most brittle of the setup scripts as it relies on specific settings and paths that may change between macOS versions.)
+  - [`scripts/install-prerequisites`](./scripts/install-prerequisites) A script that installs several prerequisite applications. These will be installed automatically by the `setup` script, but you can also run it anytime before that if necessary or if you just need a bare bones setup. (Running `./script --bootstrap` is equivalent to running this script.)
+- `Brewfile*`s: a set of files that tell Homebrew what applications to install.
+  - [`Brewfile`](./Brewfile) Non-essential applications that I like to have installed on my development machines. This file will be skipped if the `--minimal` flag is passed to `setup`.
+  - [`Brewfile.minimal`](./Brewfile.minimal) A list of applications I consider to be essential. If the `--minimal` flag is passed to `setup` then only these programs will be installed.
 - [`setup`](./setup) The main entry point for setting up development environments.
 
 > [!TIP]
@@ -100,7 +100,7 @@ Did you...
 - [ ] make sure [Mackup][mackup] is installed and updated to the latest version?
 - [ ] run `mackup backup --force && mackup uninstall --force`?[^mackup-sonoma]
 
-### 2. Setting Up Your Mac
+### 2. Setting Up Your New Workstation
 
 > [!NOTE]
 > This process cannot run unattended - you may be prompted for your password several times as well as other system prompts.
@@ -162,7 +162,7 @@ After backing up your old workstation you may now follow these install instructi
 5. If you use a password manager like 1Password, set it up now and sync your passwords.
 6. Setup the sync utility for whatever cloud storage provider you use with Mackup (iCloud, Dropbox, Google Drive, etc.). Be sure your Mackup backup folder is available locally.
 7. Run `mackup restore --dry-run` to verify your setup. You should see a list of files to be restored matching the files you backed up in the previous section.
-8. Once your Mackup cloud storage provider is ready, restore preferences by running `mackup restore --force && mackup uninstall --force && scripts/restore-symlinks-after-mackup-uninstall`.[^mackup-sonoma]
+8. Once your Mackup cloud storage provider is ready, restore preferences by running `mackup restore --force && mackup uninstall --force && bin/restore_symlinks_after_mackup_uninstall`.[^mackup-sonoma]
 9. Restart your workstation to ensure all changes take effect.
 10. Open any applications that you expect to run on startup like 1Password, Dropbox, etc. and make sure they're configured correctly.
 11. [Optional] Setup an SSH key.
