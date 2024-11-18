@@ -17,7 +17,7 @@ if [[ -z $(command -v brew 2>/dev/null) ]]; then
   /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-brew_command="$(command -v brew 2>/dev/null)"
+brew_command="$(command -v brew 2>/dev/null || echo)"
 if [[ -n "${brew_command}" ]]; then
   log_debug "Homebrew installed at $(dirname "${brew_command}")"
   eval "$(${brew_command} shellenv)"
