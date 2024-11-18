@@ -123,9 +123,6 @@
   # Ensure AWS defaults are set
   export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 
-  # Compilation flags
-  # export ARCHFLAGS="-arch x86_64"
-
   # Always show progress on Docker builds
   export BUILDKIT_PROGRESS=plain
 
@@ -135,21 +132,24 @@
   # Load iTerm2 shell integration
   [[ -e "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
 
-  # Load rbenv
-  [[ -n "$(command -v rbenv 2>/dev/null)" ]] && eval "$(rbenv init -)"
-
   # Load nodenv
-  [[ -n "$(command -v nodenv 2>/dev/null)" ]] && eval "$(nodenv init -)"
+  # TODO: Add this dynamically to zprofile when installing
+  # [[ -n "$(command -v nodenv 2>/dev/null)" ]] && eval "$(nodenv init -)"
 
   # NVM completions
   export NVM_DIR="$HOME/.nvm"
   [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+  # Load rbenv
+  # TODO: Add this dynamically to zprofile when installing
+  # [[ -e "~/.rbenv/bin/rbenv" ]] && eval "$(~/.rbenv/bin/rbenv init -)"
+
   # Make sure ruby-build is up to date
-  [[ -d "$(rbenv root)/plugins/ruby-build" ]] && git -C "$(rbenv root)/plugins/ruby-build" pull
+  # TODO: Add this dynamically to zprofile when installing
+  # [[ -d "~/.rbenv/plugins/ruby-build" ]] && git -C "~/.rbenv/plugins/ruby-build" pull
 
   # ngrok autocompletion
-  if command -v ngrok &>/dev/null; then
+  if [[ -n $(command -v ngrok &>/dev/null) ]]; then
     eval "$(ngrok completion)"
   fi

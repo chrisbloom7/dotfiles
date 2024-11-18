@@ -8,16 +8,16 @@ subject=${1:?Subject is required}
 target=${2:?Target is required}
 
 owner=$(echo "${subject}" | cut -d '/' -f1)
-if [[ ! -d "${target}/${subject}" ]]; then
-  log_info "Cloning ${subject} to ${target}/${subject}"
-  mkdir -p "${target}/${owner}"
-  git clone https://github.com/${subject}.git ${target}/${subject} 1>/dev/null
+if [[ ! -d "${target}" ]]; then
+  log_info "Cloning ${subject} to ${target}"
+  mkdir -p "${target}/../"
+  git clone https://github.com/${subject}.git ${target} 1>/dev/null
 else
-  log_info "Updating ${subject} in ${target}/${subject}"
-  cd "${target}/${subject}"
+  log_info "Updating ${subject} in ${target}"
+  cd "${target}"
   git_status="$(git status --porcelain -z)"
   if [[ -n "${git_status}" ]] && [[ "${FORCE_MODE:-false}" == true ]]; then
-    log_attention "Cannot update ${subject} in ${target}/${subject} because there are uncommitted changes"
+    log_attention "Cannot update ${subject} in ${target} because there are uncommitted changes"
   else
     git reset --hard 1>/dev/null
     git pull 1>/dev/null

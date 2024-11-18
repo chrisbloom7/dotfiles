@@ -6,11 +6,11 @@ source ../bin/helpers/trap_and_trace.sh
 log_info "Cloning projects"
 
 # Create a source directory and fold for personal projects
-SRC="${HOME}/src"
-mkdir -p "${SRC}"
+TARGET="${HOME}/src"
+mkdir -p "${TARGET}"
 
 log_debug "Creating sandbox directory"
-mkdir -p "${SRC}/sandbox"
+mkdir -p "${TARGET}/sandbox"
 
 projects=(
   # "3zcurdia/annealing"
@@ -37,7 +37,7 @@ projects=(
   "slack-ruby/slack-ruby-client"
 )
 for project in "${projects[@]}"; do
-  clone_project "${project}" "${SRC}"
+  clone_project "${project}" "${TARGET}/${project}"
 done
 
 log_success "Done cloning projects!"

@@ -40,7 +40,7 @@ if [[ -n "${ZSH_PATH}" ]] && [[ -d "${ZSH_CUSTOM}" ]]; then
   for plugin in "${plugins[@]}"; do
     if [[ ! -d "${ZSH_CUSTOM}/plugins/${plugin}" ]]; then
       log_debug "Installing ${plugin} to ${ZSH_CUSTOM}/plugins"
-      clone_project "zsh-users/${plugin}" "${ZSH_CUSTOM}/plugins/"
+      clone_project "zsh-users/${plugin}" "${ZSH_CUSTOM}/plugins/${plugin}"
     fi
   done
 fi
