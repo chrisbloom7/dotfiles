@@ -50,7 +50,7 @@ if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
   unset RESTORE_EXIT_ON_ERROR
 fi
 
-if !is_minimal_mode; then
+if ! is_minimal_mode; then
   log_info "Installing additional Homebrew packages"
   log_debug "Disabling Exit on error for Brewfile"
   if [[  $- =~ e ]]; then
