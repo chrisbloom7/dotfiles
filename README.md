@@ -95,9 +95,12 @@ If you're migrating from an existing Mac or Linux workstation, you should first 
 Did you...
 
 - [ ] commit and push any changes to locally checked out git repositories?
+- [ ] incorporate any important differences in the config files that will be symlinked from the the [`configs`](./configs) into this repo?
+- [ ] cross-check the list of currently installed Homebrew formulae and casks against the [`Brewfile`](./Brewfile) and [`Brewfile.minimal`](./Brewfile.minimal) files?
 - [ ] backup all important files that aren't automatically synced to iCloud, Dropbox, Google Drive, Adobe Cloud, etc?
-- [ ] export important data from locally running databases and other services?
-- [ ] make sure [Mackup][mackup] is installed and updated to the latest version?
+- [ ] export important data from locally running databases and other services that you might need on the new workstation?
+- [ ] install or update to the latest version of [Mackup][mackup]?
+- [ ] configure Mackup to use your preferred storage provider and exclude `mackup` from backing up itself?
 - [ ] run `mackup backup --force && mackup uninstall --force`?[^mackup-sonoma]
 
 ### 2. Setting Up Your New Workstation
@@ -207,9 +210,9 @@ After you've set up a new workstation you may want to wipe your old one.
 If you want to start with your own dotfiles from this setup, it's pretty easy to do so. First of all you'll need to fork this repo. Then you'll want to go through and update any references to `chrisbloom7` and `chrisbloom7/dotfiles` to use your own username and dotfiles repo name. After that you can tweak the scripts any way you want. See the [contents](#contents) section above for info about notable files and folders you may want to explore. Here are some additional steps you may want to take:
 
 - Go through the [`scripts/configure-macos`](./scripts/configure-macos) file and adjust the settings to your liking. You may find it useful to reference [the original script by Mathias Bynens](https://github.com/mathiasbynens/dotfiles/blob/master/.macos) as well as [Kevin Suttle's macOS Defaults project](https://github.com/kevinSuttle/macOS-Defaults).
-- Check out the [`Brewfile`](./Brewfile) and [`Brewfile.minimal`](./Brewfile.minimal) files and adjust the apps you want to install for your machine. Use `brew search` or [their search page](https://formulae.brew.sh/cask/) to check if the app you want to install is available. You can generate a Brewfile of your currently installed formulae, casks, etc., with `brew bundle dump --all --describe --file="Brewfile.local"` then manually copy/paste the apps you want to keep into `Brewfile` and `Brewfile.minimal`.
-- Go hrough the subfolders in [`configs`](./configs) to add your own dotfiles. Don't forget to update the accompanying `symlink` scripts as you add and remove files, and if you add any new folders besure to include a symlink script and make it executable.
-- You can adjust the [`.zshrc`](./configs/zsh/.zshrc) file to your liking to tweak your Oh My Zsh setup. More info about how to customize Oh My Zsh can be found [here](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization). Make sure your `~/.zshrc` file is symlinked from your dotfiles repo to your home directory.
+- Check out the [`Brewfile`](./Brewfile) and [`Brewfile.minimal`](./Brewfile.minimal) files and adjust the apps you want to install for your machine. Use `brew search` or [their search page](https://formulae.brew.sh/cask/) to check if the app you want to install is available. You can generate a Brewfile of your currently installed formulae, casks, etc., with `brew bundle dump --all --describe --file="Brewfile.${$(uname -n)%.local}.local"` then manually copy/paste the apps you want to keep into `Brewfile` and `Brewfile.minimal`. (Files named `Brewfile*.local` are ignored by git so you can keep your local Brewfile changes separate from the main repo.)
+- Go hrough the subfolders in [`configs`](./configs) to add your own config files. Don't forget to update the accompanying `symlink*` scripts as you add and remove files.
+- You can adjust the [`.zshrc`](./configs/zsh/.zshrc) file to your liking to tweak your Oh My Zsh setup. More info about how to customize Oh My Zsh can be found [here](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization). Make sure your `~/.zshrc` file is symlinked *from* your dotfiles repo *to* your home directory first so you can commit any changes to it.
 
 When installing these dotfiles for the first time you'll need to backup all of your settings with Mackup.[^mackup-sonoma] Install Mackup and backup your settings with the commands below. Your settings will be synced to iCloud so you can use them to sync between computers and reinstall them when reinstalling your Mac. If you want to save your settings to a different directory or different storage than iCloud, [checkout the documentation](https://github.com/lra/mackup/blob/master/doc/README.md#storage).
 
