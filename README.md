@@ -87,10 +87,7 @@ These steps will guide you through setting up a new Mac or Linux workstation wit
 If you're migrating from an existing Mac or Linux workstation, you should first make sure to backup all of your existing data. Go through the checklist below to make sure you didn't forget anything before you migrate.
 
 > [!CAUTION]
-> While Mackup isn't required, if you do choose to use it then I would strongly recommend using a [storage provider][storages] that supports versioning, i.e. *not iCloud*, in case you need to recover from a bad backup or restore operation.
-
-> [!CAUTION]
-> See this footnote[^mackup-sonoma] about a bug in Mackup that affects macOS 14 (Sonoma) and later versions.
+> While Mackup isn't required, if you do choose to use it then I would strongly recommend using a [storage provider][storages] that supports versioning, i.e. *not iCloud*, in case you need to recover from a bad backup or restore operation. Also take notice of this footnote[^mackup-sonoma] regarding a bug in Mackup that affects macOS 14 (Sonoma) and later versions.
 
 Did you...
 
