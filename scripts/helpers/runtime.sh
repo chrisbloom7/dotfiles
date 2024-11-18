@@ -31,66 +31,69 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   export PATH="${DOTFILES}/bin:${PATH}"
 
   # Options defaults
+  export BOOTSTRAP_MODE=${BOOTSTRAP_MODE:-false}
+  export DRY_RUN_MODE=${DRY_RUN_MODE:-false} # TODO: Implement this
   export FORCE_MODE=${FORCE_MODE:-false}
-  export NO_INSTALL_MODE=${NO_INSTALL_MODE:-false}
   export MINIMAL_MODE=${MINIMAL_MODE:-false}
   export QUIET_MODE=${QUIET_MODE:-false}
   export VERBOSE_MODE=${VERBOSE_MODE:-false}
 
   # Export mode functions for rest of setup
+  is_bootstrap_mode() { [[ ${BOOTSTRAP_MODE:-} == true ]]; }; export -f is_bootstrap_mode
+  is_dry_run_mode() { [[ ${DRY_RUN_MODE:-} == true ]]; }    ; export -f is_dry_run_mode
   is_force_mode() { [[ ${FORCE_MODE:-} == true ]]; }        ; export -f is_force_mode
-  is_install_mode() { [[ ${NO_INSTALL_MODE:-} == false ]]; }; export -f is_install_mode
   is_minimal_mode() { [[ ${MINIMAL_MODE:-} == true ]]; }    ; export -f is_minimal_mode
   is_quiet_mode() { [[ "${QUIET_MODE:-}" == true ]]; }      ; export -f is_quiet_mode
   is_verbose_mode() { [[ "${VERBOSE_MODE:-}" == true ]]; }  ; export -f is_verbose_mode
 
   # Option validation functions (no export needed for these functions)
-  _can_use_minimal_mode() { is_install_mode; }
+  _can_use_minimal_mode() { ! is_bootstrap_mode; }
   _can_use_quiet_mode() { ! is_verbose_mode; }
-  _can_use_verbose_mode() { ! is_quiet_mode; }
 
   # Parse script options
   _parse_setup_options() {
     local USAGE=(
       "Usage: $0 [OPTIONS]"
       "Options:"
-      " -h, --help        You're looking at it"
-      " -f, --force       Replace regular files and directories with symlinks as necessary."
-      "                   Files and directories will be renamed with a '.setup' extension."
-      " -m, --minimal     Install bare minimum packages (ignored if --no-install is set)"
-      " -n, --no-install  Skip installation steps, only run config and symlink steps"
-      " -q, --quiet       Print fewer status messages (ignored if --verbose is set)"
-      " -v, --verbose     Print additional status messages (ignored if --quiet is set)"
+      " -b, --bootstrap  Install only the prerequsites. Only applies to \`setup\`."
+      " -d, --dry-run    [not currently implemented] Only print status messages; do not make any changes."
+      " -f, --force      Replace regular files and directories with symlinks as necessary."
+      "                  Existing files and directories will be renamed with a \`.presetup\` extension."
+      " -h, --help       You're looking at it. Print this help message and exit."
+      " -m, --minimal    Install bare minimum packages. Only applies to \`setup\`."
+      "                  (ignored if --bootstrap is set)"
+      " -n               Same as -d for compatibility with other scripts."
+      " -q, --quiet      Print fewer status messages. (ignored if --verbose is set)."
+      " -v, --verbose    Print additional status messages."
     )
 
     while [[ $# -gt 0 ]]; do
       case $1 in
-        -h | --help      ) printf >&1 '%s\n' "${USAGE[@]}"
-                           exit 0
+        -h | --help        ) printf >&1 '%s\n' "${USAGE[@]}" && exit 0
+                             ;;
+        -b | --bootstrap   ) BOOTSTRAP_MODE=true && MINIMAL_MODE=false
+                             ;;
+        -f | --force       ) FORCE_MODE=true
+                             ;;
+        -m | --minimal     ) _can_use_minimal_mode && MINIMAL_MODE=true
+                             ;;
+        -d | -n | --dry-run) DRY_RUN_MODE=true
                            ;;
-        -f | --force     ) FORCE_MODE=true
-                           ;;
-        -m | --minimal   ) _can_use_minimal_mode && MINIMAL_MODE=true
-                           ;;
-        -n | --no-install) NO_INSTALL_MODE=true
-                           MINIMAL_MODE=false
-                           ;;
-        -q | --quiet     ) _can_use_quiet_mode && QUIET_MODE=true
-                           ;;
-        -v | --verbose   ) _can_use_verbose_mode && VERBOSE_MODE=true
-                           ;;
-        *                ) if [[ "$1" =~ ^-[a-z]{2,} ]]; then
-                             args=""
-                             for (( i=1; i<${#1}; i++ )); do
-                               args="${args} -${1:$i:1}"
-                             done
-                             _parse_setup_options $args
-                           else
-                             log_error "Invalid option: $1"
-                             printf >&1 '%s\n' "${USAGE[@]}"
-                             exit 1
-                           fi
-                           ;;
+        -q | --quiet       ) _can_use_quiet_mode && QUIET_MODE=true
+                             ;;
+        -v | --verbose     ) QUIET_MODE=false && VERBOSE_MODE=true
+                             ;;
+        *                  ) if [[ "$1" =~ ^-[a-z]{2,} ]]; then
+                               # Handle multiple concatenated short options
+                               for (( i=1; i<${#1}; i++ )); do
+                                 _parse_setup_options -${1:$i:1}
+                               done
+                             else
+                               log_error "Invalid option: $1"
+                               printf >&1 '%s\n' "${USAGE[@]}"
+                               exit 1
+                             fi
+                             ;;
       esac
       shift
     done
@@ -109,9 +112,10 @@ fi
 
 # Debugging output
 log_debug "Parsed options:"
+log_debug "  BOOTSTRAP_MODE:  ${BOOTSTRAP_MODE:?Not set!}"
+log_debug "  DRY_RUN_MODE:    ${DRY_RUN_MODE:?Not set!}"
 log_debug "  FORCE_MODE:      ${FORCE_MODE:?Not set!}"
 log_debug "  MINIMAL_MODE:    ${MINIMAL_MODE:?Not set!}"
-log_debug "  NO_INSTALL_MODE: ${NO_INSTALL_MODE:?Not set!}"
 log_debug "  QUIET_MODE:      ${QUIET_MODE:?Not set!}"
 log_debug "  VERBOSE_MODE:    ${VERBOSE_MODE:?Not set!}"
 log_debug "  DOTFILES:        ${DOTFILES:?Not set!}"

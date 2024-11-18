@@ -35,7 +35,10 @@ log_info "Installing Homebrew dependencies from Brewfile"
 brew tap homebrew/bundle
 
 log_info "Installing minimal Homebrew packages"
-bundle_args="--force --no-lock"
+bundle_args="--no-lock"
+if is_force_mode; then
+  bundle_args="${bundle_args} --force"
+fi
 if is_verbose_mode; then
   bundle_args="${bundle_args} --verbose"
 else

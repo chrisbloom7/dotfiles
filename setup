@@ -5,6 +5,7 @@
 # worrying about whether your dotfiles are causing issues.
 # [[ -n "${CODESPACES:-}" ]] && exit 0
 
+original_args="$@"
 cd "$(dirname "$0")"
 [[ -n "${DEBUG:-}" ]] && echo -e "\033[90mSourcing runtime script\033[0m" || true
 source ./scripts/helpers/runtime.sh
@@ -24,15 +25,18 @@ else
   log_attention "Prerequisites mode not supported in Codespaces; skipping $0"
 fi
 
-log_debug "Checking runtime environment"
-if [[ "$(is_codespace)" == "true" ]]; then
-  log_debug "calling bootstrap-codespaces script"
-  scripts/bootstrap-codespaces
-elif [[ "$(is_macos)" == "true" || "$(is_linux)" == "true" ]]; then
-  log_debug "calling bootstrap-workstation script"
-  scripts/bootstrap-workstation
-else
-  log_attention "Unrecognized environment; skipping $0"
+if ! is_bootstrap_mode; then
+  log_debug "Checking runtime environment"
+  if [[ "$(is_codespace)" == "true" ]]; then
+    log_debug "calling bootstrap-codespaces script"
+    scripts/bootstrap-codespaces
+  elif [[ "$(is_macos)" == "true" || "$(is_linux)" == "true" ]]; then
+    log_debug "calling bootstrap-workstation script"
+    scripts/bootstrap-workstation
+  else
+    log_attention "Unrecognized environment; skipping $0"
+  fi
 fi
 
+log_debug "Finished running \`$0 ${original_args}\`"
 log_success "Setup complete!"

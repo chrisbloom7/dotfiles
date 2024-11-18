@@ -3,7 +3,7 @@ cd "$(dirname "$0")"
 source ../../scripts/helpers/runtime.sh
 source ../../bin/helpers/trap_and_trace.sh
 
-log_info "Symlinking mackup configs"
+log_info "Symlinking Mackup configs"
 
 TARGET="${HOME}"
 

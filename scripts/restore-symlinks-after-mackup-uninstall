@@ -6,11 +6,11 @@ source ../bin/helpers/trap_and_trace.sh
 log_info "Restoring symlinks after mackup uninstall"
 
 # Mackup currently has a bug that makes it dangerous to use with Sonoma. The
-# workaround is to run `mackup backup -f` or `mackup restore -f` and then
-# immediately run `mackup uninstall -f`. This tricks mackup into creating or
+# workaround is to run `mackup backup --force` or `mackup restore --force` and then
+# immediately run `mackup uninstall --force`. This tricks Mackup into creating or
 # restoring the backup files, during which it's usual symlinking process will
 # fail. Then, when it tries to uninstall, it will copy the files back to their
 # original locations. This script will then symlink files that were linked in
-# the setup script in case mackup trampled on them.
+# the setup script in case Mackup trampled on them.
 log_debug "calling config symlink script"
 ./symlink-config-files

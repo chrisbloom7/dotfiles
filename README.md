@@ -31,18 +31,19 @@ See the [Setting up your Workspace](#setting-up-your-workspace) section below fo
 
 ### Transient Containers
 
-You can use these dotfiles to configure transient development environments such as [devcontainers][devcontainers], Dockerfiles, and other transient containers[^target-envs]. Here's how:
+You can use these dotfiles to configure transient development environments such as [devcontainers][devcontainers], Dockerfiles, and other transient containers.[^target-envs] Here's how:
 
 1. Perform a [shallow clone][shallow-clone] of this repository into your container.
 
    ```shell
    git clone -–depth -1 https://github.com/chrisbloom7/dotfiles.git ~/.dotfiles
+   cd ~/.dotfiles
    ```
 
 2. Run the `setup` script in this repository to configure your devcontainer.
 
    ```shell
-   cd ~/.dotfiles
+   # Use `./setup --help` to see all available options
    ./setup
    ```
 
@@ -65,7 +66,7 @@ A brief overview of some of the most important files and directories in this rep
   - `scripts/bootstrap-*`s: Subscripts that run common and application specific setup steps. Called automatically by the `setup` script.
   - `scripts/configure-macos`s Updates various settings on macOS to my preferred configuration. Called automatically by the `setup` script.
   - [`scripts/install-prerequisites`](./scripts/install-prerequisites) A script that installs several prerequisite applications. These will be installed automatically before the full `setup` script runs, but you can also run it anytime before that if necessary or if you just need a bare bones setup.
-  - [`scripts/restore-symlinks-after-mackup-uninstall`](./scripts/restore-symlinks-after-mackup-uninstall) A utility script that addresses a bug in `mackup` commands on macOS Sonoma and up.[^mackup-sonoma]
+  - [`scripts/restore-symlinks-after-mackup-uninstall`](./scripts/restore-symlinks-after-mackup-uninstall) A utility script that addresses a bug in Mackup commands on macOS Sonoma and up.[^mackup-sonoma]
 - [`setup`](./setup) The main entry point for setting up development environments.
 
 > [!TIP]
@@ -84,10 +85,10 @@ These steps will guide you through setting up a new Mac or Linux workstation wit
 ### 1. Backup Your Data
 
 > [!TIP]
-> While `mackup` isn't required, if you do choose to use it then I would strongly recommend using a [storage provider][storages] that supports versioning, i.e. *not iCloud*, in case you need to recover from a bad backup or restore operation.
+> While Mackup isn't required, if you do choose to use it then I would strongly recommend using a [storage provider][storages] that supports versioning, i.e. *not iCloud*, in case you need to recover from a bad backup or restore operation.
 
 > [!CAUTION]
-> See this footnote[^mackup-sonoma] about a bug in `mackup` that affects macOS 14 (Sonoma) and later versions.
+> See this footnote[^mackup-sonoma] about a bug in Mackup that affects macOS 14 (Sonoma) and later versions.
 
 If you're migrating from an existing Mac or Linux workstation, you should first make sure to backup all of your existing data. Go through the checklist below to make sure you didn't forget anything before you migrate.
 
@@ -118,13 +119,45 @@ After backing up your old workstation you may now follow these install instructi
    cd ~/.dotfiles
    ```
 
-4. Run the installation with:
+4. Run the installation:
 
-   ```shell
-   ./setup
-   ```
+   1. To run a full setup:
 
-   There are a number of flags available to use with this command. Run `./setup --help` to see them. Personally I like to run my setups with `./setup --force --verbose`.
+      ```shell
+      ./setup
+      ```
+
+      > [!TIP]
+      > You can pass the `--help` flag to the setup script to see all available options.
+
+   2. If you'd prefer to start with only a minimal set of applications:
+
+      ```shell
+      ./setup --minimal
+      ```
+
+      You can always run the full `./setup` later. This has the advantage of giving you a stable development environment to tinker with the remaining setup scripts before proceeding, and is my preferred approach when setting up a new workstation.
+   3. Since the setup scripts are idempotent, you can perform the setup in phases if you prefer. For example:
+
+      ```shell
+      # Install prerequisites
+      ./setup --bootstrap
+
+      # Perform any manual steps, e.g. editing, setup, testing, etc., then install the minimal set of applications
+      ./setup --minimal
+
+      # Perform any additional steps, then install the remaining applications
+      ./setup
+      ```
+
+   4. You can also run the individual scripts in the `scripts` directory if you prefer a more granular approach. For example, to perform only the configuration settings for macOS:
+
+      ```shell
+      ./scripts/configure-macos
+      ```
+
+      > [!TIP]
+      > As with the `setup` script, use the `--help` with any file in the `scripts/` directory to see available options.
 
 5. If you use a password manager like 1Password, set it up now and sync your passwords.
 6. Setup the sync utility for whatever cloud storage provider you use with Mackup (iCloud, Dropbox, Google Drive, etc.). Be sure your Mackup backup folder is available locally.
@@ -142,7 +175,7 @@ After backing up your old workstation you may now follow these install instructi
           ```
 
     2. [Add your SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
-13. [Optional] Setup a GPG key.
+12. [Optional] Setup a GPG key.
     1. You can either use an existing GPG key or create a new one:
        1. Sync an existing GPG key from another machine
        2. [Generate a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key) by running the following script and following the prompts:
@@ -197,8 +230,8 @@ In addition to [Vints' own sentiments](https://github.com/driesvints/dotfiles?ta
 
 <!-- Footnotes -->
 [^codespaces]: I tend to use [devcontainers][devcontainers] such as [GitHub Codespaces][codespaces] for most of my development these days, so having a local development environment where I install "[all the things!](https://web.archive.org/web/20240807175656if_/https://www.simplybusiness.co.uk/wp-content/uploads/sites/3/2024/05/things.webp)" is much less important than it used to be. As a result, the local setup scrips are focused on daily use and productivity tools. The more intensive development tools like databases, caches, servers, compilers, etc, are offloaded to containers.
-[^mackup-sonoma]: As of this writing, `mackup backup` and `mackup restore` commands [have a bug][mackup-sonoma] that affects macOS 14 (Sonoma) and later versions due to changes in the way macOS handles file permissions. There is an accepted [workaround][mackup-sonoma-workaround] that some folks have found success with, but you should be aware of the risks before proceeding. You can always skip the `mackup` steps if you're not comfortable with the risk.
-[^target-envs]: The setup scripts in this repo primarily target setting up full development environments on local macOS machines (my preferred choice for development machines), and lightweight Linux development containers. YMMV on other platforms.
+[^mackup-sonoma]: As of this writing, `mackup backup` and `mackup restore` commands [have a bug][mackup-sonoma] that affects macOS 14 (Sonoma) and later versions due to changes in the way macOS handles file permissions. **The [workaround][mackup-sonoma-workaround] is to run `mackup backup --force` or `mackup restore --force` and then immediately run `mackup uninstall --force`.** Normally, when Mackup runs `backup` or `restore` it places symlinks for tracked config files in their original location and keeps the real file in whatever storage provider you've configered. In macOS 14+ the symlinking part fails so it looks like all your configs have been lost. The workaround works by forcing Mackup to complete the `backup` or `restore` operations, overwriting anything in the destination and ignoring failed symlinks. Then the `uninstall` command undoes the symlinking that Mackup thought it performed and replaces the symlinks with copies of the real files. Note however that the workaround does not comes without a little risk so be sure you are using a backup storage provider that supports rolling back changes. You can always skip the Mackup steps if you're not comfortable assuming that risk.
+[^target-envs]: The setup scripts in this repo have been tested on macOS and Ubuntu systems. YMMV on other platforms.
 
 <!-- Anchors -->
 [codespaces]: https://github.com/features/codespaces

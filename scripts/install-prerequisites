@@ -29,7 +29,10 @@ log_info "Setting up Homebrew taps"
 
 # Install prerequisite Homebrew formulae
 log_info "Installing prerequisite Homebrew formulae"
-brew_args="--require-sha --no-quarantine --force --overwrite"
+brew_args="--require-sha --no-quarantine --overwrite"
+if is_force_mode; then
+  brew_args="$brew_args --force"
+fi
 if is_verbose_mode; then
   brew_args="$brew_args --verbose"
 else

@@ -126,7 +126,7 @@
   # Always show progress on Docker builds
   export BUILDKIT_PROGRESS=plain
 
-  # Load project aliases (backed up by mackup to prevent leaking sensitive info)
+  # Load project aliases (backed up by Mackup to prevent leaking sensitive info)
   [[ -e "${HOME}/.aliases" ]] && source "${HOME}/.aliases"
 
   # Load iTerm2 shell integration
