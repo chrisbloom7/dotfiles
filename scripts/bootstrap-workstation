@@ -11,13 +11,17 @@ if [[ "$(is_macos)" != "true" ]]; then
   exit 0
 fi
 
+# Run setup steps that apply both locally and in devcontainers
+log_debug "calling common boostrap script"
+./bootstrap-common
+
 # Symlink Mackup config files to the home directory
 log_debug "calling config symlink script"
 ./symlink-config-files
 
 log_info "Initializing Homebrew"
 source ./helpers/source_homebrew.sh
-add_eval_to_dotfile '[[ -n "$(command -v brew 2>/dev/null)" ]]' "\$(brew --prefix)/bin/brew shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+add_eval_to_dotfile "[[ -f "$(brew --prefix)/bin/brew" ]]" "$(brew --prefix)/bin/brew shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
 
 log_debug "Updating Homebrew"
 if is_verbose_mode; then
