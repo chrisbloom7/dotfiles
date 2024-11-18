@@ -15,7 +15,7 @@ function _trace_on_error {
   if [[ $- =~ e ]] && [[ "${error_code}" != "0" ]]; then
     local line_number=$2
     local command="${BASH_COMMAND}"
-    local script_name="${BASH_SOURCE[-1]}"
+    local script_name="${BASH_SOURCE[1]}"
     local script_path="${PWD%/}/$(basename "${script_name}")"
     # echo ""
     # echo "caller: $(caller)"
