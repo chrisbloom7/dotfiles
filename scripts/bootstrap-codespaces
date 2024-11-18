@@ -47,7 +47,7 @@ log_debug "calling common boostrap script"
 #  RepositoryName=mycoolapp
 #  TERM_PROGRAM=vscode # Could also be "codespaces"
 
-log_info "Cconfiguring git for codespaces"
+log_info "Configuring git for codespaces"
 # This insteadOf line doesn't work on Codespaces, so we need to unset it
 git config unset --global --value url."git@github.com:".insteadOf
 
@@ -59,15 +59,8 @@ else
   log_attention "gh CLI not found; skipping credentials helper installation"
 fi
 
-log_debug "Checking if linuxbrew is installed"
-if [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
-  log_info "Initializing linuxbrew"
-
-  test -d "${HOME}/.linuxbrew" && eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"
-  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  add_eval_to_dotfile '[[ -n "$(command -v brew 2>/dev/null)" ]]' "$(brew --prefix)/bin/brew shellenv" "${HOME}/.bashrc" "${HOME}/.zprofile"
-fi
-
-brew tap homebrew/bundle
+log_info "Initializing Homebrew"
+source ./helpers/source_homebrew.sh
+add_eval_to_dotfile '[[ -n "$(command -v brew 2>/dev/null)" ]]' "$(brew --prefix)/bin/brew shellenv" "${HOME}/.bashrc" "${HOME}/.zprofile"
 
 log_success "Done codespace specific bootstrapping!"

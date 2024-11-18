@@ -17,23 +17,8 @@ if [[ -z $(command -v brew 2>/dev/null) ]]; then
   /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-brew_command="$(command -v brew 2>/dev/null || echo)"
-if [[ -n "${brew_command}" ]]; then
-  log_debug "Homebrew installed at $(dirname "${brew_command}")"
-  eval "$("${brew_command}" shellenv)"
-elif [[ -d ~/.linuxbrew ]]; then
-  log_debug "Homebrew installed at ~/.linuxbrew"
-  eval "$(~/.linuxbrew/bin/brew shellenv)"
-elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
-  log_debug "Homebrew installed at /home/linuxbrew/.linuxbrew"
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-elif [[ -d /opt/homebrew ]]; then
-  log_debug "Homebrew installed at /opt/homebrew"
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-else
-  log_error "Could not locate Homebrew installation location"
-  exit 1
-fi
+log_info "Initializing Homebrew"
+source ./helpers/source_homebrew.sh
 
 log_info "Setting up Homebrew taps"
 [[ -n "$(brew tap | grep homebrew/bundle)" ]] || brew tap --quiet homebrew/bundle
@@ -49,39 +34,39 @@ else
 fi
 
 log_debug "Checking for coreutils formulae"
-if [ -z "$(brew ls coreutils)" ]; then
+if [ -z "$(brew ls coreutils 2>/dev/null)" ]; then
   log_info "Installing coreutils formulae"
   brew install $brew_args coreutils
 fi
 
 log_debug "Checking for git formulae"
-if [ -z "$(brew ls git)" ]; then
+if [ -z "$(brew ls git 2>/dev/null)" ]; then
   log_info "Installing git formulae"
   brew install $brew_args git
 fi
 
 log_debug "Checking for gpg-suite formulae"
-if [ -z "$(brew ls gpg-suite)" ]; then
+if [ -z "$(brew ls gpg-suite 2>/dev/null)" ]; then
   log_info "Installing gpg-suite formulae"
   brew install $brew_args gpg-suite
 fi
 
 log_debug "Checking for zsh formulae"
-if [ -z "$(brew ls zsh)" ]; then
+if [ -z "$(brew ls zsh 2>/dev/null)" ]; then
   log_info "Installing zsh formulae"
   brew install $brew_args zsh
 fi
 
 # Check for bats-core
 log_debug "Checking for bats-core formulae"
-if [ -z "$(brew ls bats-core)" ]; then
+if [ -z "$(brew ls bats-core 2>/dev/null)" ]; then
   log_info "Installing bats-core formulae"
   brew install $brew_args bats-core
 fi
 
 if [[ "$(is_macos)" == "true" ]]; then
   log_debug "Checking for mas formulae"
-  if [ -z "$(brew ls mas)" ]; then
+  if [ -z "$(brew ls mas 2>/dev/null)" ]; then
     log_info "Installing mas formulae"
     brew install $brew_args mas
   fi
