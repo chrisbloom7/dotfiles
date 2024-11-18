@@ -18,7 +18,7 @@ Please feel free to explore, learn from, copy portions of, or fork this repo for
 
 ### macOS And Linux Workstations
 
-See the [Setting up your Workspace](#setting-up-your-workspace) section below for detailed instructions on backing up, synchronizing, and setting up Mac or Linux workstation.
+See the [Preparing your Workspace](#preparing-your-workspace) section below for detailed instructions on backing up, synchronizing, and setting up Mac or Linux workstation.
 
 ### Github Codespaces
 
@@ -72,25 +72,25 @@ A brief overview of some of the most important files and directories in this rep
 > [!TIP]
 > All of the setup scripts are designed to be idempotent, meaning they can be run multiple times without causing problems.
 
-## Setting Up Your Workspace
+## Preparing your Workspace
 
 These steps will guide you through setting up a new Mac or Linux workstation with these dotfiles. If you're setting up a Codespace or other transient development environment, refer to the [Usage](#usage) section above.
 
 > [!NOTE]
-> These instructions are for when you've already set up your dotfiles. If you want to get started with your own dotfiles you can [find instructions below](#your-own-dotfiles).
+> These instructions assume you're satisfied with how I've configured *these* dotfiles. If you'd prefer to configure your own dotfiles you will [find those instructions below](#your-own-dotfiles).
 
 > [!IMPORTANT]
 > The installation steps here are idempotent, so you can run them as often as you like as you're making adjustments to the scripts. Note however that they won't *roll back* previous setup steps, even if an error occurs, so you may need to manually unset/uninstall things back to their previous state before trying again.
 
 ### 1. Backup Your Data
 
-> [!TIP]
+If you're migrating from an existing Mac or Linux workstation, you should first make sure to backup all of your existing data. Go through the checklist below to make sure you didn't forget anything before you migrate.
+
+> [!CAUTION]
 > While Mackup isn't required, if you do choose to use it then I would strongly recommend using a [storage provider][storages] that supports versioning, i.e. *not iCloud*, in case you need to recover from a bad backup or restore operation.
 
 > [!CAUTION]
 > See this footnote[^mackup-sonoma] about a bug in Mackup that affects macOS 14 (Sonoma) and later versions.
-
-If you're migrating from an existing Mac or Linux workstation, you should first make sure to backup all of your existing data. Go through the checklist below to make sure you didn't forget anything before you migrate.
 
 Did you...
 
@@ -102,13 +102,13 @@ Did you...
 
 ### 2. Setting Up Your New Workstation
 
+After backing up your old workstation you may now follow these install instructions to setup a new one.
+
 > [!NOTE]
-> This process cannot run unattended - you may be prompted for your password several times as well as other system prompts.
+> This process cannot run unattended - you may be prompted for your password several times in addition to other system prompts.
 
 > [!TIP]
 > While you can technically use a different location than `~/.dotfiles`, I strongly recommend you don't due to how many references you'd need to update throughout the scripts.
-
-After backing up your old workstation you may now follow these install instructions to setup a new one.
 
 1. Update your OS to the latest version through system preferences
 2. Install `git` if it's not already installed
@@ -123,12 +123,12 @@ After backing up your old workstation you may now follow these install instructi
 
    1. To run a full setup:
 
+      > [!TIP]
+      > You can pass the `--help` flag to the setup script to see all available options.
+
       ```shell
       ./setup
       ```
-
-      > [!TIP]
-      > You can pass the `--help` flag to the setup script to see all available options.
 
    2. If you'd prefer to start with only a minimal set of applications:
 
@@ -152,12 +152,12 @@ After backing up your old workstation you may now follow these install instructi
 
    4. You can also run the individual scripts in the `scripts` directory if you prefer a more granular approach. For example, to perform only the configuration settings for macOS:
 
+      > [!TIP]
+      > As with the `setup` script, use the `--help` with any file in the `scripts/` directory to see available options.
+
       ```shell
       ./scripts/configure-macos
       ```
-
-      > [!TIP]
-      > As with the `setup` script, use the `--help` with any file in the `scripts/` directory to see available options.
 
 5. If you use a password manager like 1Password, set it up now and sync your passwords.
 6. Setup the sync utility for whatever cloud storage provider you use with Mackup (iCloud, Dropbox, Google Drive, etc.). Be sure your Mackup backup folder is available locally.
@@ -199,15 +199,15 @@ After you've set up a new workstation you may want to wipe your old one.
 ## Your Own Dotfiles
 
 > [!IMPORTANT]
-> Please note that the instructions below assume you already have set up Oh My Zsh so make sure to first [install Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh#getting-started) before you continue.
+> Please note that the instructions below assume you are using zsh as your default shell and are using it with [Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh#getting-started). If you are using a different shell or are not using Oh My Zsh, you will need to adjust the instructions accordingly.
 
-> [!TIP]
-> Pay special attention to the names of the files and directories in this repository. While they may not matter so much for setting up a local development environment, they can be important when setting up a Codespace or other devcontainer where [assumptions are made][codespaces-script-names] about the location and names of certain files and directories.
+> [!CAUTION]
+> Pay special attention to the names of the files and directories in your dotfiles repo. While they may not matter so much for setting up a local development environment, they can be important when it comes to setting up a Codespace or other devcontainer where [assumptions are made][codespaces-script-names] about the location and names of certain files that may be run automatically.
 
-If you want to start with your own dotfiles from this setup, it's pretty easy to do so. First of all you'll need to fork this repo. After that you can tweak it the way you want. See the [contents](#contents) section above for info about the files and folders you may want to tweak, for example:
+If you want to start with your own dotfiles from this setup, it's pretty easy to do so. First of all you'll need to fork this repo. Then you'll want to go through and update any references to `chrisbloom7` and `chrisbloom7/dotfiles` to use your own username and dotfiles repo name. After that you can tweak the scripts any way you want. See the [contents](#contents) section above for info about notable files and folders you may want to explore. Here are some additional steps you may want to take:
 
-- Go through the [`scripts/configure-macos`](./scripts/configure-macos) file and adjust the settings to your liking. You can find much more settings at [the original script by Mathias Bynens](https://github.com/mathiasbynens/dotfiles/blob/master/.macos) and [Kevin Suttle's macOS Defaults project](https://github.com/kevinSuttle/macOS-Defaults).
-- Check out the [`Brewfile`](./Brewfile) and [`Brewfile.minimal`](./Brewfile.minimal) files and adjust the apps you want to install for your machine. Use `brew search` or [their search page](https://formulae.brew.sh/cask/) to check if the app you want to install is available.
+- Go through the [`scripts/configure-macos`](./scripts/configure-macos) file and adjust the settings to your liking. You may find it useful to reference [the original script by Mathias Bynens](https://github.com/mathiasbynens/dotfiles/blob/master/.macos) as well as [Kevin Suttle's macOS Defaults project](https://github.com/kevinSuttle/macOS-Defaults).
+- Check out the [`Brewfile`](./Brewfile) and [`Brewfile.minimal`](./Brewfile.minimal) files and adjust the apps you want to install for your machine. Use `brew search` or [their search page](https://formulae.brew.sh/cask/) to check if the app you want to install is available. You can generate a Brewfile of your currently installed formulae, casks, etc., with `brew bundle dump --all --describe --file="Brewfile.local"` then manually copy/paste the apps you want to keep into `Brewfile` and `Brewfile.minimal`.
 - Go hrough the subfolders in [`configs`](./configs) to add your own dotfiles. Don't forget to update the accompanying `symlink` scripts as you add and remove files, and if you add any new folders besure to include a symlink script and make it executable.
 - You can adjust the [`.zshrc`](./configs/zsh/.zshrc) file to your liking to tweak your Oh My Zsh setup. More info about how to customize Oh My Zsh can be found [here](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization). Make sure your `~/.zshrc` file is symlinked from your dotfiles repo to your home directory.
 
