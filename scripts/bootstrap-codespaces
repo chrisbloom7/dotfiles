@@ -61,6 +61,6 @@ fi
 
 log_info "Initializing Homebrew"
 source ./helpers/source_homebrew.sh
-add_eval_to_dotfile '[[ -n "$(command -v brew 2>/dev/null)" ]]' "$(brew --prefix)/bin/brew shellenv" "${HOME}/.bashrc" "${HOME}/.zprofile"
+add_eval_to_dotfile '[[ -n "$(command -v brew 2>/dev/null)" ]]' "\$(brew --prefix)/bin/brew shellenv" "${HOME}/.profile" "${HOME}/.zprofile"
 
 log_success "Done codespace specific bootstrapping!"
