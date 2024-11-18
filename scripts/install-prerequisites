@@ -20,7 +20,7 @@ fi
 brew_command="$(command -v brew 2>/dev/null || echo)"
 if [[ -n "${brew_command}" ]]; then
   log_debug "Homebrew installed at $(dirname "${brew_command}")"
-  eval "$(${brew_command} shellenv)"
+  eval "$("${brew_command}" shellenv)"
 elif [[ -d ~/.linuxbrew ]]; then
   log_debug "Homebrew installed at ~/.linuxbrew"
   eval "$(~/.linuxbrew/bin/brew shellenv)"
@@ -31,7 +31,7 @@ elif [[ -d /opt/homebrew ]]; then
   log_debug "Homebrew installed at /opt/homebrew"
   eval "$(/opt/homebrew/bin/brew shellenv)"
 else
-  log_error "Could not locate Homebrew installation location
+  log_error "Could not locate Homebrew installation location"
   exit 1
 fi
 
