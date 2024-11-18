@@ -14,6 +14,7 @@ new_eval="eval \"\$(${subject})\""
 for target in ${@:3}; do
   if [[ ! -f $target ]]; then
     log_debug "Target file ${target} does not exist yet; touching"
+    mkdir -p "$(dirname "${target}")"
     touch "${target}"
   fi
 

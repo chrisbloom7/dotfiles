@@ -18,7 +18,7 @@ elif [[ -d /home/linuxbrew/.linuxbrew ]]; then
 elif [[ -d /opt/homebrew ]]; then
   log_debug "Homebrew installed at /opt/homebrew"
   eval "$(/opt/homebrew/bin/brew shellenv)"
-else
+elif [[ -z ${SOURCE_HOMEBREW_SILENT:-} ]]; then
   log_error "Could not locate Homebrew installation location"
   exit 1
 fi
