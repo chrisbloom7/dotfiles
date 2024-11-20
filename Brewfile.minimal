@@ -32,6 +32,7 @@ brew "zsh"                          # UNIX shell (command interpreter)
 
 ## Casks
 cask "1password" appdir: "/Applications" # Password manager that keeps all passwords secure behind one password
+cask "1password-cli"                     # Command-line interface for 1Password
 cask "alfred"                            # Application launcher and productivity software
 cask "deckset"                           # Presentations from Markdown
 cask "discord"                           # Voice and text chat software
