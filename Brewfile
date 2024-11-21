@@ -35,7 +35,9 @@
 #    restart_service : boolean
 #    start_service   : boolean
 
-include "Brewfile.minimal"
+# Set arguments for installing casks
+# https://github.com/homebrew/homebrew-cask/blob/master/USAGE.md#options
+cask_args appdir: "~/Applications", fontdir: "~/Library/Fonts", require_sha: true, no_quarantine: true
 
 ## Desktop Docker
 cask "docker"                   # App to build and share containerised applications and microservices

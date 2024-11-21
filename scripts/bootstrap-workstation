@@ -23,9 +23,9 @@ add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)
 
 log_info "Adding HOMEBREW_CASK_OPTS to shell profiles"
 if [[ "$(is_macos)" == "true" ]]; then
-  add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--appdir=\\\"${HOME}/Applications\\\" --fontdir:\\\"${HOME}/Library/Fonts\\\" --require-sha\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
-else
-  add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--require-sha\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+  add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--appdir=\\\"${HOME}/Applications\\\" --fontdir:\\\"${HOME}/Library/Fonts\\\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+# else
+#   add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--require-sha\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
 fi
 
 log_debug "Updating Homebrew"
@@ -146,7 +146,7 @@ log_info "Installing iTerm2 shell integration for Zsh"
 curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh
 
 # Install Rosetta 2 on M1+ Macs to bridge the gap between Intel and Apple processors
-if [[ "$(uname -m)" != "x86_64" ]]; then
+if [[ "$(uname -m)" =~ "arm" ]]; then
   log_info "Installing Rosetta 2"
   softwareupdate --install-rosetta --agree-to-license || true
 fi
