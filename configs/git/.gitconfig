@@ -1,7 +1,7 @@
 [user]
 	name = Chris Bloom
 	email = chrisbloom7@github.com
-	signingkey = 562B0097828C9EB1
+	signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCz4RnLFX6PK+4A7yOAkjDZvvClFzLFdTKWFE9mY2WabGV6fK/FeZNvoT0WWKaMtO5OQosbCXLgZ3W3Bw/LTpvFOZcCGzCXhK7bzQ7S6gvkjkupkCxfQV/x0nYUjPaWPAjvviUTPPATxWAr749i3Vf7J5sV9Bd/jK1wbcHAhgYDEH8mqP5ty4GQ2GP9KjuPrEVDYcudHlOSQnOShRrcuOs5SItrocVq6lgVAm5oolpAHJgbMHqS3UG2VcYA1P/EA1TYSiTWEbJG1wZzAnejOK2iRYuQxzyeyk/Qscq9jXWRXbNU7rSuAKQRyv2khfyLQc5HFDkaawMLLbYjrwo/c34bQdTz6uwqQtDvc101C80nX04fqaTQaqVYhkws0Pyup4QaMGdTwnUXMPMaMu0X88jRLkjk/2S+zXcyRtYjwmqZepYTG4ZkyfiGDEwyluc41Za28nroxzfNYDJtbrDnOG6OlKDgiR2SqWBVLUP4Yt58XdSvz7q8wC5EahjBOuSy4cUqpoDsQ+vlxGVTIk+y1Glto/BssqMEN34FsU2D2+zzGwzbhcqi/KyTdR0sSRvAxTvLZganKDGKszD4IrLZ0WloedvAgWXwShgEh85F4pLSxfvqXHRwDKZSxxhRzAMvVXr9xjAsTaWj2ZxiehGc3phIC80HBEh9KATAqWeDR7U7kw==
 [github]
 	user = chrisbloom7
 [core]
@@ -75,3 +75,8 @@
 # 	gpgsign = true
 [gpg]
 	program = /usr/local/bin/gpg
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true

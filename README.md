@@ -157,7 +157,7 @@ After backing up your old workstation you may now follow these install instructi
 
 5. If you use a password manager like 1Password, set it up now and sync your passwords.
 6. Setup the sync utility for whatever cloud storage provider you use with Mackup (iCloud, Dropbox, Google Drive, etc.). Be sure your Mackup backup folder is available locally.
-7. Run `mackup restore --dry-run` to verify your setup. You should see a list of files to be restored matching the files you backed up in the previous section.
+7. Run `mackup restore --dry-run | sort` to verify your setup. You should see a list of files to be restored matching the files you backed up in the previous section.
 8. Once your Mackup cloud storage provider is ready, restore preferences by running `mackup restore --force && mackup uninstall --force && bin/restore_symlinks_after_mackup_uninstall`.[^mackup-sonoma]
 9. Restart your workstation to ensure all changes take effect.
 10. Open any applications that you expect to run on startup like 1Password, Dropbox, etc. and make sure they're configured correctly.

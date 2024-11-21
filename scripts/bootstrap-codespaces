@@ -23,7 +23,7 @@ if [[ "$(is_codespace)" != "true" ]]; then
 fi
 
 # Run setup steps that apply both locally and in devcontainers
-log_debug "calling common boostrap script"
+log_info "calling common boostrap script"
 ./bootstrap-common
 
 # ENV variables we could evaluate in a Codespace:
@@ -51,7 +51,7 @@ log_info "Configuring git for codespaces"
 # This insteadOf line doesn't work on Codespaces, so we need to unset it
 git config unset --global --value url."git@github.com:".insteadOf
 
-log_debug "Checking if gh CLI is installed"
+log_info "Checking if gh CLI is installed"
 if [[ -n $(command -v gh 2>/dev/null) ]]; then
   log_attention "Installing credentials helper via gh CLI. Watch for prompts."
   gh auth setup-git
@@ -59,8 +59,11 @@ else
   log_attention "gh CLI not found; skipping credentials helper installation"
 fi
 
-log_info "Initializing Homebrew"
-source ./helpers/source_homebrew.sh
-add_eval_to_dotfile "[[ -f "$(brew --prefix)/bin/brew" ]]" "$(brew --prefix)/bin/brew shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+log_info "calling source homebrew script"
+SOURCE_HOMEBREW_SILENT=true source ./helpers/source_homebrew.sh
+if [[ -z $(command -v brew 2>/dev/null) ]]; then
+  log_info "Adding Homebrew evals to shell profiles"
+  add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)/bin/brew\" shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+fi
 
 log_success "Done codespace specific bootstrapping!"

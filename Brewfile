@@ -52,14 +52,11 @@ brew "aom"               # Codec library for encoding and decoding AV1 video str
 brew "awscli"            # Official Amazon AWS command-line interface
 brew "bat"               # Clone of cat(1) with syntax highlighting and Git integration
 brew "devcontainer"      # Reference implementation for the Development Containers specification
-brew "gh"                # GitHub command-line tool
-brew "github-keygen"     # Bootstrap GitHub SSH configuration
 brew "httpie"            # User-friendly cURL replacement (command-line HTTP client)
 brew "imagemagick"       # Tools and libraries to manipulate images in many formats
 brew "lynx"              # Text-based web browser
 brew "notify"            # Stream the output of any CLI and publish it to a variety of supported platforms
 brew "pandoc"            # Swiss-army knife of markup format conversion
-brew "pinentry-mac"      # Pinentry for GPG on Mac
 brew "pkg-config"        # Manage compile and link flags for libraries
 brew "putty"             # Implementation of Telnet and SSH
 brew "telnet"            # User interface to the TELNET protocol
@@ -75,7 +72,6 @@ brew "wget"              # Internet file retriever
 
 ## Casks
 cask "adobe-acrobat-reader"   # View, print, and comment on PDF documents
-cask "beyond-compare"         # Compare files and folders
 cask "chatgpt"                # OpenAI's official ChatGPT desktop app
 cask "chromedriver"           # Automated testing of webapps for Google Chrome
 cask "clamxav"                # Anti-virus and malware scanner
@@ -86,14 +82,14 @@ cask "drivethrurpg"           # Sync DriveThruRPG libraries to compatible device
 cask "figma"                  # Collaborative team software
 # cask "firefox"                # Web browser
 # cask "flotato"                # Tool to turn any web page into a desktop app
+# cask "fluid"                  # Tool to turn a website into a desktop app
 cask "freeze"                 # Amazon Glacier file transfer client
 cask "garmin-express"         # Update maps and software, sync with Garmin Connect and register your device
 cask "gemini"                 # Disk space cleaner that finds and deletes duplicated and similar files
 cask "graphiql"               # Light, Electron-based Wrapper around GraphiQL
-cask "logi-options+"          # Software for Logitech devices
 cask "microsoft-edge"         # Multi-platform web browser
+# cask "monofocus"              # Keep all tasks from your todo apps on your menu bar
 cask "ngrok"                  # Reverse proxy, secure introspectable tunnels to localhost
-cask "obsbot-center"          # Configuration and firmware update utility for OBSBOT Tiny and Meet series
 # cask "postgres-unofficial"    # App wrapper for PostgreSQL with support for multiple versions and databases
 cask "raycast"                # Control your tools with a few keystrokes
 cask "screenfocus"            # Tool to manage multiple screens
@@ -103,6 +99,7 @@ cask "scriptql"               # AppleScript Quick Look plugin
 cask "shutter-encoder"        # Video, audio and image converter
 cask "steam"                  # Video game digital distribution service
 cask "transmit"               # File transfer application
+# cask "versions"               # Subversion client
 cask "voodoopad"              # Notes organiser
 cask "wavebox"                # Web browser
 cask "yubico-yubikey-manager" # Application for configuring any YubiKey
@@ -137,7 +134,6 @@ mas "Video Editor Movavi", id: 1_388_868_440
 # mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/
 
 ## VS code extensions
-vscode "AlanWalk.markdown-navigation"               # Auto generate markdown navigation panel to the activity bar.
 vscode "alefragnani.bookmarks"
 vscode "assisrMatheus.sidebar-markdown-notes"       # Take notes in your sidebar using markdown
 vscode "castwide.solargraph"
@@ -145,7 +141,6 @@ vscode "ciarant.vscode-structurizr"                 # Structurizr DSL syntax hig
 vscode "emilast.logfilehighlighter"
 vscode "erikphansen.vscode-toggle-column-selection" # Turn a selection into a column selection à la TextMate
 vscode "GraphQL.vscode-graphql-syntax"              # Adds syntax highlighting support for .graphql & embedded support for javascript, typescript, vue, markdown, python, php, reason, ocaml and rescript
-vscode "jetmartin.bats"                             # Bats (Bash Automated Testing System) language support for VSCode.
 vscode "loginspector.loginspector"
 vscode "mechatroner.rainbow-csv"                    # Highlight CSV and TSV files, Run SQL-like queries
 vscode "MermaidChart.vscode-mermaid-chart"          # The Mermaid Chart extension for Visual Studio Code enables developers to view and edit diagrams stored in Mermaid charts within the Visual Studio Code. With integration to the Mermaid Chart service, this extension allows users to attach diagrams to their code. Gain quick access to edit diagrams.

@@ -38,6 +38,9 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   export QUIET_MODE=${QUIET_MODE:-false}
   export VERBOSE_MODE=${VERBOSE_MODE:-false}
 
+  # Always enable verbose mode in Codespaces
+  [[ -n "${CODESPACES:-}" ]] && VERBOSE_MODE=true
+
   # Export mode functions for rest of setup
   is_bootstrap_mode() { [[ ${BOOTSTRAP_MODE:-} == true ]]; }; export -f is_bootstrap_mode
   is_dry_run_mode() { [[ ${DRY_RUN_MODE:-} == true ]]; }    ; export -f is_dry_run_mode

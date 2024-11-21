@@ -6,8 +6,8 @@ source ../bin/helpers/trap_and_trace.sh
 # Local macOS setup, not in a devcontainer
 log_info "Bootstrapping macOS"
 
-if [[ "$(is_macos)" != "true" ]]; then
-  log_attention "Not macOS; skipping $0"
+if [[ "$(is_macos)" != "true" && "$(is_linux)" != "true" ]]; then
+  log_attention "Not a macOS or Linux workstation; skipping $0"
   exit 0
 fi
 
@@ -15,13 +15,18 @@ fi
 log_debug "calling common boostrap script"
 ./bootstrap-common
 
-# Symlink Mackup config files to the home directory
-log_debug "calling config symlink script"
-./symlink-config-files
+log_debug "calling source homebrew script"
+./helpers/source_homebrew.sh
 
-log_info "Initializing Homebrew"
-source ./helpers/source_homebrew.sh
-add_eval_to_dotfile "[[ -f "$(brew --prefix)/bin/brew" ]]" "$(brew --prefix)/bin/brew shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+log_info "Adding Homebrew evals to shell profiles"
+add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)/bin/brew\" shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+
+log_info "Adding HOMEBREW_CASK_OPTS to shell profiles"
+if [[ "$(is_macos)" == "true" ]]; then
+  add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--appdir=\\\"${HOME}/Applications\\\" --fontdir:\\\"${HOME}/Library/Fonts\\\" --require-sha\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+else
+  add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--require-sha\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+fi
 
 log_debug "Updating Homebrew"
 if is_verbose_mode; then
