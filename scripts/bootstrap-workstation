@@ -16,7 +16,7 @@ log_debug "calling common boostrap script"
 ./bootstrap-common
 
 log_debug "calling source homebrew script"
-./helpers/source_homebrew.sh
+source ./helpers/source_homebrew.sh
 
 log_info "Adding Homebrew evals to shell profiles"
 add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)/bin/brew\" shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"

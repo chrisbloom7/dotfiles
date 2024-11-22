@@ -12,13 +12,11 @@ log_info "Installing prerequisites"
 
 # Check for Homebrew and install if we don't have it
 log_info "Checking for Homebrew"
-: $(
-  SOURCE_HOMEBREW_SILENT=true source ./helpers/source_homebrew.sh
-  if [[ -z $(command -v brew 2>/dev/null) ]]; then
-    log_info "Installing Homebrew"
-    /usr/bin/env bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  fi
-)
+SOURCE_HOMEBREW_SILENT=true source ./helpers/source_homebrew.sh
+if [[ -z $(command -v brew 2>/dev/null) ]]; then
+  log_info "Installing Homebrew"
+  /usr/bin/env bash -c "NONINTERACTIVE=1 $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
 
 log_info "Initializing Homebrew"
 source ./helpers/source_homebrew.sh
