@@ -37,6 +37,7 @@
 
 # Set arguments for installing casks
 # https://github.com/homebrew/homebrew-cask/blob/master/USAGE.md#options
+# Tip: Use `force: true` to override `require_sha: true` on individual casks
 cask_args appdir: "~/Applications", fontdir: "~/Library/Fonts", require_sha: true, no_quarantine: true
 
 ## Desktop Docker
