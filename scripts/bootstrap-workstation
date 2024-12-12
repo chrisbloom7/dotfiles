@@ -15,7 +15,7 @@ fi
 log_debug "calling common boostrap script"
 ./bootstrap-common
 
-log_debug "calling source homebrew script"
+log_debug "Sourcing homebrew script"
 source ./helpers/source_homebrew.sh
 
 log_info "Adding Homebrew evals to shell profiles"
