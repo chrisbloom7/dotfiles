@@ -4,7 +4,6 @@
 puts "Loading #{__FILE__}"
 
 require "irb/completion"
-require "irb/ext/save-history"
 require "rubygems"
 
 IRB.conf[:AUTO_INDENT]  = true

@@ -40,9 +40,11 @@ log_info "Installing Homebrew dependencies from Brewfile"
 brew tap homebrew/bundle
 
 log_info "Installing minimal Homebrew packages"
-bundle_args="--no-lock"
+bundle_args="--no-lock --cleanup"
 if is_force_mode; then
   bundle_args="${bundle_args} --force"
+else
+  bundle_args="${bundle_args} --no-upgrade"
 fi
 if is_verbose_mode; then
   bundle_args="${bundle_args} --verbose"
@@ -102,10 +104,11 @@ if ! is_minimal_mode; then
 fi
 
 if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
+  # TODO: The path might also be /opt/homebrew/bin/mise - can we detect on install?
   log_info "Activating Mise"
-  add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise activate bash"   "${HOME}/.bash_profile"
-  add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise completion bash" "${HOME}/.bash_completion"
-  add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise activate zsh"    "${HOME}/.zprofile"
+  add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate bash"   "${HOME}/.bash_profile"
+  add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise completion bash" "${HOME}/.bash_completion"
+  add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate zsh"    "${HOME}/.zprofile"
   # add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise completion zsh"  "/usr/local/share/zsh/site-functions/_mise"
   eval "$(~/.local/bin/mise activate bash)"
 
