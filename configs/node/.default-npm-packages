@@ -3,6 +3,7 @@ eslint
 moment
 prettier
 typescript
+typescript-eslint
+@eslint/js
 @types/debug
 @types/lodash
-@types/minimist
