@@ -1,0 +1,8 @@
+debug
+eslint
+moment
+prettier
+typescript
+@types/debug
+@types/lodash
+@types/minimist
