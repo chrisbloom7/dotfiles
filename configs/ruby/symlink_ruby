@@ -17,6 +17,9 @@ done
 log_debug "Symlinking default-gems to ~/ as .default-gems"
 symlink_config "${PWD}/default-gems" "${TARGET}/.default-gems"
 
+log_debug "Symlinking .bundle-config to ~/ as .bundle/config"
+symlink_config "${PWD}/.bundle-config" "${TARGET}/.bundle/config"
+
 if [[ -n $(command -v rbenv 2>/dev/null) ]]; then
   # Symlink default-gems to second custom target
   TARGET="${RBENV_ROOT:-$(rbenv root)}"

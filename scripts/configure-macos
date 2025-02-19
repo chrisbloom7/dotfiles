@@ -3,8 +3,7 @@ cd "$(dirname "$0")"
 source ./helpers/runtime.sh
 source ../bin/helpers/trap_and_trace.sh
 
-# Thanks to Mathias Bynens!
-# ~/.macos — https://mths.be/macos
+# See https://macos-defaults.com for an incomplete list of macOS defaults
 
 # For more information about these settings, see:
 # - https://github.com/kevinSuttle/macOS-Defaults/blob/9aed141a1f0abdb3581d3439131fad176ca01682/REFERENCE.md
