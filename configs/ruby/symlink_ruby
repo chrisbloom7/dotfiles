@@ -18,6 +18,7 @@ log_debug "Symlinking default-gems to ~/ as .default-gems"
 symlink_config "${PWD}/default-gems" "${TARGET}/.default-gems"
 
 log_debug "Symlinking .bundle-config to ~/ as .bundle/config"
+mkdir -p "${TARGET}/.bundle"
 symlink_config "${PWD}/.bundle-config" "${TARGET}/.bundle/config"
 
 if [[ -n $(command -v rbenv 2>/dev/null) ]]; then

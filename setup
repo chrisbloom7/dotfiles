@@ -6,6 +6,7 @@
 # [[ -n "${CODESPACES:-}" ]] && exit 0
 
 original_args="$@"
+[[ -n "${DEBUG:-}" ]] && echo -e "\033[90mCDing into $(dirname "$0")\033[0m" || true
 cd "$(dirname "$0")"
 [[ -n "${DEBUG:-}" ]] && echo -e "\033[90mSourcing runtime script\033[0m" || true
 source ./scripts/helpers/runtime.sh
@@ -17,7 +18,6 @@ log_info "Beginning setup"
 log_debug "Sourcing sudo keep alive script"
 source ./scripts/helpers/sudo-keep-alive.sh
 
-log_info "Checking prerequisites"
 if [[ "$(is_codespace)" != "true" ]]; then
   log_debug "calling prerequisites script"
   scripts/install-prerequisites
