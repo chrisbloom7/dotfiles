@@ -65,7 +65,7 @@ fi
 
 log_info "calling source homebrew script"
 SOURCE_HOMEBREW_SILENT=true source ./helpers/source_homebrew.sh
-if [[ -z $(command -v brew 2>/dev/null) ]]; then
+if [[ -n $(command -v brew 2>/dev/null) ]]; then
   log_info "Adding Homebrew evals to shell profiles"
   add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)/bin/brew\" shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
 fi
