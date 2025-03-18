@@ -47,9 +47,13 @@ log_info "calling common boostrap script"
 #  RepositoryName=mycoolapp
 #  TERM_PROGRAM=vscode # Could also be "codespaces"
 
-log_info "Configuring git for codespaces"
-# This insteadOf line doesn't work on Codespaces, so we need to unset it
-git config unset --global url."git@github.com:".insteadOf
+if [[ -n "$(git config get --global url."git@github.com:".insteadOf)" ]]; then
+  log_info "Configuring git for codespaces"
+  # This insteadOf line doesn't work on Codespaces, so we need to unset it
+  git config unset --global url."git@github.com:".insteadOf
+else
+  log_info "No git insteadOf config found; skipping"
+fi
 
 log_info "Checking if gh CLI is installed"
 if [[ -n $(command -v gh 2>/dev/null) ]]; then
