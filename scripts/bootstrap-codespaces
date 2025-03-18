@@ -49,7 +49,7 @@ log_info "calling common boostrap script"
 
 log_info "Configuring git for codespaces"
 # This insteadOf line doesn't work on Codespaces, so we need to unset it
-git config unset --global --value url."git@github.com:".insteadOf
+git config unset --global url."git@github.com:".insteadOf
 
 log_info "Checking if gh CLI is installed"
 if [[ -n $(command -v gh 2>/dev/null) ]]; then

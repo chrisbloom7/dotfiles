@@ -36,7 +36,7 @@ else
 fi
 brew update $brew_args
 
-log_info "Installing Homebrew dependencies from Brewfile"
+log_info "Installing Homebrew support for Brewfiles"
 brew tap homebrew/bundle
 
 log_info "Installing minimal Homebrew packages"
