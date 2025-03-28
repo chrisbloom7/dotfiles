@@ -3,7 +3,7 @@
 # Set arguments for installing casks
 # https://github.com/homebrew/homebrew-cask/blob/master/USAGE.md#options
 # Tip: Use `force: true` to override `require_sha: true` on individual casks
-cask_args appdir: "~/Applications", fontdir: "~/Library/Fonts", require_sha: true, no_quarantine: true
+cask_args require_sha: true, no_quarantine: true
 
 ## Taps
 tap "buo/cask-upgrade"  # A command line tool for upgrading every outdated app installed by Homebrew Cask
@@ -15,6 +15,7 @@ brew "bash-completion"              # Programmable completion for Bash 3.2
 brew "bash"                         # Bourne-Again SHell, a UNIX command interpreter
 brew "bats-core"                    # Bash Automated Testing System
 brew "coreutils"                    # GNU File, Shell, and Text utilities
+brew "fzf"                          # Command-line fuzzy finder
 brew "gh"                           # GitHub command-line tool
 brew "git"                          # Distributed revision control system
 brew "github-keygen"                # Bootstrap GitHub SSH configuration
@@ -22,9 +23,11 @@ brew "grep"                         # GNU grep, egrep and fgrep
 brew "mackup"                       # Keep your Mac's application settings in sync
 brew "mas"                          # Mac App Store command-line interface
 brew "mise"                         # Polyglot runtime manager (asdf rust clone)
+brew "mpg123"                       # Fast console MPEG Audio Player and decoder library
+brew "php"                          # General-purpose scripting language
 brew "pinentry-mac"                 # Pinentry for GPG on Mac
-# brew "rbenv-default-gems"           # Auto-installs gems for Ruby installs
-# brew "rbenv"                        # Ruby version manager - prefer mise
+# brew "rbenv-default-gems"           # Auto-installs gems for Ruby installs ! Prefer `mise`
+# brew "rbenv"                        # Ruby version manager ! Prefer `mise`
 brew "ruby-build"                   # Install various Ruby versions and implementations
 brew "vsce"                         # Tool for packaging, publishing and managing VS Code extensions
 brew "zsh-autosuggestions"          # Fish-like fast/unobtrusive autosuggestions for zsh
@@ -35,41 +38,41 @@ brew "zsh-syntax-highlighting"      # Fish shell like syntax highlighting for zs
 brew "zsh"                          # UNIX shell (command interpreter)
 
 ## Casks
-cask "1password", appdir: "/Applications" # Password manager that keeps all passwords secure behind one password
-cask "1password-cli"                      # Command-line interface for 1Password
-cask "alfred"                             # Application launcher and productivity software
-cask "beyond-compare"                     # Compare files and folders
-cask "deckset"                            # Presentations from Markdown
-cask "discord"                            # Voice and text chat software
-cask "divvy"                              # Application window manager focusing on simplicity
-cask "dropbox"                            # Client for the Dropbox cloud storage service
-cask "google-chrome"                      # Web browser
-cask "google-drive"                       # Client for the Google Drive storage service
-cask "gpg-suite"                          # Tools to protect your emails and files
-cask "imageoptim"                         # Tool to optimise images to a smaller size
-cask "iterm2"                             # Terminal emulator as alternative to Apple's Terminal app
-cask "logi-options+", force: true         # Software for Logitech devices
-cask "macdown"                            # Open-source Markdown editor
-cask "mailplane"                          # Gmail client
-cask "monitorcontrol"                     # Tool to control external monitor brightness & volume
-cask "monodraw"                           # Tool to create text-based art
-cask "obsbot-center"                      # Configuration and firmware update utility for OBSBOT Tiny and Meet series
-cask "qlcolorcode"                        # Quick Look plug-in that renders source code with syntax highlighting
-# cask "qlimagesize"                        # Display image info and preview unsupported formats in QuickLook
-cask "qlmarkdown"                         # Quick Look generator for Markdown files
-cask "qlstephen"                          # Quick Look plugin for plaintext files without an extension
-cask "qlvideo"                            # Thumbnails, static previews, cover art and metadata for video files
-cask "qlzipinfo"                          # List out the contents of a zip file in the QuickLook preview
-cask "quicklook-csv"                      # Quick Look plugin for CSV files
-cask "quicklook-json"                     # Quick Look plugin for JSON files
-cask "slack"                              # Team communication and collaboration software
-cask "spotify"                            # Music streaming service
-cask "the-unarchiver"                     # Unpacks archive files
-cask "viscosity"                          # OpenVPN client with AppleScript support
-cask "visual-studio-code"                 # Open-source code editor
-cask "warp"                               # Rust-based terminal
-cask "webpquicklook"                      # Quick Look plugin for webp files
-cask "zoom"                               # Video communication and virtual meeting platform
+cask "1password"                              # Password manager that keeps all passwords secure behind one password
+cask "1password-cli"                          # Command-line interface for 1Password
+cask "alfred"                                 # Application launcher and productivity software
+cask "beyond-compare"                         # Compare files and folders
+cask "deckset"                                # Presentations from Markdown
+cask "discord"                                # Voice and text chat software
+cask "divvy"                                  # Application window manager focusing on simplicity
+cask "dropbox"                                # Client for the Dropbox cloud storage service
+cask "google-chrome"                          # Web browser
+cask "google-drive"                           # Client for the Google Drive storage service
+cask "gpg-suite"                              # Tools to protect your emails and files
+cask "imageoptim"                             # Tool to optimise images to a smaller size
+cask "iterm2"                                 # Terminal emulator as alternative to Apple's Terminal app
+cask "logi-options+", force: true             # Software for Logitech devices
+cask "macdown"                                # Open-source Markdown editor
+cask "mailplane"                              # Gmail client
+cask "monitorcontrol"                         # Tool to control external monitor brightness & volume
+cask "monodraw"                               # ASCII art editor
+cask "notunes"                                # Tool to disable iTunes launching when media keys are pressed
+cask "obsbot-center"                          # Configuration and firmware update utility for OBSBOT Tiny and Meet series
+cask "qlcolorcode"                            # Quick Look plug-in that renders source code with syntax highlighting
+cask "qlmarkdown"                             # Quick Look generator for Markdown files
+cask "qlstephen"                              # Quick Look plugin for plaintext files without an extension
+cask "qlvideo"                                # Thumbnails, static previews, cover art and metadata for video files
+cask "qlzipinfo"                              # List out the contents of a zip file in the QuickLook preview
+cask "quicklook-csv"                          # Quick Look plugin for CSV files
+cask "quicklook-json"                         # Quick Look plugin for JSON files
+cask "slack"                                  # Team communication and collaboration software
+cask "spotify"                                # Music streaming service
+cask "the-unarchiver"                         # Unpacks archive files
+cask "viscosity"                              # OpenVPN client with AppleScript support
+cask "visual-studio-code"                     # Open-source code editor
+cask "warp"                                   # Rust-based terminal
+cask "webpquicklook"                          # Quick Look plugin for webp files
+cask "zoom"                                   # Video communication and virtual meeting platform
 
 ## Fonts
 cask "font-mona-sans"                     # Mona-Sans font
@@ -119,7 +122,7 @@ vscode "redhat.vscode-yaml"                     # YAML Language Support by Red H
 vscode "shardulm94.trailing-spaces"             # Highlight trailing spaces and delete them in a flash!
 vscode "shd101wyy.markdown-preview-enhanced"    # Markdown Preview Enhanced ported to vscode
 vscode "sorbet.sorbet-vscode-extension"         # Ruby IDE features, powered by Sorbet.
-# vscode "stkb.rewrap"                            # Hard word wrapping for comments and other text at a given column.
+vscode "stkb.rewrap"                            # Hard word wrapping for comments and other text at a given column.
 vscode "stripe.endsmart"                        # A modern version of endwise that relies on more recent VSCode APIs.
 vscode "Tyriar.sort-lines"                      # Sorts lines of text
 vscode "yzhang.markdown-all-in-one"             # All you need to write Markdown (keyboard shortcuts, table of contents, auto preview and more)

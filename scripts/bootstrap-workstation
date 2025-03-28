@@ -21,12 +21,12 @@ source ./helpers/source_homebrew.sh
 log_info "Adding Homebrew evals to shell profiles"
 add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)/bin/brew\" shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
 
-log_info "Adding HOMEBREW_CASK_OPTS to shell profiles"
-if [[ "$(is_macos)" == "true" ]]; then
-  add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--appdir=\\\"${HOME}/Applications\\\" --fontdir=\\\"${HOME}/Library/Fonts\\\"\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
-# else
-#   add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--require-sha\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
-fi
+# log_info "Adding HOMEBREW_CASK_OPTS to shell profiles"
+# if [[ "$(is_macos)" == "true" ]]; then
+#   add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--appdir=\\\"${HOME}/Applications\\\" --fontdir=\\\"${HOME}/Library/Fonts\\\"\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+# # else
+# #   add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--require-sha\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+# fi
 
 log_debug "Updating Homebrew"
 if is_verbose_mode; then
@@ -51,12 +51,20 @@ if is_verbose_mode; then
 else
   bundle_args="${bundle_args} --quiet"
 fi
+if is_update_mode; then
+  log_info "Updating Homebrew packages from Brewfile.minimal"
+  bundle_args="${bundle_args} --update"
+else
+  log_info "Installing Homebrew packages from Brewfile.minimal"
+fi
 
 log_debug "Disabling Exit on error for Brewfile.minimal"
 if [[  $- =~ e ]]; then
   set +e
   RESTORE_EXIT_ON_ERROR=true
 fi
+# To restrict app installations to current user, add args:
+#   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
 brew bundle --file ../Brewfile.minimal $bundle_args
 log_debug "Re-enabling Exit on error"
 if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
@@ -65,12 +73,18 @@ if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
 fi
 
 if ! is_minimal_mode; then
-  log_info "Installing additional Homebrew packages"
+  if is_update_mode; then
+    log_info "Updating additional Homebrew packages from Brewfile"
+  else
+    log_info "Installing additional Homebrew packages from Brewfile"
+  fi
   log_debug "Disabling Exit on error for Brewfile"
   if [[  $- =~ e ]]; then
     set +e
     RESTORE_EXIT_ON_ERROR=true
   fi
+# To restrict app installations to current user, add args:
+#   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
   brew bundle --file ../Brewfile $bundle_args
   log_debug "Re-enabling Exit on error"
   if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
@@ -82,7 +96,7 @@ fi
 log_info "Cleaning up Homebrew services"
 brew services cleanup
 
-if ! is_minimal_mode; then
+if ! is_minimal_mode && ! is_update_mode; then
   # Uninstall default Mac apps
   log_debug "Checking for mas CLI"
   if [[ -n "$(command -v mas 2>/dev/null)" ]]; then
@@ -104,15 +118,16 @@ if ! is_minimal_mode; then
 fi
 
 if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
-  # TODO: The path might also be /opt/homebrew/bin/mise - can we detect on install?
-  log_info "Activating Mise"
-  add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate bash"   "${HOME}/.bash_profile"
-  add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise completion bash" "${HOME}/.bash_completion"
-  add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate zsh"    "${HOME}/.zprofile"
-  # add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise completion zsh"  "/usr/local/share/zsh/site-functions/_mise"
-  eval "$(~/.local/bin/mise activate bash)"
+  if ! is_update_mode; then
+    # TODO: The path might also be /opt/homebrew/bin/mise - can we detect on install?
+    log_info "Activating Mise"
+    add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate bash"   "${HOME}/.bash_profile"
+    add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise completion bash" "${HOME}/.bash_completion"
+    add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate zsh"    "${HOME}/.zprofile"
+    # add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise completion zsh"  "/usr/local/share/zsh/site-functions/_mise"
+    eval "$(~/.local/bin/mise activate bash)"
+  fi
 
-  log_info "Installing Mise plugins"
   mise_args="--cd $HOME --env local --yes"
   if is_verbose_mode; then
     mise_args="${mise_args} --verbose"
@@ -123,7 +138,13 @@ if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
   if ! is_minimal_mode; then
     mise_plugins="${mise_plugins} go java@lts ruby rust"
   fi
-  mise use $mise_args $mise_plugins
+  if is_update_mode; then
+    log_info "Updating installed Mise plugins"
+    mise upgrade $mise_args
+  else
+    log_info "Installing Mise plugins"
+    mise use $mise_args $mise_plugins
+  fi
 
   log_info "Reshimming Mise plugins"
   mise_reshim_args="--cd $HOME --yes"
@@ -136,7 +157,7 @@ else
 fi
 
 # Clone project repositories
-if ! is_minimal_mode; then
+if ! is_minimal_mode && ! is_update_mode; then
   log_debug "calling clone-projects script"
   ./clone-projects
 fi

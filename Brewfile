@@ -38,7 +38,7 @@
 # Set arguments for installing casks
 # https://github.com/homebrew/homebrew-cask/blob/master/USAGE.md#options
 # Tip: Use `force: true` to override `require_sha: true` on individual casks
-cask_args appdir: "~/Applications", fontdir: "~/Library/Fonts", require_sha: true, no_quarantine: true
+cask_args require_sha: true, no_quarantine: true
 
 ## Desktop Docker
 cask "docker"                   # App to build and share containerised applications and microservices
@@ -62,6 +62,7 @@ brew "notify"            # Stream the output of any CLI and publish it to a vari
 brew "pandoc"            # Swiss-army knife of markup format conversion
 brew "pkg-config"        # Manage compile and link flags for libraries
 brew "putty"             # Implementation of Telnet and SSH
+brew "railway"           # Develop and deploy code with zero configuration
 brew "telnet"            # User interface to the TELNET protocol
 brew "terminal-notifier" # Send macOS User Notifications from the command-line
 brew "tmux"              # Terminal multiplexer
@@ -79,19 +80,21 @@ cask "chatgpt"                # OpenAI's official ChatGPT desktop app
 cask "chromedriver"           # Automated testing of webapps for Google Chrome
 cask "clamxav"                # Anti-virus and malware scanner
 cask "cleanmymac"             # Tool to remove unnecessary files and folders from disk
+cask "cursor"                 # Write, edit, and chat about your code with AI
 cask "cyberduck"              # Server and cloud storage browser
-# cask "drawio"                 # Online diagram software
+cask "drawio"                 # Online diagram software
 cask "drivethrurpg"           # Sync DriveThruRPG libraries to compatible devices
 cask "figma"                  # Collaborative team software
-# cask "firefox"                # Web browser
+cask "firefox"                # Web browser
 # cask "flotato"                # Tool to turn any web page into a desktop app
 # cask "fluid"                  # Tool to turn a website into a desktop app
 cask "freeze"                 # Amazon Glacier file transfer client
 cask "garmin-express"         # Update maps and software, sync with Garmin Connect and register your device
 cask "gemini"                 # Disk space cleaner that finds and deletes duplicated and similar files
 cask "graphiql"               # Light, Electron-based Wrapper around GraphiQL
+cask "lm-studio"              # Discover, download, and run local LLMs
 cask "microsoft-edge"         # Multi-platform web browser
-# cask "monofocus"              # Keep all tasks from your todo apps on your menu bar
+cask "monofocus"              # Keep all tasks from your todo apps on your menu bar
 cask "ngrok"                  # Reverse proxy, secure introspectable tunnels to localhost
 # cask "postgres-unofficial"    # App wrapper for PostgreSQL with support for multiple versions and databases
 cask "raycast"                # Control your tools with a few keystrokes
@@ -102,7 +105,7 @@ cask "scriptql"               # AppleScript Quick Look plugin
 cask "shutter-encoder"        # Video, audio and image converter
 cask "steam"                  # Video game digital distribution service
 cask "transmit"               # File transfer application
-# cask "versions"               # Subversion client
+cask "versions"               # Subversion client
 cask "voodoopad"              # Notes organiser
 cask "wavebox"                # Web browser
 cask "yubico-yubikey-manager" # Application for configuring any YubiKey

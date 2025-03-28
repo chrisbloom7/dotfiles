@@ -36,6 +36,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   export FORCE_MODE=${FORCE_MODE:-false}
   export MINIMAL_MODE=${MINIMAL_MODE:-false}
   export QUIET_MODE=${QUIET_MODE:-false}
+  export UPDATE_MODE=${UPDATE_MODE:-false}
   export VERBOSE_MODE=${VERBOSE_MODE:-false}
 
   # Always enable verbose mode in Codespaces
@@ -47,10 +48,12 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   is_force_mode() { [[ ${FORCE_MODE:-} == true ]]; }        ; export -f is_force_mode
   is_minimal_mode() { [[ ${MINIMAL_MODE:-} == true ]]; }    ; export -f is_minimal_mode
   is_quiet_mode() { [[ "${QUIET_MODE:-}" == true ]]; }      ; export -f is_quiet_mode
+  is_update_mode() { [[ "${UPDATE_MODE:-}" == true ]]; }    ; export -f is_update_mode
   is_verbose_mode() { [[ "${VERBOSE_MODE:-}" == true ]]; }  ; export -f is_verbose_mode
 
   # Option validation functions (no export needed for these functions)
   _can_use_minimal_mode() { ! is_bootstrap_mode; }
+  _can_use_update_mode() { ! is_bootstrap_mode; }
   _can_use_quiet_mode() { ! is_verbose_mode; }
 
   # Parse script options
@@ -67,6 +70,9 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
       "                  (ignored if --bootstrap is set)"
       " -n               Same as -d for compatibility with other scripts."
       " -q, --quiet      Print fewer status messages. (ignored if --verbose is set)."
+      " -u, --update     Update existing packages, but don't install anything. (ignored if --bootstrap is set)"
+      "                  Combine with --force to also regenerate symlinks afterward."
+      "                  Can also be used with --minimal to only update the bare minimum packages."
       " -v, --verbose    Print additional status messages."
     )
 
@@ -81,8 +87,10 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
         -m | --minimal     ) _can_use_minimal_mode && MINIMAL_MODE=true
                              ;;
         -d | -n | --dry-run) DRY_RUN_MODE=true
-                           ;;
+                             ;;
         -q | --quiet       ) _can_use_quiet_mode && QUIET_MODE=true
+                             ;;
+        -u | --update      ) _can_use_update_mode && UPDATE_MODE=true
                              ;;
         -v | --verbose     ) QUIET_MODE=false && VERBOSE_MODE=true
                              ;;
@@ -120,5 +128,6 @@ log_debug "  DRY_RUN_MODE:    ${DRY_RUN_MODE:?Not set!}"
 log_debug "  FORCE_MODE:      ${FORCE_MODE:?Not set!}"
 log_debug "  MINIMAL_MODE:    ${MINIMAL_MODE:?Not set!}"
 log_debug "  QUIET_MODE:      ${QUIET_MODE:?Not set!}"
+log_debug "  UPDATE_MODE:     ${UPDATE_MODE:?Not set!}"
 log_debug "  VERBOSE_MODE:    ${VERBOSE_MODE:?Not set!}"
 log_debug "  DOTFILES:        ${DOTFILES:?Not set!}"

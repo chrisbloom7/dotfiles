@@ -1,7 +1,12 @@
 export PATH="$HOME/.yarn/bin:$PATH"
 
-# export EDITOR='mate -w'
-# export GIT_EDITOR='mate -wl1'
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR="${EDITOR:-vim}"
+else
+  export EDITOR="${EDITOR:-cursor}"
+  export GIT_EDITOR="${GIT_EDITOR:-${EDITOR} --wait}"
+fi
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

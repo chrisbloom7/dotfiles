@@ -1247,32 +1247,84 @@ fi
 # fi
 
 ###############################################################################
+# Add default login items                                                     #
+###############################################################################
+log_info "Adding login items"
+login_items=(
+  "Alfred 5"
+  "ChatGPT"
+  "Divvy"
+  "Dropbox"
+  "Google Drive"
+  "noTunes"
+)
+for item in "${login_items[@]}"; do
+  log_debug "Checking path of ${item} for login items"
+  item_path=""
+  if [[ -e "/Applications/${item}.app" ]]; then
+    item_path="/Applications/${item}.app"
+  elif [[ -e "${HOME}/Applications/${item}.app" ]]; then
+    item_path="${HOME}/Applications/${item}.app"
+  else
+    log_attention "Could not find installation path for ${item}; Skipping!"
+  fi
+
+  if [[ -n "${item_path}" ]]; then
+    log_debug "Adding ${item_path} to login items"
+    # NOTE: The normal output is `login item UNKNOWN` so we capture it to verify
+    result=$(osascript -e 'tell application "System Events" to make login item at end with properties {path:"'"${item_path}"'", hidden:false}')
+    if [[ $? -ne 0 ]] || [[ "${result}" != "login item UNKNOWN" ]]; then
+      log_attention "Could not add ${item_path} to login items! Exit code: $?, Status: ${result}"
+    else
+      log_success "${item_path} added to login items"
+    fi
+  fi
+done
+log_info "Finished adding login items"
+log_debug "New login items: $(osascript -e 'tell application "System Events" to get the name of every login item')"
+
+# Override default iTunes/Music apps
+# You must manually add noTunes to the login items after installing
+# Undo with `defaults write digital.twisted.noTunes replacement`
+if [[ -e "/Applications/noTunes.app" ]] && [[ -e "/Applications/Spotify.app" ]]; then
+  log_debug "Overriding iTunes with noTunes"
+  defaults write digital.twisted.noTunes replacement /Applications/Spotify.app
+fi
+
+###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
 log_info "Killing affected applications"
 
 for app in "Activity Monitor" \
     "Address Book" \
+    "Alfred 5" \
     "Calendar" \
     "cfprefsd" \
+    "ChatGPT" \
     "Contacts" \
+    "Divvy" \
     "Dock" \
+    "Dropbox" \
     "Finder" \
     "Google Chrome Canary" \
     "Google Chrome" \
+    "Google Drive" \
+    "iCal" \
     "Mail" \
     "Messages" \
+    "noTunes" \
     "Opera" \
     "Photos" \
     "Safari" \
     "SizeUp" \
     "Spectacle" \
+    "Spotify" \
     "SystemUIServer" \
     "Terminal" \
     "Transmission" \
     "Tweetbot" \
-    "Twitter" \
-    "iCal"; do
+    "Twitter"; do
     killall "${app}" &> /dev/null
 done
 

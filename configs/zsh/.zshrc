@@ -113,8 +113,8 @@
   if [[ -n $SSH_CONNECTION ]]; then
     export EDITOR="${EDITOR:-vim}"
   else
-    export EDITOR="${EDITOR:-code}"
-    export GIT_EDITOR="${GIT_EDITOR:-code --wait}"
+    export EDITOR="${EDITOR:-cursor}"
+    export GIT_EDITOR="${GIT_EDITOR:-${EDITOR} --wait}"
   fi
 
   # Compilation flags
