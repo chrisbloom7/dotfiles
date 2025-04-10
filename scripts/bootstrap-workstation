@@ -167,7 +167,7 @@ if [[ "$(uname -m)" =~ "arm" ]] && [[ -n $(command -v softwareupdate 2>/dev/null
 fi
 
 # Set macOS preferences - we run this last because this will reload the shell
-if ! is_minimal_mode; then
+if ! is_minimal_mode && ! is_update_mode; then
   log_debug "calling configure-macos script"
   ./configure-macos
 fi
@@ -176,7 +176,7 @@ fi
 log_debug "calling config symlink script"
 ./symlink-config-files
 
-log_info "Some changes may require a logout/restart to take effect"
-log_info "You may need to manually set fonts in your iTerm2 profile"
+log_attention "Some changes may require a logout/restart to take effect"
+log_attention "You may need to manually set fonts in your terminal profiles"
 
 log_success "Done codespace specific bootstrapping!"
