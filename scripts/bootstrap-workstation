@@ -94,8 +94,8 @@ if ! is_minimal_mode && ! is_update_mode; then
     log_info "Uninstalling default Mac apps"
     mas uninstall 408981434 || true # iMovie
     mas uninstall 409183694 || true # Keynote
-    mas uninstall 409201541 || true # Pages
-    mas uninstall 409203825 || true # Numbers
+    # mas uninstall 409201541 || true # Pages
+    # mas uninstall 409203825 || true # Numbers
   fi
 
   # Set default MySQL root password and auth type

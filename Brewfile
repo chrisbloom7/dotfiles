@@ -140,6 +140,8 @@ mas "Photomator", id: 1_444_636_541
 mas "QuikFlow", id: 1_626_354_390
 mas "Speedtest", id: 1_153_157_709
 mas "Video Editor Movavi", id: 1_388_868_440
+mas "Microsoft Word", id: 586_447_913
+mas "Microsoft Excel", id: 462_058_435
 # mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/
 
 ## VS code extensions

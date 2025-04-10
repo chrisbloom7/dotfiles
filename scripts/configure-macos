@@ -17,6 +17,7 @@ source ../bin/helpers/trap_and_trace.sh
 # https://github.com/lra/mackup/blob/master/mackup/applications/macosx.cfg
 
 log_info "Applying macOS defaults"
+affected_apps=("cfprefsd")
 
 log_debug "Disabling Exit on error for this script"
 if [[  $- =~ e ]]; then
@@ -319,6 +320,7 @@ fi
 # Screen                                                                      #
 ###############################################################################
 log_info "Setting screen defaults"
+affected_apps+=("SystemUIServer")
 
 if command -v defaults &> /dev/null; then
   # Re-enable subpixel antialiasing
@@ -356,6 +358,7 @@ fi
 # Finder                                                                      #
 ###############################################################################
 log_info "Setting Finder defaults"
+affected_apps+=("Finder")
 
 if command -v defaults &> /dev/null; then
   # Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
@@ -505,6 +508,7 @@ chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
 # Dock, Dashboard, and hot corners                                            #
 ###############################################################################
 log_info "Setting Dock, Dashboard, and hot corners defaults"
+affected_apps+=("Dock")
 
 if command -v defaults &> /dev/null; then
   # Enable highlight hover effect for the grid view of a stack (Dock)
@@ -636,6 +640,7 @@ sudo ln -sf "/Applications/Xcode.app/Contents/Developer/Applications/Simulator (
 # Safari & WebKit                                                             #
 ###############################################################################
 log_info "Setting Safari & WebKit defaults"
+affected_apps+=("Safari")
 
 if command -v defaults &> /dev/null; then
   # Privacy: don't send search queries to Apple
@@ -753,6 +758,7 @@ fi
 # Mail                                                                        #
 ###############################################################################
 log_info "Setting Mail defaults"
+affected_apps+=("Mail")
 
 if command -v defaults &> /dev/null; then
   # Disable send and reply animations in Mail.app
@@ -787,6 +793,7 @@ fi
 # Spotlight                                                                   #
 ###############################################################################
 log_info "Setting Spotlight defaults"
+affected_apps+=("Spotlight")
 
 # Hide Spotlight tray-icon (and subsequent helper)
 log_debug "Hiding Spotlight tray-icon"
@@ -851,6 +858,7 @@ fi
 # Terminal & iTerm 2                                                          #
 ###############################################################################
 log_info "Setting Terminal & iTerm 2 defaults"
+affected_apps+=("Terminal" "iTerm2")
 
 if command -v defaults &> /dev/null; then
   # Only use UTF-8 in Terminal.app
@@ -935,6 +943,7 @@ fi
 # Time Machine                                                                #
 ###############################################################################
 log_info "Setting Time Machine defaults"
+affected_apps+=("Time Machine")
 
 if command -v defaults &> /dev/null; then
   # Prevent Time Machine from prompting to use new hard drives as backup volume
@@ -950,6 +959,7 @@ hash tmutil &> /dev/null && sudo tmutil disablelocal
 # Activity Monitor                                                            #
 ###############################################################################
 log_info "Setting Activity Monitor defaults"
+affected_apps+=("Activity Monitor")
 
 if command -v defaults &> /dev/null; then
   # Show the main window when launching Activity Monitor
@@ -974,6 +984,7 @@ fi
 # Address Book, Dashboard, iCal, TextEdit, and Disk Utility                   #
 ###############################################################################
 log_info "Setting Address Book, Dashboard, iCal, TextEdit, and Disk Utility defaults"
+affected_apps+=("Address Book" "Calendar" "Contacts" "TextEdit")
 
 if command -v defaults &> /dev/null; then
   # Enable the debug menu in Address Book
@@ -1011,6 +1022,7 @@ fi
 # Mac App Store                                                               #
 ###############################################################################
 log_info "Setting Mac App Store defaults"
+affected_apps+=("App Store")
 
 if command -v defaults &> /dev/null; then
   # Enable the WebKit Developer Tools in the Mac App Store
@@ -1054,6 +1066,7 @@ fi
 # Photos                                                                      #
 ###############################################################################
 log_info "Setting Photos defaults"
+affected_apps+=("Photos")
 
 if command -v defaults &> /dev/null; then
   # Prevent Photos from opening automatically when devices are plugged in
@@ -1065,6 +1078,7 @@ fi
 # Messages                                                                    #
 ###############################################################################
 log_info "Setting Messages defaults"
+affected_apps+=("Messages")
 
 if command -v defaults &> /dev/null; then
   # Disable automatic emoji substitution (i.e. use plain text smileys)
@@ -1084,6 +1098,7 @@ fi
 # Google Chrome & Google Chrome Canary                                        #
 ###############################################################################
 log_info "Setting Google Chrome & Google Chrome Canary defaults"
+affected_apps+=("Google Chrome" "Google Chrome Canary")
 
 if command -v defaults &> /dev/null; then
   # Disable the all too sensitive backswipe on trackpads
@@ -1111,6 +1126,7 @@ fi
 # Opera & Opera Developer                                                     #
 ###############################################################################
 log_info "Setting Opera & Opera Developer defaults"
+affected_apps+=("Opera")
 
 if command -v defaults &> /dev/null; then
   # Expand the print dialog by default
@@ -1123,6 +1139,7 @@ fi
 # SizeUp.app                                                                  #
 ###############################################################################
 # log_info "Setting SizeUp defaults"
+# affected_apps+=("SizeUp")
 
 # if command -v defaults &> /dev/null; then
 #   # Start SizeUp at login
@@ -1138,6 +1155,7 @@ fi
 # Sublime Text                                                                #
 ###############################################################################
 # log_info "Setting Sublime Text defaults"
+# affected_apps+=("Sublime")
 
 # Install Sublime Text settings
 # log_debug "Installing Sublime Text settings"
@@ -1147,6 +1165,7 @@ fi
 # Spectacle.app                                                               #
 ###############################################################################
 # log_info "Setting Spectacle defaults"
+# affected_apps+=("Spectacle")
 
 # Set up my preferred keyboard shortcuts
 # log_debug "Setting up my preferred keyboard shortcuts"
@@ -1156,6 +1175,7 @@ fi
 # Transmission.app                                                            #
 ###############################################################################
 log_info "Setting Transmission defaults"
+affected_apps+=("Transmission")
 
 if command -v defaults &> /dev/null; then
   # Use '~/Documents/Torrents' to store incomplete downloads
@@ -1204,6 +1224,7 @@ fi
 # Twitter.app                                                                 #
 ###############################################################################
 # log_info "Setting Twitter defaults"
+# affected_apps+=("Twitter")
 
 # if command -v defaults &> /dev/null; then
 #   # Disable smart quotes as it's annoying for code tweets
@@ -1239,6 +1260,7 @@ fi
 # Tweetbot.app                                                                #
 ###############################################################################
 # log_info "Setting Tweetbot defaults"
+# affected_apps+=("Tweetbot")
 
 # if command -v defaults &> /dev/null; then
 #   # Bypass the annoyingly slow t.co URL shortener
@@ -1251,14 +1273,26 @@ fi
 ###############################################################################
 log_info "Adding login items"
 login_items=(
+  "1Password"
   "Alfred 5"
+  "AnySwitch"
+  "Calendar"
   "ChatGPT"
+  "ClamXAV"
+  "CleanMyMac"
   "Divvy"
   "Dropbox"
   "Google Drive"
+  "Mail"
+  "MonitorControl"
   "noTunes"
+  "OBSBOT Center"
+  "Window Focus"
 )
+
 for item in "${login_items[@]}"; do
+  affected_apps+=("${item}")
+
   log_debug "Checking path of ${item} for login items"
   item_path=""
   if [[ -e "/Applications/${item}.app" ]]; then
@@ -1287,6 +1321,7 @@ log_debug "New login items: $(osascript -e 'tell application "System Events" to 
 # You must manually add noTunes to the login items after installing
 # Undo with `defaults write digital.twisted.noTunes replacement`
 if [[ -e "/Applications/noTunes.app" ]] && [[ -e "/Applications/Spotify.app" ]]; then
+  affected_apps+=("Spotify")
   log_debug "Overriding iTunes with noTunes"
   defaults write digital.twisted.noTunes replacement /Applications/Spotify.app
 fi
@@ -1294,44 +1329,30 @@ fi
 ###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
-log_info "Killing affected applications"
-
-for app in "Activity Monitor" \
-    "Address Book" \
-    "Alfred 5" \
-    "Calendar" \
-    "cfprefsd" \
-    "ChatGPT" \
-    "Contacts" \
-    "Divvy" \
-    "Dock" \
-    "Dropbox" \
-    "Finder" \
-    "Google Chrome Canary" \
-    "Google Chrome" \
-    "Google Drive" \
-    "iCal" \
-    "Mail" \
-    "Messages" \
-    "noTunes" \
-    "Opera" \
-    "Photos" \
-    "Safari" \
-    "SizeUp" \
-    "Spectacle" \
-    "Spotify" \
-    "SystemUIServer" \
-    "Terminal" \
-    "Transmission" \
-    "Tweetbot" \
-    "Twitter"; do
-    killall "${app}" &> /dev/null
+read -p -t 30 "Would you like to quit all affected apps now? (yes|no)" QUIT_AFFECTED_APPS_RESPONSE
+affirmative_responses=("y" "Y" "yes" "YES")
+quit_affected_apps=false
+for response in "${affirmative_responses[@]}"; do
+  if [ "${QUIT_AFFECTED_APPS_RESPONSE}" == "${response}" ]; then
+    quit_affected_apps=true
+    break
+  fi
 done
 
-log_debug "Re-enabling Exit on error"
-if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
-  set -e
-  unset RESTORE_EXIT_ON_ERROR
+if $quit_affected_apps; then
+  log_info "Killing affected applications"
+
+  for app in $affected_apps[@]; do
+    killall "${app}" &> /dev/null
+  done
+
+  log_debug "Re-enabling Exit on error"
+  if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
+    set -e
+    unset RESTORE_EXIT_ON_ERROR
+  fi
+else
+  log_debug "User chose not to kill affected applications; skipping"
 fi
 
 log_success "macOS configured. Note that some of these changes require a logout/restart to take effect."
