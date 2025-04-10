@@ -17,7 +17,7 @@ if [[ "$(uname -a)" =~ "Darwin" ]]; then
 fi
 
 # Directories
-alias dotfiles="cd \"\${DOTFILES:?DOTFILES not set}\""
+dotfiles () { cd "${DOTFILES:?DOTFILES not set}" }
 src () { cd "$HOME/src/$@" }
 
 # Python
@@ -26,9 +26,15 @@ alias py="python3"
 alias pip="pip3"
 
 # Projects and files
-alias edots="${EDITOR} \"${DOTFILES}\""
-alias ehosts="${EDITOR} /etc/hosts"
-alias edotaliases="${EDITOR} ${HOME}/.aliases"
+edots () {
+  ${EDITOR:?EDITOR not defined} "${DOTFILES}"
+}
+ehosts () {
+  ${EDITOR:?EDITOR not defined} /etc/hosts
+}
+edotaliases () {
+  ${EDITOR:?EDITOR not defined} "${HOME}/.aliases"
+}
 readme () {
   if [[ -z "$(command -v pandoc 2>/dev/null)" ]] || [[ -z "$(command -v lynx 2>/dev/null)" ]]; then
     return 1;
