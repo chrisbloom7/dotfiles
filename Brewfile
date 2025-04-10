@@ -40,6 +40,9 @@
 # Tip: Use `force: true` to override `require_sha: true` on individual casks
 cask_args require_sha: true, no_quarantine: true
 
+## Taps
+tap "buo/cask-upgrade"  # A command line tool for upgrading every outdated app installed by Homebrew Cask
+
 ## Desktop Docker
 cask "docker"                   # App to build and share containerised applications and microservices
 brew "docker-buildx"            # Docker CLI plugin for extended build capabilities with BuildKit

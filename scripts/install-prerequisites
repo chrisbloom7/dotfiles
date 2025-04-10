@@ -21,10 +21,6 @@ fi
 log_info "Initializing Homebrew"
 source ./helpers/source_homebrew.sh
 
-log_info "Setting up Homebrew taps"
-[[ -n "$(brew tap | grep homebrew/bundle)" ]] || brew tap --quiet homebrew/bundle
-[[ -n "$(brew tap | grep homebrew/services)" ]] || brew tap --quiet homebrew/services
-
 # Install prerequisite Homebrew formulae
 log_info "Installing prerequisite Homebrew formulae"
 brew_args="--require-sha --no-quarantine --overwrite"
@@ -75,14 +71,18 @@ if [[ "$(is_macos)" == "true" ]]; then
     brew install $brew_args mas
   fi
 
-  # Install Xcode via mas
-  # https://github.com/mas-cli/mas
-  log_info "Installing Xcode via Mac App Store"
-  mas install 497799835
+  log_debug "Checking for xcode-select"
+  if [[ -z $(command -v xcode-select 2>/dev/null) ]]; then
+    # Install Xcode via mas
+    # https://github.com/mas-cli/mas
+    log_info "Installing Xcode via Mac App Store"
+    mas install 497799835
+  fi
 
   # Install Xcode Command Line Tools
-  log_info "Installing Xcode Command Line Tools"
+  log_debug "Checking for Xcode Command Line Tools"
   if [[ -z "$(xcode-select --print-path 2>/dev/null)" ]]; then
+    log_info "Installing Xcode Command Line Tools"
     xcode-select --install
   fi
 fi

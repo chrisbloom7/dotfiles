@@ -7,8 +7,6 @@ cask_args require_sha: true, no_quarantine: true
 
 ## Taps
 tap "buo/cask-upgrade"  # A command line tool for upgrading every outdated app installed by Homebrew Cask
-tap "homebrew/bundle"   # Bundler for non-Ruby dependencies from Homebrew, Homebrew Cask and the Mac App Store.
-tap "homebrew/services" # Manage background services using the daemon manager launchctl on macOS or systemctl on Linux.
 
 ## Formulae
 brew "bash-completion"              # Programmable completion for Bash 3.2

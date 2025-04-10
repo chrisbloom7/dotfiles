@@ -36,55 +36,46 @@ else
 fi
 brew update $brew_args
 
-log_info "Installing Homebrew support for Brewfiles"
-brew tap homebrew/bundle
+log_info "Installing Homebrew support for upgrading casks"
+brew tap buo/cask-upgrade
 
-log_info "Installing minimal Homebrew packages"
-bundle_args="--no-lock --cleanup"
 if is_force_mode; then
-  bundle_args="${bundle_args} --force"
-else
-  bundle_args="${bundle_args} --no-upgrade"
-fi
-if is_verbose_mode; then
-  bundle_args="${bundle_args} --verbose"
-else
-  bundle_args="${bundle_args} --quiet"
-fi
-if is_update_mode; then
-  log_info "Updating Homebrew packages from Brewfile.minimal"
-  bundle_args="${bundle_args} --update"
-else
-  log_info "Installing Homebrew packages from Brewfile.minimal"
+  brew_args="${brew_args} --force"
 fi
 
-log_debug "Disabling Exit on error for Brewfile.minimal"
+log_debug "Disabling Exit on error for Homebrew bundle/upgrade"
 if [[  $- =~ e ]]; then
   set +e
   RESTORE_EXIT_ON_ERROR=true
 fi
-# To restrict app installations to current user, add args:
-#   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
-brew bundle --file ../Brewfile.minimal $bundle_args
+if is_update_mode; then
+  log_info "Upgrading existing Homebrew packages"
+  log_debug "Running brew upgrade with args: ${brew_args}"
+  brew upgrade $brew_args
+else
+  # To restrict app installations to current user, add args:
+  #   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
+  log_info "Installing minimal Homebrew packages from Brewfile.minimal"
+  bundle_args="${brew_args} --cleanup --no-upgrade --no-lock"
+  log_debug "Running brew bundle with args: ${bundle_args}"
+  brew bundle --file ../Brewfile.minimal $bundle_args
+fi
 log_debug "Re-enabling Exit on error"
 if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
   set -e
   unset RESTORE_EXIT_ON_ERROR
 fi
 
-if ! is_minimal_mode; then
-  if is_update_mode; then
-    log_info "Updating additional Homebrew packages from Brewfile"
-  else
-    log_info "Installing additional Homebrew packages from Brewfile"
-  fi
+if ! is_minimal_mode && ! is_update_mode; then
+  log_info "Installing additional Homebrew packages from Brewfile"
   log_debug "Disabling Exit on error for Brewfile"
   if [[  $- =~ e ]]; then
     set +e
     RESTORE_EXIT_ON_ERROR=true
   fi
-# To restrict app installations to current user, add args:
-#   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
+  # To restrict app installations to current user, add args:
+  #   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
+  log_debug "Running brew bundle with args: ${bundle_args}"
   brew bundle --file ../Brewfile $bundle_args
   log_debug "Re-enabling Exit on error"
   if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
@@ -134,15 +125,17 @@ if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
   else
     mise_args="${mise_args} --quiet"
   fi
-  mise_plugins="python node@lts"
-  if ! is_minimal_mode; then
-    mise_plugins="${mise_plugins} go java@lts ruby rust"
-  fi
   if is_update_mode; then
     log_info "Updating installed Mise plugins"
+    log_debug "Running mise upgrade with args: ${mise_args}"
     mise upgrade $mise_args
   else
+    mise_plugins="python node@lts"
+    if ! is_minimal_mode; then
+      mise_plugins="${mise_plugins} go java@lts ruby rust"
+    fi
     log_info "Installing Mise plugins"
+    log_debug "Running mise use with args: ${mise_args} ${mise_plugins}"
     mise use $mise_args $mise_plugins
   fi
 
@@ -151,6 +144,7 @@ if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
   if is_force_mode; then
     mise_reshim_args="${mise_reshim_args} --force"
   fi
+  log_debug "Running mise reshim with args: ${mise_reshim_args}"
   mise reshim $mise_reshim_args
 else
   log_attention "Mise not found; skipping Mise setup"
@@ -167,7 +161,7 @@ log_info "Installing iTerm2 shell integration for Zsh"
 curl -L https://iterm2.com/misc/install_shell_integration.sh | zsh
 
 # Install Rosetta 2 on M1+ Macs to bridge the gap between Intel and Apple processors
-if [[ "$(uname -m)" =~ "arm" ]]; then
+if [[ "$(uname -m)" =~ "arm" ]] && [[ -n $(command -v softwareupdate 2>/dev/null) ]]; then
   log_info "Installing Rosetta 2"
   softwareupdate --install-rosetta --agree-to-license || true
 fi
