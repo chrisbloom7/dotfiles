@@ -15,14 +15,14 @@ begin
   require "amazing_print"
   AmazingPrint.irb!
   alias pp ap
-  # alias puts ap
+  alias puts ap
   puts "Loaded AmazingPrint"
 rescue LoadError
   begin
     require "awesome_print"
     AwesomePrint.irb!
     alias pp ap
-    # alias puts ap
+    alias puts ap
     puts "Loaded AwesomePrint"
   rescue LoadError
     nil
@@ -41,7 +41,7 @@ rescue Errno::ENOENT
 end
 
 # Exit IRB with `q` or `quit` as well as `exit`
-alias q exit
+# alias q exit
 alias quit exit
 
 # Load project-specific .irbrc
