@@ -108,6 +108,7 @@ vscode "github.vscode-github-actions"           # GitHub Actions workflows and r
 vscode "GitHub.vscode-pull-request-github"      # Pull Request and Issue Provider for GitHub
 vscode "golang.go"                              # Rich Go language support for Visual Studio Code
 vscode "howardzuo.vscode-git-tags"              # quick manage tags for a git repo
+vscode "hverlin.mise-vscode"                    # Mise (asdf rust clone) for VS Code
 vscode "IBM.output-colorizer"                   # Syntax highlighting for log files
 vscode "itarato.byesig"                         # Hide Ruby Sorbet signatures
 vscode "janjoerke.align-by-regex"               # Aligns selected lines of text by a regular expression.
@@ -118,7 +119,7 @@ vscode "PKief.material-icon-theme"              # Material Design Icons for Visu
 vscode "redhat.vscode-yaml"                     # YAML Language Support by Red Hat, with built-in Kubernetes syntax support
 vscode "shardulm94.trailing-spaces"             # Highlight trailing spaces and delete them in a flash!
 vscode "shd101wyy.markdown-preview-enhanced"    # Markdown Preview Enhanced ported to vscode
-vscode "sorbet.sorbet-vscode-extension"         # Ruby IDE features, powered by Sorbet.
+# vscode "sorbet.sorbet-vscode-extension"         # Ruby IDE features, powered by Sorbet.
 vscode "stkb.rewrap"                            # Hard word wrapping for comments and other text at a given column.
 vscode "stripe.endsmart"                        # A modern version of endwise that relies on more recent VSCode APIs.
 vscode "Tyriar.sort-lines"                      # Sorts lines of text
