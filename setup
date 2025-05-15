@@ -15,8 +15,8 @@ source ./bin/helpers/trap_and_trace.sh
 
 log_info "Beginning setup"
 
-log_debug "Sourcing sudo keep alive script"
-source ./scripts/helpers/sudo-keep-alive.sh
+log_debug "Prompting for sudo password"
+prompt_password
 
 if [[ "$(is_codespace)" != "true" ]]; then
   log_debug "calling prerequisites script"

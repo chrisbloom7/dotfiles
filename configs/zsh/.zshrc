@@ -155,4 +155,4 @@
   fi
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/chrisbloom7/.lmstudio/bin"
+export PATH="$PATH:${HOME}/.lmstudio/bin"
