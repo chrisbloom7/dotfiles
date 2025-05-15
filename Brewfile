@@ -91,6 +91,7 @@ cask "figma"                  # Collaborative team software
 cask "firefox"                # Web browser
 # cask "flotato"                # Tool to turn any web page into a desktop app
 # cask "fluid"                  # Tool to turn a website into a desktop app
+cask "focusrite-control"      # Focusrite interface controller
 cask "freeze"                 # Amazon Glacier file transfer client
 cask "garmin-express"         # Update maps and software, sync with Garmin Connect and register your device
 cask "gemini"                 # Disk space cleaner that finds and deletes duplicated and similar files
@@ -133,7 +134,7 @@ cask "font-texturina"                     # Texturina font
 cask "font-tilt-warp"                     # Tilt Warp font
 
 ## Apps from the Mac App Store
-mas "AnySwitch", id: 6_444_313_776
+# mas "AnySwitch", id: 6_444_313_776
 mas "Encrypto", id: 935_235_287
 mas "one sec | screen time + focus", id: 1_532_875_441
 mas "Photomator", id: 1_444_636_541

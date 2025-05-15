@@ -1275,7 +1275,7 @@ log_info "Adding login items"
 login_items=(
   "1Password"
   "Alfred 5"
-  "AnySwitch"
+  # "AnySwitch"
   "Calendar"
   "ChatGPT"
   "ClamXAV"

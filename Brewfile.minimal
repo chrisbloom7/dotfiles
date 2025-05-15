@@ -28,6 +28,7 @@ brew "pinentry-mac"                 # Pinentry for GPG on Mac
 # brew "rbenv"                        # Ruby version manager ! Prefer `mise`
 brew "ruby-build"                   # Install various Ruby versions and implementations
 brew "vsce"                         # Tool for packaging, publishing and managing VS Code extensions
+brew "watchman"                     # Watches files and records when they change
 brew "zsh-autosuggestions"          # Fish-like fast/unobtrusive autosuggestions for zsh
 brew "zsh-completions"              # Additional completion definitions for zsh
 brew "zsh-git-prompt"               # Informative git prompt for zsh
