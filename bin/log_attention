@@ -3,4 +3,4 @@ set -euo pipefail
 cd "$(dirname "$0")"
 source "${PWD}/helpers/color_codes.sh"
 
-echo -e "${ANSI_BOLD_YELLOW}Attention:${ANSI_RESET} $@"
+echo -e "${ANSI_BOLD_YELLOW}Attention:${ANSI_RESET} $@" && tput bel || true

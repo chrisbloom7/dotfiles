@@ -6,17 +6,18 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   exit 1
 fi
 
+prompt_password() {
+  log_attention "Enter your administrative password to install dependencies:"
+
+  sudo -v
+
+  # Keep-alive: update existing `sudo` time stamp until script has finished
+  # Runs in the background and dies when the script is done
+  log_debug "Starting keep-alive loop"
+  while true; do sudo -n true; sleep 30; kill -0 "$$" || exit; done 2>/dev/null &
+}
+
 # Ask for the administrator password upfront if it's not already cached
 if ! sudo -n true 2>/dev/null; then
-  log_attention "Enter your administrative password to install dependencies:"
-  sudo -v || exit 1
+  prompt_password
 fi
-
-# Keep-alive: update existing `sudo` time stamp until script has finished
-# Runs in the background and dies when the script is done
-log_debug "Starting keep-alive loop"
-while true; do
-  sudo -n true
-  sleep 30
-  kill -0 "$$" || exit
-done 2>/dev/null &
