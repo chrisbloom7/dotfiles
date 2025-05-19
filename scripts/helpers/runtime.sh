@@ -16,6 +16,55 @@ if [[ -n "${DEBUG:-}" ]]; then
   set -o xtrace     # Print a trace of simple commands. Same as -x.
 fi
 
+# https://gist.github.com/TekWizely/c0259f25e18f2368c4a577495cd566cd
+# Serializes a bash array to a string, with a configurable seperator.
+#
+# $1 = source varname ( contains array to be serialized )
+# $2 = target varname ( will contian the serialized string )
+# $3 = seperator ( optional, defaults to $'\x01' )
+#
+# example:
+#
+#    my_arry=( one "two three" four )
+#    serialize_array my_array my_string '|'
+#    declare -p my_string
+#
+# result:
+#
+#    declare -- my_string="one|two three|four"
+#
+function serialize_array() {
+  log_debug "Serializing ${1:?Must specify source array variable} into ${2:?Must specify target string variable}"
+	declare -n _array="${1}" _str="${2}" # _array, _str => local reference vars
+	local IFS="${3:-$'\x01'}"
+	# shellcheck disable=SC2034 # Reference vars assumed used by caller
+	_str="${_array[*]}" # * => join on IFS
+  log_debug "Serialized: ${_str}"
+}
+
+# https://gist.github.com/TekWizely/c0259f25e18f2368c4a577495cd566cd
+# Deserializes a string into a bash array, with a configurable seperator.
+#
+# $1 = source varname ( contains string to be deserialized )
+# $2 = target varname ( will contain the deserialized array )
+# $3 = seperator ( optional, defaults to $'\x01' )
+#
+# example:
+#
+#    my_string="one|two three|four"
+#    deserialize_array my_string my_array '|'
+#    declare -p my_array
+#
+# result:
+#
+#    declare -a my_array=([0]="one" [1]="two three" [2]="four")
+#
+function deserialize_array() {
+  log_debug "Deserializing ${1:?Must specify source string variable} into ${2:?Must specify target array variable}"
+	IFS="${3:-$'\x01'}" read -r -a "${2}" <<<"${!1}" # -a => split on IFS
+  log_debug "Deserialized: ${2}"
+}
+
 # Load helpers script if it's not already loaded
 if [[ -z "${HELPERS_LOADED:-}" ]]; then
   # Detect location of dotfiles directory
@@ -31,7 +80,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   export PATH="${DOTFILES}/bin:${PATH}"
 
   # Options defaults
-  export ADDITIONAL_DEPENDENCIES=${ADDITIONAL_DEPENDENCIES:-('common')}
+  export ADDITIONAL_DEPENDENCIES_SERIALIZED=${ADDITIONAL_DEPENDENCIES_SERIALIZED:-common}
   export BOOTSTRAP_MODE=${BOOTSTRAP_MODE:-false}
   export DRY_RUN_MODE=${DRY_RUN_MODE:-false} # TODO: Implement this
   export FORCE_MODE=${FORCE_MODE:-false}
@@ -82,6 +131,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
       "                  (ignored if --bootstrap or --minimal is set)"
     )
 
+    deserialize_array ADDITIONAL_DEPENDENCIES_SERIALIZED ADDITIONAL_DEPENDENCIES '|'
     while [[ $# -gt 0 ]]; do
       case $1 in
         -h | --help             ) printf >&1 '%s\n' "${USAGE[@]}" && exit 0
@@ -94,7 +144,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                                   ;;
         -d | -n | --dry-run     ) DRY_RUN_MODE=true
                                   ;;
-        -p | --personal         ) ADDITIONAL_DEPENDENCIES+=('personal')
+        -p | --personal         ) ADDITIONAL_DEPENDENCIES+=( personal )
                                   ;;
         -q | --quiet            ) _can_use_quiet_mode && QUIET_MODE=true
                                   ;;
@@ -102,7 +152,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                                   ;;
         -v | --verbose          ) QUIET_MODE=false && VERBOSE_MODE=true
                                   ;;
-        -w | --work | --business) ADDITIONAL_DEPENDENCIES+=('work')
+        -w | --work | --business) ADDITIONAL_DEPENDENCIES+=( work )
                                   ;;
         *                       ) if [[ "$1" =~ ^-[a-z]{2,} ]]; then
                                     # Handle multiple concatenated short options
@@ -118,9 +168,11 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
       esac
       shift
     done
+    serialize_array ADDITIONAL_DEPENDENCIES ADDITIONAL_DEPENDENCIES_SERIALIZED '|'
 
     log_debug "Options processed successfully"
   }
+  
   _parse_setup_options "$@"
 
   # Mark helpers script as loaded
@@ -133,7 +185,7 @@ fi
 
 # Debugging output
 log_debug "Parsed options:"
-log_debug "  ADDITIONAL_DEPENDENCIES: ${ADDITIONAL_DEPENDENCIES:?Not set!}"
+log_debug "  ADDITIONAL_DEPENDENCIES: ${ADDITIONAL_DEPENDENCIES_SERIALIZED:?Not set!}"
 log_debug "  BOOTSTRAP_MODE:          ${BOOTSTRAP_MODE:?Not set!}"
 log_debug "  DRY_RUN_MODE:            ${DRY_RUN_MODE:?Not set!}"
 log_debug "  FORCE_MODE:              ${FORCE_MODE:?Not set!}"

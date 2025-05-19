@@ -86,17 +86,15 @@ cask "qlzipinfo"                              # List out the contents of a zip f
 cask "quicklook-csv"                          # Quick Look plugin for CSV files
 cask "quicklook-json"                         # Quick Look plugin for JSON files
 cask "visual-studio-code"                     # Open-source code editor
-cask "warp"                                   # Rust-based terminal
 cask "webpquicklook"                          # Quick Look plugin for webp files
-cask "zoom"                                   # Video communication and virtual meeting platform
 
 ## Fonts
-cask "font-mona-sans"                     # Mona-Sans font
-cask "font-monaspace-nerd-font"           # Monospace Nerd font
-cask "font-monaspace"                     # Monospaced font
-cask "font-open-sans"                     # Open Sans font
-cask "font-powerline-symbols"             # Powerline Symbols font
-cask "font-source-code-pro-for-powerline" # Source Code Pro for Powerline font
-cask "font-source-code-pro"               # Source Code Pro font
-cask "font-source-sans-3"                 # Source Sans 3 font
-cask "font-source-serif-4"                # Source Serif 4 font
+cask "font-mona-sans", force: true                     # Mona-Sans font
+cask "font-monaspace-nerd-font", force: true           # Monospace Nerd font
+cask "font-monaspace", force: true                     # Monospaced font
+cask "font-open-sans", force: true                     # Open Sans font
+cask "font-powerline-symbols", force: true             # Powerline Symbols font
+cask "font-source-code-pro-for-powerline", force: true # Source Code Pro for Powerline font
+cask "font-source-code-pro", force: true               # Source Code Pro font
+cask "font-source-sans-3", force: true                 # Source Sans 3 font
+cask "font-source-serif-4", force: true                # Source Serif 4 font
