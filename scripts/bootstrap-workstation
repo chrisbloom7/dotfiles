@@ -55,10 +55,10 @@ if is_update_mode; then
 else
   # To restrict app installations to current user, add args:
   #   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
-  log_info "Installing minimal Homebrew packages from Brewfile.minimal"
+  log_info "Installing minimal Homebrew packages from Brewfile"
   bundle_args="${brew_args} --cleanup --no-upgrade --no-lock"
   log_debug "Running brew bundle with args: ${bundle_args}"
-  brew bundle --file ../Brewfile.minimal $bundle_args
+  brew bundle --file ../Brewfile $bundle_args
 fi
 log_debug "Re-enabling Exit on error"
 if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
@@ -67,21 +67,23 @@ if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
 fi
 
 if ! is_minimal_mode && ! is_update_mode; then
-  log_info "Installing additional Homebrew packages from Brewfile"
-  log_debug "Disabling Exit on error for Brewfile"
-  if [[  $- =~ e ]]; then
-    set +e
-    RESTORE_EXIT_ON_ERROR=true
-  fi
   # To restrict app installations to current user, add args:
   #   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
-  log_debug "Running brew bundle with args: ${bundle_args}"
-  brew bundle --file ../Brewfile $bundle_args
-  log_debug "Re-enabling Exit on error"
-  if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
-    set -e
-    unset RESTORE_EXIT_ON_ERROR
-  fi
+  for dependency_file in $ADDITIONAL_DEPENDENCIES[@]; do
+    log_info "Installing additional Homebrew packages from Brewfile.${dependency_file}"
+    log_debug "Disabling Exit on error for Brewfile.${dependency_file}"
+    if [[  $- =~ e ]]; then
+      set +e
+      RESTORE_EXIT_ON_ERROR=true
+    fi
+    log_debug "Running brew bundle with args: ${bundle_args}"
+    brew bundle --file ../Brewfile.${dependency_file} $bundle_args
+    log_debug "Re-enabling Exit on error"
+    if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
+      set -e
+      unset RESTORE_EXIT_ON_ERROR
+    fi
+  done
 fi
 
 log_info "Cleaning up Homebrew services"

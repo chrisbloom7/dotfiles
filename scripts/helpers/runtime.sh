@@ -31,6 +31,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   export PATH="${DOTFILES}/bin:${PATH}"
 
   # Options defaults
+  export ADDITIONAL_DEPENDENCIES=${ADDITIONAL_DEPENDENCIES:-('common')}
   export BOOTSTRAP_MODE=${BOOTSTRAP_MODE:-false}
   export DRY_RUN_MODE=${DRY_RUN_MODE:-false} # TODO: Implement this
   export FORCE_MODE=${FORCE_MODE:-false}
@@ -43,6 +44,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   [[ -n "${CODESPACES:-}" ]] && VERBOSE_MODE=true
 
   # Export mode functions for rest of setup
+  is_verbose_mode() { [[ "${VERBOSE_MODE:-}" == true ]]; }  ; export -f is_verbose_mode
   is_bootstrap_mode() { [[ ${BOOTSTRAP_MODE:-} == true ]]; }; export -f is_bootstrap_mode
   is_dry_run_mode() { [[ ${DRY_RUN_MODE:-} == true ]]; }    ; export -f is_dry_run_mode
   is_force_mode() { [[ ${FORCE_MODE:-} == true ]]; }        ; export -f is_force_mode
@@ -69,42 +71,50 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
       " -m, --minimal    Install bare minimum packages. Only applies to \`setup\`."
       "                  (ignored if --bootstrap is set)"
       " -n               Same as -d for compatibility with other scripts."
+      " -p, --personal   Install additional dependencies for a personal workstation. Only applies to \`setup\`."
+      "                  (ignored if --bootstrap or --minimal is set)"
       " -q, --quiet      Print fewer status messages. (ignored if --verbose is set)."
       " -u, --update     Update existing packages, but don't install anything. (ignored if --bootstrap is set)"
       "                  Combine with --force to also regenerate symlinks afterward."
       "                  Can also be used with --minimal to only update the bare minimum packages."
       " -v, --verbose    Print additional status messages."
+      " -w, --work       Install additional dependencies for a business workstation. Only applies to \`setup\`."
+      "                  (ignored if --bootstrap or --minimal is set)"
     )
 
     while [[ $# -gt 0 ]]; do
       case $1 in
-        -h | --help        ) printf >&1 '%s\n' "${USAGE[@]}" && exit 0
-                             ;;
-        -b | --bootstrap   ) BOOTSTRAP_MODE=true && MINIMAL_MODE=false
-                             ;;
-        -f | --force       ) FORCE_MODE=true
-                             ;;
-        -m | --minimal     ) _can_use_minimal_mode && MINIMAL_MODE=true
-                             ;;
-        -d | -n | --dry-run) DRY_RUN_MODE=true
-                             ;;
-        -q | --quiet       ) _can_use_quiet_mode && QUIET_MODE=true
-                             ;;
-        -u | --update      ) _can_use_update_mode && UPDATE_MODE=true
-                             ;;
-        -v | --verbose     ) QUIET_MODE=false && VERBOSE_MODE=true
-                             ;;
-        *                  ) if [[ "$1" =~ ^-[a-z]{2,} ]]; then
-                               # Handle multiple concatenated short options
-                               for (( i=1; i<${#1}; i++ )); do
-                                 _parse_setup_options -${1:$i:1}
-                               done
-                             else
-                               log_error "Invalid option: $1"
-                               printf >&1 '%s\n' "${USAGE[@]}"
-                               exit 1
-                             fi
-                             ;;
+        -h | --help             ) printf >&1 '%s\n' "${USAGE[@]}" && exit 0
+                                  ;;
+        -b | --bootstrap        ) BOOTSTRAP_MODE=true && MINIMAL_MODE=false
+                                  ;;
+        -f | --force            ) FORCE_MODE=true
+                                  ;;
+        -m | --minimal          ) _can_use_minimal_mode && MINIMAL_MODE=true
+                                  ;;
+        -d | -n | --dry-run     ) DRY_RUN_MODE=true
+                                  ;;
+        -p | --personal         ) ADDITIONAL_DEPENDENCIES+=('personal')
+                                  ;;
+        -q | --quiet            ) _can_use_quiet_mode && QUIET_MODE=true
+                                  ;;
+        -u | --update           ) _can_use_update_mode && UPDATE_MODE=true
+                                  ;;
+        -v | --verbose          ) QUIET_MODE=false && VERBOSE_MODE=true
+                                  ;;
+        -w | --work | --business) ADDITIONAL_DEPENDENCIES+=('work')
+                                  ;;
+        *                       ) if [[ "$1" =~ ^-[a-z]{2,} ]]; then
+                                    # Handle multiple concatenated short options
+                                    for (( i=1; i<${#1}; i++ )); do
+                                      _parse_setup_options -${1:$i:1}
+                                    done
+                                  else
+                                    log_error "Invalid option: $1"
+                                    printf >&1 '%s\n' "${USAGE[@]}"
+                                    exit 1
+                                  fi
+                                  ;;
       esac
       shift
     done
@@ -123,11 +133,12 @@ fi
 
 # Debugging output
 log_debug "Parsed options:"
-log_debug "  BOOTSTRAP_MODE:  ${BOOTSTRAP_MODE:?Not set!}"
-log_debug "  DRY_RUN_MODE:    ${DRY_RUN_MODE:?Not set!}"
-log_debug "  FORCE_MODE:      ${FORCE_MODE:?Not set!}"
-log_debug "  MINIMAL_MODE:    ${MINIMAL_MODE:?Not set!}"
-log_debug "  QUIET_MODE:      ${QUIET_MODE:?Not set!}"
-log_debug "  UPDATE_MODE:     ${UPDATE_MODE:?Not set!}"
-log_debug "  VERBOSE_MODE:    ${VERBOSE_MODE:?Not set!}"
-log_debug "  DOTFILES:        ${DOTFILES:?Not set!}"
+log_debug "  ADDITIONAL_DEPENDENCIES: ${ADDITIONAL_DEPENDENCIES:?Not set!}"
+log_debug "  BOOTSTRAP_MODE:          ${BOOTSTRAP_MODE:?Not set!}"
+log_debug "  DRY_RUN_MODE:            ${DRY_RUN_MODE:?Not set!}"
+log_debug "  FORCE_MODE:              ${FORCE_MODE:?Not set!}"
+log_debug "  MINIMAL_MODE:            ${MINIMAL_MODE:?Not set!}"
+log_debug "  QUIET_MODE:              ${QUIET_MODE:?Not set!}"
+log_debug "  UPDATE_MODE:             ${UPDATE_MODE:?Not set!}"
+log_debug "  VERBOSE_MODE:            ${VERBOSE_MODE:?Not set!}"
+log_debug "  DOTFILES:                ${DOTFILES:?Not set!}"
