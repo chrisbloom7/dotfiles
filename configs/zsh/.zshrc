@@ -110,12 +110,17 @@
   export LANG="${LANG:-en_US.UTF-8}"
 
   # Preferred editor for local and remote sessions
-  if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR="${EDITOR:-vim}"
-  else
-    export EDITOR="${EDITOR:-cursor}"
-    export GIT_EDITOR="${GIT_EDITOR:-${EDITOR} --wait}"
+  _DEFAULT_EDITOR=vim
+  if [[ -z $SSH_CONNECTION ]]; then
+    if [[ -n $(command -v cursor 2>/dev/null) ]]; then
+      _DEFAULT_EDITOR=cursor
+    elif [[ -n $(command -v code 2>/dev/null) ]]; then
+      _DEFAULT_EDITOR=code
+    fi
   fi
+  export EDITOR="${EDITOR:-${_DEFAULT_EDITOR}}"
+  export GIT_EDITOR="${GIT_EDITOR:-${EDITOR} --wait}"
+  unset _DEFAULT_EDITOR
 
   # Compilation flags
   # export ARCHFLAGS="-arch x86_64"
