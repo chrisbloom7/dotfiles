@@ -19,7 +19,7 @@ log_info "Generating a new GPG key for USER ID \"${USER_ID}\""
 gpg --quiet --quick-generate-key "${USER_ID}" default default none
 
 # Parse the secret key ID from the list, e.g. `sec   rsa4096/0x1234567890ABCDEF 2021-01-01 [SC]`
-sec_key="$(gpg --list-secret-keys --keyid-format=long "${1}" | grep -m1 "^sec" | cut -w -f2 | cut -d '/' -f2)"
+sec_key="$(gpg --list-secret-keys --keyid-format=long "${USER_ID}" | grep -m1 "^sec" | cut -w -f2 | cut -d '/' -f2)"
 log_info "Registering GPG key ${sec_key}"
 
 # Codespaces has issues when GPG commit signing is enabled on the containers as
@@ -36,4 +36,4 @@ git config set --global --all gpg.program "$(command -v gpg 2>/dev/null)"
 
 # Adding your GPG key to your GitHub account
 # https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account
-log_success "To add your public key to GitHub, etc., run 'gpg --armor --\"${USER_ID}\" | pbcopy' to copy the key to your clipboard."
+log_success "To add your public key to GitHub, etc., run 'gpg --armor --export \"${sec_key}\" | pbcopy' to copy the key to your clipboard."
