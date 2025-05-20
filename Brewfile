@@ -73,28 +73,28 @@ brew "zsh"                          # UNIX shell (command interpreter)
 brew "wget"                         # Internet file retriever
 
 ## Casks
-cask "google-chrome"                          # Web browser
-cask "gpg-suite"                              # Tools to protect your emails and files
-cask "iterm2"                                 # Terminal emulator as alternative to Apple's Terminal app
-cask "logi-options+", force: true             # Software for Logitech devices
-# cask "obsbot-center"                          # Configuration and firmware update utility for OBSBOT Tiny and Meet series ! Cask is often out of date; prefer downloading directly from publisher
-cask "qlcolorcode"                            # Quick Look plug-in that renders source code with syntax highlighting
-cask "qlmarkdown"                             # Quick Look generator for Markdown files
-cask "qlstephen"                              # Quick Look plugin for plaintext files without an extension
-cask "qlvideo"                                # Thumbnails, static previews, cover art and metadata for video files
-cask "qlzipinfo"                              # List out the contents of a zip file in the QuickLook preview
-cask "quicklook-csv"                          # Quick Look plugin for CSV files
-cask "quicklook-json"                         # Quick Look plugin for JSON files
-cask "visual-studio-code"                     # Open-source code editor
-cask "webpquicklook"                          # Quick Look plugin for webp files
+cask "google-chrome"      # Web browser
+cask "gpg-suite"          # Tools to protect your emails and files
+cask "iterm2"             # Terminal emulator as alternative to Apple's Terminal app
+cask "logi-options+"      # Software for Logitech devices
+# cask "obsbot-center"      # Configuration and firmware update utility for OBSBOT Tiny and Meet series ! Cask is often out of date; prefer downloading directly from publisher
+cask "qlcolorcode"        # Quick Look plug-in that renders source code with syntax highlighting
+cask "qlmarkdown"         # Quick Look generator for Markdown files
+cask "qlstephen"          # Quick Look plugin for plaintext files without an extension
+cask "qlvideo"            # Thumbnails, static previews, cover art and metadata for video files
+cask "qlzipinfo"          # List out the contents of a zip file in the QuickLook preview
+cask "quicklook-csv"      # Quick Look plugin for CSV files
+cask "quicklook-json"     # Quick Look plugin for JSON files
+cask "visual-studio-code" # Open-source code editor
+cask "webpquicklook"      # Quick Look plugin for webp files
 
 ## Fonts
-cask "font-mona-sans", force: true                     # Mona-Sans font
-cask "font-monaspace-nerd-font", force: true           # Monospace Nerd font
-cask "font-monaspace", force: true                     # Monospaced font
-cask "font-open-sans", force: true                     # Open Sans font
-cask "font-powerline-symbols", force: true             # Powerline Symbols font
-cask "font-source-code-pro-for-powerline", force: true # Source Code Pro for Powerline font
-cask "font-source-code-pro", force: true               # Source Code Pro font
-cask "font-source-sans-3", force: true                 # Source Sans 3 font
-cask "font-source-serif-4", force: true                # Source Serif 4 font
+cask "font-mona-sans"                     # Mona-Sans font
+cask "font-monaspace-nerd-font"           # Monospace Nerd font
+cask "font-monaspace"                     # Monospaced font
+cask "font-open-sans"                     # Open Sans font
+cask "font-powerline-symbols"             # Powerline Symbols font
+cask "font-source-code-pro-for-powerline" # Source Code Pro for Powerline font
+cask "font-source-code-pro"               # Source Code Pro font
+cask "font-source-sans-3"                 # Source Sans 3 font
+cask "font-source-serif-4"                # Source Serif 4 font

@@ -7,52 +7,56 @@
 cask_args require_sha: true, no_quarantine: true
 
 ## Formulae
-brew "mackup"             # Keep your Mac's application settings in sync
 brew "railway"            # Develop and deploy code with zero configuration
 # brew "rbenv-default-gems" # Auto-installs gems for Ruby installs ! Prefer `mise`
 # brew "rbenv"              # Ruby version manager ! Prefer `mise`
 
+## Services ! Prefer devcontainers
+# brew "mysql", restart_service: true      # Open source relational database management system
+# brew "postgresql", restart_service: true # Object-relational database system
+# brew "redis", restart_service: true      # Persistent key-value database, with built-in net interface
+
 ## Casks
-cask "1password-cli"             # Command-line interface for 1Password
-cask "alfred"                    # Application launcher and productivity software
-cask "beyond-compare"            # Compare files and folders
-cask "chatgpt"                   # OpenAI's official ChatGPT desktop app
-cask "clamxav"                   # Anti-virus and malware scanner
-cask "cleanmymac"                # Tool to remove unnecessary files and folders from disk
-cask "cursor"                    # Write, edit, and chat about your code with AI
-cask "cyberduck"                 # Server and cloud storage browser
-cask "discord"                   # Voice and text chat software
-cask "drawio"                    # Online diagram software
-cask "drivethrurpg"              # Sync DriveThruRPG libraries to compatible devices
-cask "dropbox"                   # Client for the Dropbox cloud storage service
-# cask "firefox"                   # Web browser
-# cask "flotato"                   # Tool to turn any web page into a desktop app
-# cask "fluid"                     # Tool to turn a website into a desktop app
-cask "focusrite-control"         # Focusrite interface controller
-cask "garmin-express"            # Update maps and software, sync with Garmin Connect and register your device
-cask "gemini"                    # Disk space cleaner that finds and deletes duplicated and similar files
-cask "google-drive", force: true # Client for the Google Drive storage service
-cask "graphiql"                  # Light, Electron-based Wrapper around GraphiQL
-cask "imageoptim"                # Tool to optimise images to a smaller size
-cask "lm-studio"                 # Discover, download, and run local LLMs
-# cask "mailplane"                 # Gmail client ! Deprecated client
-# cask "microsoft-edge"            # Multi-platform web browser
-# cask "monofocus"                 # Keep all tasks from your todo apps on your menu bar
-# cask "raycast"                   # Control your tools with a few keystrokes
-# cask "screenfocus"               # Tool to manage multiple screens
-cask "script-debugger"           # Integrated development environment focused entirely on AppleScript
-cask "scriptql"                  # AppleScript Quick Look plugin
-cask "shutter-encoder"           # Video, audio and image converter
-cask "spotify"                   # Music streaming service
-cask "steam"                     # Video game digital distribution service
-cask "the-unarchiver"            # Unpacks archive files
-cask "transmit"                  # File transfer application
-cask "versions"                  # Subversion client
-# cask "viscosity"                 # OpenVPN client with AppleScript support
-cask "voodoopad"                 # Notes organiser
-cask "warp"                      # Rust-based terminal
-# cask "wavebox"                   # Web browser
-# cask "yubico-yubikey-manager"    # Application for configuring any YubiKey
+cask "1password-cli"          # Command-line interface for 1Password
+cask "alfred"                 # Application launcher and productivity software
+cask "beyond-compare"         # Compare files and folders
+cask "chatgpt"                # OpenAI's official ChatGPT desktop app
+cask "clamxav"                # Anti-virus and malware scanner
+cask "cleanmymac"             # Tool to remove unnecessary files and folders from disk
+cask "cursor"                 # Write, edit, and chat about your code with AI
+cask "cyberduck"              # Server and cloud storage browser
+cask "discord"                # Voice and text chat software
+cask "drawio"                 # Online diagram software
+cask "drivethrurpg"           # Sync DriveThruRPG libraries to compatible devices
+cask "dropbox"                # Client for the Dropbox cloud storage service
+# cask "firefox"                # Web browser
+# cask "flotato"                # Tool to turn any web page into a desktop app
+# cask "fluid"                  # Tool to turn a website into a desktop app
+cask "focusrite-control"      # Focusrite interface controller
+cask "garmin-express"         # Update maps and software, sync with Garmin Connect and register your device
+cask "gemini"                 # Disk space cleaner that finds and deletes duplicated and similar files
+cask "google-drive"           # Client for the Google Drive storage service
+cask "graphiql"               # Light, Electron-based Wrapper around GraphiQL
+cask "imageoptim"             # Tool to optimise images to a smaller size
+cask "lm-studio"              # Discover, download, and run local LLMs
+# cask "mailplane"              # Gmail client ! Deprecated client
+# cask "microsoft-edge"         # Multi-platform web browser
+# cask "monofocus"              # Keep all tasks from your todo apps on your menu bar
+# cask "raycast"                # Control your tools with a few keystrokes
+# cask "screenfocus"            # Tool to manage multiple screens
+cask "script-debugger"        # Integrated development environment focused entirely on AppleScript
+cask "scriptql"               # AppleScript Quick Look plugin
+cask "shutter-encoder"        # Video, audio and image converter
+cask "spotify"                # Music streaming service
+cask "steam"                  # Video game digital distribution service
+cask "the-unarchiver"         # Unpacks archive files
+cask "transmit"               # File transfer application
+cask "versions"               # Subversion client
+# cask "viscosity"              # OpenVPN client with AppleScript support
+cask "voodoopad"              # Notes organiser
+cask "warp"                   # Rust-based terminal
+# cask "wavebox"                # Web browser
+# cask "yubico-yubikey-manager" # Application for configuring any YubiKey
 
 ## Apps from the Mac App Store
 mas "1Password for Safari", id: 1569813296

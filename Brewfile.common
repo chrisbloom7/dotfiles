@@ -24,6 +24,7 @@ brew "devcontainer"      # Reference implementation for the Development Containe
 brew "httpie"            # User-friendly cURL replacement (command-line HTTP client)
 brew "imagemagick"       # Tools and libraries to manipulate images in many formats
 brew "lynx"              # Text-based web browser
+brew "mackup"            # Keep your Mac's application settings in sync
 brew "notify"            # Stream the output of any CLI and publish it to a variety of supported platforms
 brew "pandoc"            # Swiss-army knife of markup format conversion
 brew "pgcli"             # CLI for Postgres with auto-completion and syntax highlighting
@@ -33,11 +34,6 @@ brew "telnet"            # User interface to the TELNET protocol
 brew "terminal-notifier" # Send macOS User Notifications from the command-line
 brew "tmux"              # Terminal multiplexer
 brew "watch"             # Executes a program periodically, showing output fullscreen
-
-## Services ! Prefer devcontainers
-# brew "mysql", restart_service: true      # Open source relational database management system
-# brew "postgresql", restart_service: true # Object-relational database system
-# brew "redis", restart_service: true      # Persistent key-value database, with built-in net interface
 
 ## Casks
 cask "1password"            # Password manager that keeps all passwords secure behind one password
@@ -58,23 +54,17 @@ cask "slack"                # Team communication and collaboration software
 cask "zoom"                 # Video communication and virtual meeting platform
 
 ## Fonts
-cask "font-0xproto-nerd-font", force: true    # 0xproto Nerd font
-cask "font-0xproto", force: true              # 0xproto font
-cask "font-bungee-color", force: true         # Bungee Color font
-cask "font-bungee-hairline", force: true      # Bungee Hairline font
-cask "font-bungee-inline", force: true        # Bungee Inline font
-cask "font-bungee-outline", force: true       # Bungee Outline font
-cask "font-bungee-shade", force: true         # Bungee Shade font
-cask "font-bungee-spice", force: true         # Bungee Spice font
-cask "font-bungee", force: true               # Bungee font
-cask "font-creepster-caps", force: true       # Creepster Caps font
-cask "font-creepster", force: true            # Creepster font
-cask "font-space-grotesk", force: true        # Space Grotesk font
-cask "font-space-mono-nerd-font", force: true # Space Mono Nerd font
-cask "font-space-mono", force: true           # Space Mono font
-cask "font-sudo", force: true                 # Sudo font
-cask "font-texturina", force: true            # Texturina font
-cask "font-tilt-warp", force: true            # Tilt Warp font
+cask "font-0xproto-nerd-font" # 0xproto Nerd font
+cask "font-0xproto"           # 0xproto font
+cask "font-bungee-color"      # Bungee Color font
+cask "font-bungee-hairline"   # Bungee Hairline font
+cask "font-bungee-inline"     # Bungee Inline font
+cask "font-bungee-outline"    # Bungee Outline font
+cask "font-bungee-shade"      # Bungee Shade font
+cask "font-bungee-spice"      # Bungee Spice font
+cask "font-bungee"            # Bungee font
+cask "font-creepster-caps"    # Creepster Caps font
+cask "font-creepster"         # Creepster font
 
 ## Apps from the Mac App Store
 # mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/
