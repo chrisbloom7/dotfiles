@@ -37,10 +37,13 @@ brew "watch"             # Executes a program periodically, showing output fulls
 
 ## Casks
 cask "1password"            # Password manager that keeps all passwords secure behind one password
+cask "1password-cli"        # Command-line interface for 1Password
+cask "alfred"               # Application launcher and productivity software
 cask "adobe-acrobat-reader" # View, print, and comment on PDF documents
 cask "chromedriver"         # Automated testing of webapps for Google Chrome
 cask "deckset"              # Presentations from Markdown
 cask "divvy"                # Application window manager focusing on simplicity
+cask "dropbox"              # Client for the Dropbox cloud storage service
 cask "freeze"               # Amazon Glacier file transfer client
 cask "macdown"              # Open-source Markdown editor
 cask "monitorcontrol"       # Tool to control external monitor brightness & volume

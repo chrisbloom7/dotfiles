@@ -65,8 +65,6 @@ A brief overview of some of the most important files and directories in this rep
   - [`scripts/configure-macos`](./scripts/configure-macos) Updates various settings on macOS to my preferred configuration. (This tends to be the most brittle of the setup scripts as it relies on specific settings and paths that may change between macOS versions.)
   - [`scripts/install-prerequisites`](./scripts/install-prerequisites) A script that installs several prerequisite applications. These will be installed automatically by the `setup` script, but you can also run it anytime before that if necessary or if you just need a bare bones setup. (Running `./script --bootstrap` is equivalent to running this script.)
 - `Brewfile*`s: a set of files that tell Homebrew what applications to install.
-  - [`Brewfile`](./Brewfile) Non-essential applications that I like to have installed on my development machines. This file will be skipped if the `--minimal` flag is passed to `setup`.
-  - [`Brewfile.minimal`](./Brewfile.minimal) A list of applications I consider to be essential. If the `--minimal` flag is passed to `setup` then only these programs will be installed.
 - [`setup`](./setup) The main entry point for setting up development environments.
 
 > [!TIP]
@@ -93,7 +91,7 @@ Did you...
 
 - [ ] commit and push any changes to locally checked out git repositories?
 - [ ] incorporate any important differences in the config files that will be symlinked from the the [`configs`](./configs) into this repo?
-- [ ] cross-check the list of currently installed Homebrew formulae and casks against the [`Brewfile`](./Brewfile) and [`Brewfile.minimal`](./Brewfile.minimal) files?
+- [ ] cross-check the list of currently installed Homebrew formulae and casks against the Brewfiles?
 - [ ] backup all important files that aren't automatically synced to iCloud, Dropbox, Google Drive, Adobe Cloud, etc?
 - [ ] export important data from locally running databases and other services that you might need on the new workstation?
 - [ ] install or update to the latest version of [Mackup][mackup]?

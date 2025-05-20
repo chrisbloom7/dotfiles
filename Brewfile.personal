@@ -17,8 +17,6 @@ brew "railway"            # Develop and deploy code with zero configuration
 # brew "redis", restart_service: true      # Persistent key-value database, with built-in net interface
 
 ## Casks
-cask "1password-cli"          # Command-line interface for 1Password
-cask "alfred"                 # Application launcher and productivity software
 cask "beyond-compare"         # Compare files and folders
 cask "chatgpt"                # OpenAI's official ChatGPT desktop app
 cask "clamxav"                # Anti-virus and malware scanner
@@ -28,7 +26,6 @@ cask "cyberduck"              # Server and cloud storage browser
 cask "discord"                # Voice and text chat software
 cask "drawio"                 # Online diagram software
 cask "drivethrurpg"           # Sync DriveThruRPG libraries to compatible devices
-cask "dropbox"                # Client for the Dropbox cloud storage service
 # cask "firefox"                # Web browser
 # cask "flotato"                # Tool to turn any web page into a desktop app
 # cask "fluid"                  # Tool to turn a website into a desktop app

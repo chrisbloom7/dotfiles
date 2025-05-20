@@ -7,5 +7,6 @@
 cask_args require_sha: true, no_quarantine: true
 
 ## Casks
-cask "figma"                  # Collaborative team software
-cask "lastpass-cli"           # LastPass command-line interface tool
+cask "figma"        # Collaborative team software
+# cask "lastpass"     # Password manager # ! Deprecated in favor of browser plugins
+cask "lastpass-cli" # LastPass command-line interface tool
