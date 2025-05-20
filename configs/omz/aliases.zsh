@@ -1,6 +1,7 @@
 # Shortcuts
-alias cls="clear"
-alias yn='test "$@" && echo yup || echo nope'
+alias -g cls="clear"
+alias -g yn='test "$@" && echo yup || echo nope'
+alias -g badge='tput bel'
 
 if [[ -n "$(command -v zsh 2>/dev/null)" ]]; then
   alias reloadshell="omz reload"

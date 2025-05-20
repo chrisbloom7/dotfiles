@@ -8,7 +8,12 @@ log_info "Symlinking ruby configs"
 TARGET="${HOME}"
 
 configs=(
+  ".autotest"
+  ".gemrc"
   ".irbrc"
+  ".pryrc"
+  ".rspec"
+  ".rvmrc"
 )
 for config in "${configs[@]}"; do
   symlink_config "${PWD}/${config}" "${TARGET}/${config}"
@@ -22,8 +27,7 @@ mkdir -p "${TARGET}/.bundle"
 symlink_config "${PWD}/.bundle-config" "${TARGET}/.bundle/config"
 
 if [[ -n $(command -v rbenv 2>/dev/null) ]]; then
-  # Symlink default-gems to second custom target
   TARGET="${RBENV_ROOT:-$(rbenv root)}"
-  log_debug "Symlinking default-gems to rbenv"
+  log_debug "Symlinking default-gems for rbenv"
   symlink_config "${PWD}/default-gems" "${TARGET}/default-gems"
 fi

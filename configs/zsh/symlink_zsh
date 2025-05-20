@@ -7,23 +7,18 @@ log_info "Symlinking zsh configs"
 
 TARGET="${HOME}"
 
+# https://www.freecodecamp.org/news/how-do-zsh-configuration-files-work/
+#
+# .zshenv: This is loaded universally for all types of shell sessions (interactive or non-interactive, login or non-login). It is the only configuration file that gets loaded for non-interactive and non-login scripts like cron jobs. However, macOS overrides this for PATH settings for interactive shells.
+# .zprofile: Loaded for login shells (both interactive and the rare non-interactive sessions). MacOS uses this to set up the shell for any new terminal window. Subshells that start within the terminal window inherit settings but don't load ~/.zprofile again.
+# .zshrc: Loaded only for interactive shell sessions. It is loaded whenever you open a new terminal window or launch a subshell from a terminal window.
+# .zlogin: Only used for login shell configurations, loaded after .zprofile. This is loaded whenever you open a new terminal window.
+# .zlogout: Only used for login shell configurations. This is loaded whenever a login shell exits.
+#
+# Use ~/.zprofile to set the PATH and EDITOR environment variables.
+# Use ~/.zshrc for aliases and a custom prompt, tweaking the appearance and behavior of the terminal.
 configs=(
   ".zshrc"
-)
-for config in "${configs[@]}"; do
-  symlink_config "${PWD}/${config}" "${TARGET}/${config}"
-done
-
-log_info "Symlinking OMZ configs"
-ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
-ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
-TARGET="${ZSH_CUSTOM}"
-mkdir -p "${TARGET}"
-
-configs=(
-  "agnoster.zsh-theme"
-  "aliases.zsh"
-  "path.zsh"
 )
 for config in "${configs[@]}"; do
   symlink_config "${PWD}/${config}" "${TARGET}/${config}"

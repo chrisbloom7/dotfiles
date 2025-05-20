@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+source ../../scripts/helpers/runtime.sh
+source ../../bin/helpers/trap_and_trace.sh
+
+log_info "Symlinking OMZ configs"
+ZSH="${ZSH:-${HOME}/.oh-my-zsh}"
+ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH}/custom}"
+TARGET="${ZSH_CUSTOM}"
+mkdir -p "${TARGET}"
+
+# Any file ending in .zsh immediately under $ZSH_CUSTOM will be automatically sourced. The file name does not matter.
+configs=(
+  "agnoster.zsh-theme"
+  "aliases.zsh"
+  "paths.zsh"
+)
+for config in "${configs[@]}"; do
+  symlink_config "${PWD}/${config}" "${TARGET}/${config}"
+done

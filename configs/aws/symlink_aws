@@ -3,14 +3,12 @@ cd "$(dirname "$0")"
 source ../../scripts/helpers/runtime.sh
 source ../../bin/helpers/trap_and_trace.sh
 
-log_info "Symlinking docker configs"
+log_info "Symlinking AWS configs"
 
-TARGET="${HOME}/.docker"
-mkdir -p "${TARGET}"
+TARGET="${HOME}/.aws"
 
 configs=(
-  "config.json"
-  "daemon.json"
+  "config"
 )
 for config in "${configs[@]}"; do
   symlink_config "${PWD}/${config}" "${TARGET}/${config}"
