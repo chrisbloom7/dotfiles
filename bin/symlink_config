@@ -8,32 +8,70 @@ subject=${1:?Subject is required}
 target=${2:?Target is required}
 
 log_debug "Symlinking ${subject} to ${target}"
-if [[ ! -L "${target}" ]] && ([[ -f "${target}" ]] || [[ -d "${target}" ]]); then
-  if [[ "${FORCE_MODE:-}" != true ]]; then
-    log_attention "${target} already exists; move it or use FORCE_MODE to rename it"
-    exit 0
-  else
-    suffix="presetup"
-    last_index="$(find $(dirname "${target}") -maxdepth 1 -name "$(basename "${target}").presetup*" | sort -V | tail -n1 | sed -E 's/^.+\.presetup(\.0*([1-9]+))?/\2/')"
-    if [[ -n "${last_index}" ]]; then
-      next_index=$((last_index + 1))
-      suffix="${suffix}.$(printf %5s "${next_index}" | tr ' ' 0)"
-    elif [[ -e "${target}.${suffix}" ]]; then
-      suffix="${suffix}.00001"
-    fi
-    log_attention "${target} already exists; renaming to ${target}.${suffix}"
 
-    mv_args="-n"
-    if [[ "${VERBOSE_MODE:-}" == true ]]; then
-      mv_args="${mv_args} -v"
-    fi
-    mv $mv_args "${target}" "${target}.${suffix}"
-  fi
+if [[ ! -e "${subject}" ]]; then
+  log_attention "${subject} not found; skipping"
+  exit 0
 fi
 
-if [[ -L "${target}" ]]; then
-  log_debug "Unlinking existing soft target ${target}"
-  unlink "${target}"
+if [[ -e "${target}" ]]; then
+  # The target already exists and is not a symlink
+  if [[ ! -L "${target}" ]]; then
+    # Check to see if the target differs from the subject
+    diff_flags="--brief"
+    [[ -d "${target}" ]] && diff_flags="${diff_flags} --recursive --new-file"
+    log_debug "Disabling Exit on error for Homebrew bundle/upgrade"
+    if [[  $- =~ e ]]; then
+      set +e
+      RESTORE_EXIT_ON_ERROR=true
+    fi
+    log_debug "Calculating diff between ${subject} and ${target}"
+    diff ${diff_flags} "${subject}" "${target}" &> /dev/null
+    diff_stat=$?
+    log_debug "diff_stat: ${diff_stat}"
+    log_debug "Re-enabling Exit on error"
+    if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
+      set -e
+      unset RESTORE_EXIT_ON_ERROR
+    fi
+
+    if [[ ${diff_stat} -ne 0 ]]; then
+      if [[ "${FORCE_MODE}" != true ]] && [[ ${diff_stat} -gt 1 ]]; then
+        log_attention "${target} already exists but diff operation failed; move it or use FORCE_MODE to rename it"
+        exit 0
+      elif [[ "${FORCE_MODE}" != true ]]; then
+        log_attention "${target} already exists and is different than ${subject}; move it or use FORCE_MODE to rename it"
+        exit 0
+      else
+        suffix="symlink_config_backup"
+        log_debug "Checking for existing backups of $(basename "${target}").${suffix}*"
+        last_index="$(find $(dirname "${target}") -maxdepth 1 -name "$(basename "${target}").${suffix}*" | sort -V | tail -n1 | sed -E 's/^.+\.'"${suffix}"'(\.0*([1-9]+))?/\2/')"
+        if [[ -n "${last_index}" ]]; then
+          next_index=$((last_index + 1))
+          suffix="${suffix}.$(printf %5s "${next_index}" | tr ' ' 0)"
+        elif [[ -e "${target}.${suffix}" ]]; then
+          suffix="${suffix}.00001"
+        fi
+        log_attention "${target} already exists; renaming to ${target}.${suffix}"
+
+        mv_args="-n"
+        if [[ "${VERBOSE_MODE:-}" == true ]]; then
+          mv_args="${mv_args} -v"
+        fi
+        mv $mv_args "${target}" "${target}.${suffix}"
+      fi
+    else
+      log_debug "Removing identical ${target}"
+      if [[ -d "${target}" ]]; then
+        rm -rf "${target}"
+      else
+        rm "${target}"
+      fi
+    fi
+  else
+    log_debug "Unlinking existing soft target ${target}"
+    unlink "${target}"
+  fi
 fi
 
 link_args="-s"
