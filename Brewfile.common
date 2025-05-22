@@ -127,9 +127,7 @@ vscode "yzhang.markdown-all-in-one"                 # All you need to write Mark
 
 ## VS Code Themes
 vscode "dustinsanders.an-old-hope-theme-vscode"     # vscode theme inspired by a galaxy far far away...
-vscode "miladfathy.dragan-color-theme"    
 vscode "PKief.material-icon-theme"                  # Material Design Icons for Visual Studio Code
-vscode "tamagui.batsignal"                          # A color theme for bats
 
 ## VS Code Extension Packs
 #
