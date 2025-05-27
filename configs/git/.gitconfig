@@ -1,6 +1,6 @@
 [user]
 	name = Chris Bloom
-	email = chrisbloom7@github.com
+	email = chrisbloom7@gmail.com
 	signingkey = 7D1983282132E721
 [github]
 	user = chrisbloom7
@@ -71,6 +71,7 @@
 	prune = true
 [credential "https://gist.github.com"]
 	username = chrisbloom7
+	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
 # [commit]
 # 	gpgsign = true
@@ -82,3 +83,6 @@
 	gpgsign = true
 [tag]
 	gpgsign = true
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
