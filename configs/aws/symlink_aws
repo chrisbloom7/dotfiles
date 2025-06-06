@@ -6,6 +6,8 @@ source ../../bin/helpers/trap_and_trace.sh
 log_info "Symlinking AWS configs"
 
 TARGET="${HOME}/.aws"
+mkdir -p "${TARGET}"
+clean_broken_symlinks "${TARGET}"
 
 configs=(
   "config"

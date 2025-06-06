@@ -14,7 +14,9 @@ if [[ ! -e "${subject}" ]]; then
   exit 0
 fi
 
-if [[ -e "${target}" ]]; then
+log_debug "Checking to see if ${target} exists..."
+if [[ -e "${target}" ]] || [[ -L "${target}" ]]; then
+  log_debug "${target} exists"
   # The target already exists and is not a symlink
   if [[ ! -L "${target}" ]]; then
     # Check to see if the target differs from the subject
@@ -72,6 +74,8 @@ if [[ -e "${target}" ]]; then
     log_debug "Unlinking existing soft target ${target}"
     unlink "${target}"
   fi
+else
+  log_debug "${target} does not exist"
 fi
 
 link_args="-s"

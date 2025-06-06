@@ -106,6 +106,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   _can_use_minimal_mode() { ! is_bootstrap_mode; }
   _can_use_update_mode() { ! is_bootstrap_mode; }
   _can_use_quiet_mode() { ! is_verbose_mode; }
+  _can_use_dry_run_mode() { ! is_force_mode; }
 
   # Parse script options
   _parse_setup_options() {
@@ -113,7 +114,8 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
       "Usage: $0 [OPTIONS]"
       "Options:"
       " -b, --bootstrap  Install only the prerequsites. Only applies to \`setup\`."
-      " -d, --dry-run    [not currently implemented] Only print status messages; do not make any changes."
+      " -d, --dry-run    [limited implementation] Only print status messages; do not make any changes."
+      "                  (ignored if --force is set)"
       " -f, --force      Replace regular files and directories with symlinks as necessary."
       "                  Existing files and directories will be renamed with a \`.presetup\` extension."
       " -h, --help       You're looking at it. Print this help message and exit."
@@ -138,11 +140,11 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                                   ;;
         -b | --bootstrap        ) BOOTSTRAP_MODE=true && MINIMAL_MODE=false
                                   ;;
-        -f | --force            ) FORCE_MODE=true
+        -f | --force            ) FORCE_MODE=true && DRY_RUN_MODE=false
                                   ;;
         -m | --minimal          ) _can_use_minimal_mode && MINIMAL_MODE=true
                                   ;;
-        -d | -n | --dry-run     ) DRY_RUN_MODE=true
+        -d | --dry-run          ) _can_use_dry_run_mode && DRY_RUN_MODE=true
                                   ;;
         -p | --personal         ) ADDITIONAL_DEPENDENCIES+=( personal )
                                   ;;
@@ -150,7 +152,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                                   ;;
         -u | --update           ) _can_use_update_mode && UPDATE_MODE=true
                                   ;;
-        -v | --verbose          ) QUIET_MODE=false && VERBOSE_MODE=true
+        -v | --verbose          ) VERBOSE_MODE=true && QUIET_MODE=false
                                   ;;
         -w | --work | --business) ADDITIONAL_DEPENDENCIES+=( work )
                                   ;;
@@ -172,7 +174,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
 
     log_debug "Options processed successfully"
   }
-  
+
   _parse_setup_options "$@"
 
   # Mark helpers script as loaded

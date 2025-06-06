@@ -8,6 +8,7 @@ log_info "Copying docker config templates"
 
 TARGET="${HOME}/.docker"
 mkdir -p "${TARGET}"
+clean_broken_symlinks "${TARGET}"
 
 json_configs=(
   "config"

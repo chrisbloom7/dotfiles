@@ -7,6 +7,7 @@ log_info "Symlinking mise configs"
 
 TARGET="${HOME}/.config/mise"
 mkdir -p "${TARGET}"
+clean_broken_symlinks "${TARGET}"
 
 configs=(
   "config.toml"
