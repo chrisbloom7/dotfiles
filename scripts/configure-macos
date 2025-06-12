@@ -7,6 +7,10 @@ source ./helpers/runtime.sh
 source ../bin/helpers/trap_and_trace.sh
 
 # See https://macos-defaults.com for an incomplete list of macOS defaults
+# Other references:
+# - https://macowners.club/posts/brief-macos-dock-settings-terminal/
+# - https://github.com/rusty1s/dotfiles/blob/master/macos/defaults.sh
+# - https://mac.install.guide/mac-setup/dock
 
 # For more information about these settings, see:
 # - https://github.com/kevinSuttle/macOS-Defaults/blob/9aed141a1f0abdb3581d3439131fad176ca01682/REFERENCE.md
@@ -20,6 +24,13 @@ source ../bin/helpers/trap_and_trace.sh
 # https://github.com/lra/mackup/blob/master/mackup/applications/macosx.cfg
 
 log_info "Applying macOS defaults"
+defaults=(
+  ()
+)
+
+
+
+
 affected_apps=("cfprefsd")
 
 log_debug "Disabling Exit on error for this script"
@@ -68,9 +79,11 @@ if command -v defaults &> /dev/null; then
   # log_debug "Setting highlight color to green"
   # defaults write NSGlobalDomain AppleHighlightColor -string "0.764700 0.976500 0.568600"
 
-  # Set sidebar icon size to medium
-  log_debug "Setting sidebar icon size to medium"
-  defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
+  # Set Finder sidebar icon size to medium
+  log_debug "Setting sidebar icon size"
+  # defaults write NSGlobalDomain "NSTableViewDefaultSizeMode" -int 1 # Small
+  defaults write NSGlobalDomain "NSTableViewDefaultSizeMode" -int 2 # Medium (default)
+  # defaults write NSGlobalDomain "NSTableViewDefaultSizeMode" -int 3 # Large
 
   # Always show scrollbars
   # log_debug "Always showing scrollbars"
@@ -109,8 +122,8 @@ if command -v defaults &> /dev/null; then
   defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
   # Disable the “Are you sure you want to open this application?” dialog
-  log_debug "Disabling the 'Are you sure you want to open this application?' dialog"
-  defaults write com.apple.LaunchServices LSQuarantine -bool false
+  log_debug "Disabling the 'Application Downloaded from Internet' dialog"
+  defaults write com.apple.LaunchServices "LSQuarantine" -bool "false"
 
   # Display ASCII control characters using caret notation in standard text views
   # Try e.g. 'cd /tmp; unidecode "\x{0000}" > cc.txt; open -e cc.txt'
@@ -514,13 +527,52 @@ log_info "Setting Dock, Dashboard, and hot corners defaults"
 affected_apps+=("Dock")
 
 if command -v defaults &> /dev/null; then
+  # Reset all current Dock settings
+  log_debug "Resetting all current Dock settings"
+  defaults delete-all com.apple.dock
+
+  # Remove all Dock items
+  log_debug "Removing all current Dock items"
+  defaults write com.apple.dock persistent-apps -array
+
+  persistent_dock_apps=(
+    "/Applications/zoom.us.app"
+    "/Applications/Slack.app"
+    "/Applications/Google Chrome.app"
+    "/Applications/iTerm.app"
+    "/Applications/Visual Studio Code.app"
+  )
+
+  for app in "${persistent_dock_apps[@]}"; do
+    dockutil --add "${app}" --position end
+  done
+
+  dockutil --add '' --type small-spacer --section apps --position beginning
+
+  chrome_app_path="${HOME}/Applications/Chrome Apps.localized"
+  chrome_apps=($(IFS=$'\n' find "${chrome_app_path}" -name "*.app" -type f -depth 1))
+
+  for chrome_app in "${chrome_apps[@]}"; do
+    dockutil --add "'"${chrome_app}"'" --after Finder.app
+  done
+
+  dockutil --add '' --type small-spacer --section apps --position beginning
+
   # Enable highlight hover effect for the grid view of a stack (Dock)
   log_debug "Enabling highlight hover effect for the grid view of a stack (Dock)"
   defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
-  # Set the icon size of Dock items to 36 pixels
-  log_debug "Setting the icon size of Dock items to 36 pixels"
-  defaults write com.apple.dock tilesize -int 36
+  # Set the icon size of Dock items
+  log_debug "Setting the icon size of Dock items"
+  defaults write com.apple.dock tilesize -int
+
+  # Magnify items in the Dock when hovered over
+  log_debug "Enabling Dock item magnification effect"
+  defaults write com.apple.dock "magnification" -bool true
+
+  # Setting the magnified size of Dock items
+  log_debug "Setting the magnified size of Dock items"
+  defaults write com.apple.dock "largesize" -int 120
 
   # Change minimize/maximize window effect
   log_debug "Changing minimize/maximize window effect"
@@ -545,8 +597,8 @@ if command -v defaults &> /dev/null; then
   defaults write com.apple.dock persistent-apps -array
 
   # Show only open applications in the Dock
-  log_debug "Showing only open applications in the Dock"
-  defaults write com.apple.dock static-only -bool true
+  log_debug "Do not hide closed applications in the Dock"
+  defaults write com.apple.dock static-only -bool false
 
   # Don't animate opening applications from the Dock
   log_debug "Disabling animation when opening applications from the Dock"
@@ -574,16 +626,16 @@ if command -v defaults &> /dev/null; then
   defaults write com.apple.dock mru-spaces -bool false
 
   # Remove the auto-hiding Dock delay
-  log_debug "Removing the auto-hiding Dock delay"
-  defaults write com.apple.dock autohide-delay -float 0
+  # log_debug "Removing the auto-hiding Dock delay"
+  # defaults write com.apple.dock autohide-delay -float 0
 
   # Remove the animation when hiding/showing the Dock
-  log_debug "Removing the animation when hiding/showing the Dock"
-  defaults write com.apple.dock autohide-time-modifier -float 0
+  # log_debug "Removing the animation when hiding/showing the Dock"
+  # defaults write com.apple.dock autohide-time-modifier -float 0
 
   # Automatically hide and show the Dock
-  log_debug "Automatically hiding and showing the Dock"
-  defaults write com.apple.dock autohide -bool true
+  log_debug "Disabling automatically hiding and showing the Dock"
+  defaults write com.apple.dock autohide -bool false
 
   # Make Dock icons of hidden applications translucent
   log_debug "Making Dock icons of hidden applications translucent"

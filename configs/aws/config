@@ -1,3 +1,11 @@
 [default]
 region = us-east-1
 output = json
+
+[profile chris.bloom]
+sso_start_url = https://d-90675350d0.awsapps.com/start#/
+region = us-east-1
+output = json
+sso_region = us-east-1
+sso_account_id = 068738303278
+sso_role_name = BackendEngineerAccess

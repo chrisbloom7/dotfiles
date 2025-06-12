@@ -12,7 +12,7 @@ if [[ "$(is_macos)" != "true" && "$(is_linux)" != "true" ]]; then
 fi
 
 # Run setup steps that apply both locally and in devcontainers
-log_debug "calling common boostrap script"
+log_debug "Running setup steps that apply both locally and in devcontainers"
 ./bootstrap-common
 
 log_debug "Sourcing homebrew script"

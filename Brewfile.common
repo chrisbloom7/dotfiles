@@ -22,6 +22,7 @@ brew "awscli"            # Official Amazon AWS command-line interface
 brew "bat"               # Clone of cat(1) with syntax highlighting and Git integration
 brew "devcontainer"      # Reference implementation for the Development Containers specification
 brew "difftastic"        # Diff that understands syntax
+brew "dockutil"          # Command-line utility to manage applications in the macOS Dock
 brew "gmailctl"          # Declarative configuration for Gmail filters
 brew "httpie"            # User-friendly cURL replacement (command-line HTTP client)
 brew "imagemagick"       # Tools and libraries to manipulate images in many formats

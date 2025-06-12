@@ -165,3 +165,6 @@ export PATH="$PATH:${HOME}/.lmstudio/bin"
 if [[ -f "${HOME}/.hunt-cli/autocomplete_zsh" ]]; then
   source "${HOME}/.hunt-cli/autocomplete_zsh"
 fi
+autoload -Uz compinit
+compinit
+source /Users/chris.bloom/.hunt-cli/autocomplete_zsh

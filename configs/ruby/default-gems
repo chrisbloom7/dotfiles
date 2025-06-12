@@ -1,6 +1,7 @@
 amazing_print
 bundler
 debug
+devpack
 dotenv
 rubocop
 ruby-lsp
