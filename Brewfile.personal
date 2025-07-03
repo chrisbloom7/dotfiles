@@ -39,6 +39,7 @@ cask "lm-studio"              # Discover, download, and run local LLMs
 # cask "mailplane"              # Gmail client ! Deprecated client
 # cask "microsoft-edge"         # Multi-platform web browser
 # cask "monofocus"              # Keep all tasks from your todo apps on your menu bar
+cask "network-radar"          # Tool to scan and monitor the network
 # cask "raycast"                # Control your tools with a few keystrokes
 # cask "screenfocus"            # Tool to manage multiple screens
 cask "script-debugger"        # Integrated development environment focused entirely on AppleScript

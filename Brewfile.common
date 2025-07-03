@@ -28,6 +28,7 @@ brew "httpie"            # User-friendly cURL replacement (command-line HTTP cli
 brew "imagemagick"       # Tools and libraries to manipulate images in many formats
 brew "lynx"              # Text-based web browser
 brew "mackup"            # Keep your Mac's application settings in sync
+brew "markdownlint-cli"  # CLI for Node.js style checker and lint tool for Markdown files
 brew "notify"            # Stream the output of any CLI and publish it to a variety of supported platforms
 brew "pandoc"            # Swiss-army knife of markup format conversion
 brew "pgcli"             # CLI for Postgres with auto-completion and syntax highlighting

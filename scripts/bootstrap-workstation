@@ -58,7 +58,7 @@ else
   log_info "Installing minimal Homebrew packages from Brewfile"
   bundle_args="${brew_args} --cleanup --no-upgrade"
   log_debug "Running brew bundle with args: ${bundle_args}"
-  brew bundle --file ../Brewfile $bundle_args
+  brew bundle --file ../Brewfile.minimal $bundle_args
 fi
 log_debug "Re-enabling Exit on error"
 if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
@@ -85,6 +85,32 @@ if ! is_minimal_mode && ! is_update_mode; then
       unset RESTORE_EXIT_ON_ERROR
     fi
   done
+
+  if ! is_skip_local_mode; then
+    log_info "Looking for local Brewfiles in $(cd ../ && pwd)"
+
+    oldIFS=$IFS && IFS=$'\n'
+    local_brewfiles=($(find ../ \( -type f -or -type l \) -maxdepth 1 -name "Brewfile*.local" -print))
+    IFS=$oldIFS
+
+    for brewfile in "${local_brewfiles[@]}"; do
+      log_info "Installing additional Homebrew packages from ${brewfile}"
+      log_debug "Disabling Exit on error for ${brewfile}"
+      if [[  $- =~ e ]]; then
+        set +e
+        RESTORE_EXIT_ON_ERROR=true
+      fi
+      log_debug "Running brew bundle with args: ${bundle_args}"
+      brew bundle --file "${brewfile}" $bundle_args
+      log_debug "Re-enabling Exit on error"
+      if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
+        set -e
+        unset RESTORE_EXIT_ON_ERROR
+      fi
+    done
+  else
+    log_debug "SKIP_LOCAL_MODE is enabled; skipping search for Brewfile*.local files"
+  fi
 fi
 
 log_info "Cleaning up Homebrew services"
