@@ -1,4 +1,4 @@
-## OMZ Configuration
+## OMZ CONFIGURATION
 
 # Path to your dotfiles installation.
 export DOTFILES=$HOME/.dotfiles
@@ -11,10 +11,6 @@ export PATH="${DOTFILES}/bin:${PATH}"
 export ZSH=$HOME/.oh-my-zsh
 
 # Enable completions
-if [[ -n "$(command -v rbenv 2>/dev/null)" ]] && [[ -e "$(rbenv root)/completions" ]]; then
-  # add rbenv completions
-  FPATH="$(rbenv root)/completions:${FPATH}"
-fi
 autoload -Uz compinit && compinit
 
 # Set name of the theme to load --- if set to "random", it will
@@ -85,13 +81,25 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 # See https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/
 plugins=(
+  # Runtimes and auto-completions
+  brew
+  chruby                       # Mainly for ruby-build autocomplete
+  docker
+  iterm2
+  mise
+  ngrok
+  nodenv
+  nvm
+  rbenv
+  zsh-autosuggestions
+  zsh-completions
+
+  # Utilities
   common-aliases               # creates helpful shortcut aliases for many commonly used commands
   encode64                     # encode64/e64; encodefile64/ef64; decode64/d64
   history                      # h (history); hl (less); hs (grep); hsi (grep -i)
   jsontools                    # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
   zbell                        # prints a bell character when a command finishes if it has been running for longer than a specified duration
-  zsh-autosuggestions          # Fish-like autosuggestions for zsh
-  zsh-completions              # Additional completion definitions for Zsh
   zsh-history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
   zsh-syntax-highlighting      # Fish shell like syntax highlighting for Zsh
 )
@@ -103,7 +111,7 @@ DEFAULT_USER="chrisbloom7"
 [[ ! -f $ZSH/oh-my-zsh.sh ]] && echo "oh-my-zsh not found at $ZSH" && exit 1
 source $ZSH/oh-my-zsh.sh
 
-## User configuration
+## USER CONFIGURATION
 
 # You may need to manually set your language environment
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"
@@ -133,34 +141,6 @@ export BUILDKIT_PROGRESS=plain
 
 # Load project aliases (backed up by Mackup to prevent leaking sensitive info)
 [[ -e "${HOME}/.aliases" ]] && source "${HOME}/.aliases"
-
-# Load iTerm2 shell integration
-[[ -e "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# Load nodenv
-# TODO: Add this dynamically to zprofile when installing
-# [[ -n "$(command -v nodenv 2>/dev/null)" ]] && eval "$(nodenv init -)"
-
-# NVM completions
-export NVM_DIR="$HOME/.nvm"
-[[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Load rbenv
-# TODO: Add this dynamically to zprofile when installing
-# [[ -e "~/.rbenv/bin/rbenv" ]] && eval "$(~/.rbenv/bin/rbenv init -)"
-
-# Make sure ruby-build is up to date
-# TODO: Add this dynamically to zprofile when installing
-# [[ -d "~/.rbenv/plugins/ruby-build" ]] && git -C "~/.rbenv/plugins/ruby-build" pull
-
-# ngrok autocompletion
-if [[ -n $(command -v ngrok &>/dev/null) ]]; then
-  eval "$(ngrok completion)"
-fi
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:${HOME}/.lmstudio/bin"
 
 if [[ -f "${HOME}/.hunt-cli/autocomplete_zsh" ]]; then
   source "${HOME}/.hunt-cli/autocomplete_zsh"
