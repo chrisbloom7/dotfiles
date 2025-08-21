@@ -80,7 +80,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   export PATH="${DOTFILES}/bin:${PATH}"
 
   # Options defaults
-  export ADDITIONAL_DEPENDENCIES_SERIALIZED=${ADDITIONAL_DEPENDENCIES_SERIALIZED:-common}
+  export ADDITIONAL_DEPENDENCIES_SERIALIZED=${ADDITIONAL_DEPENDENCIES_SERIALIZED:-"common|vscode.common"}
   export BOOTSTRAP_MODE=${BOOTSTRAP_MODE:-false}
   export DRY_RUN_MODE=${DRY_RUN_MODE:-false} # TODO: Implement this
   export FORCE_MODE=${FORCE_MODE:-false}
@@ -146,7 +146,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                                   ;;
         -d | --dry-run          ) _can_use_dry_run_mode && DRY_RUN_MODE=true
                                   ;;
-        -p | --personal         ) ADDITIONAL_DEPENDENCIES+=( personal )
+        -p | --personal         ) ADDITIONAL_DEPENDENCIES+=( personal vscode.personal )
                                   ;;
         -q | --quiet            ) _can_use_quiet_mode && QUIET_MODE=true
                                   ;;
