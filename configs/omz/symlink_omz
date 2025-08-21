@@ -12,7 +12,6 @@ clean_broken_symlinks "${TARGET}"
 
 # Any file ending in .zsh immediately under $ZSH_CUSTOM will be automatically sourced. The file name does not matter.
 configs=(
-  "agnoster.zsh-theme"
   "aliases.zsh"
   "paths.zsh"
 )

@@ -1,35 +1,31 @@
-# Shortcuts
-alias cls="clear"
+# Shortcut aliases and functions
 alias badge='tput bel'
-
+alias cls="clear"
+alias shrug="echo '¯\_(ツ)_/¯'"
+if [[ "$(uname -a)" =~ "Darwin" ]]; then
+  alias beep="say -v Yuri \"My liege, the task is complete\""
+  alias clipboard="pbcopy"
+  alias copyssh="pbcopy < ${HOME}/.ssh/id_rsa.pub"
+  alias fixzoom="sudo killall VDCAssistant"
+  alias flushdns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+  alias library="cd ${HOME}/Library"
+fi
+if [[ -n "$(command -v zsh 2>/dev/null)" ]]; then
+  alias reload="omz reload"
+  alias reloadshell="omz reload"
+fi
 yn() {
   test $@ && echo yup || echo nope
 }
 
-if [[ -n "$(command -v zsh 2>/dev/null)" ]]; then
-  alias reloadshell="omz reload"
-  alias reload="omz reload"
-fi
-
-if [[ "$(uname -a)" =~ "Darwin" ]]; then
-  alias beep="say -v Yuri \"My liege, the task is complete\""
-  alias copyssh="pbcopy < ${HOME}/.ssh/id_rsa.pub"
-  alias fixzoom="sudo killall VDCAssistant"
-  alias flushdns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
-  alias shrug="echo '¯\_(ツ)_/¯' | pbcopy"
-  alias library="cd ${HOME}/Library"
-fi
-
-# Directories
-dotfiles () { cd "${DOTFILES:?DOTFILES not set}" }
-src () { cd "$HOME/src/$@" }
-
-# Python
+# Python aliases and functions
 alias python="python3"
 alias py="python3"
 alias pip="pip3"
 
-# Projects and files
+# Directory and file aliases and functions
+dotfiles () { cd "${DOTFILES:?DOTFILES not set}" }
+src () { cd "$HOME/src/$@" }
 edots () {
   ${EDITOR:?EDITOR not defined} "${DOTFILES}"
 }
@@ -39,18 +35,8 @@ ehosts () {
 edotaliases () {
   ${EDITOR:?EDITOR not defined} "${HOME}/.aliases"
 }
-readme () {
-  if [[ -z "$(command -v pandoc 2>/dev/null)" ]] || [[ -z "$(command -v lynx 2>/dev/null)" ]]; then
-    return 1;
-  fi
-  if [[ -n "${1:-}" ]]; then
-    pandoc $1 | lynx -stdin
-  else
-    pandoc README.md | lynx -stdin
-  fi
-}
 
-# General utilities
+# Utility aliases and functions
 epoch () {
   if [[ -n "${1:-}" ]]; then
     if [[ -n "$(command -v ruby 2>/dev/null)" ]]; then
@@ -65,7 +51,16 @@ epoch () {
   fi
 }
 alias timestamp="epoch"
-weather () { curl -4 wttr.in/${1:-SRQ}\?${2:-n2} }
+readme () {
+  if [[ -z "$(command -v pandoc 2>/dev/null)" ]] || [[ -z "$(command -v lynx 2>/dev/null)" ]]; then
+    return 1;
+  fi
+  if [[ -n "${1:-}" ]]; then
+    pandoc $1 | lynx -stdin
+  else
+    pandoc README.md | lynx -stdin
+  fi
+}
 rvmrc () {
   [[ -z "$(command -v rvm 2>/dev/null)" ]] && echo "rvm not installed" && return 1
 
@@ -75,8 +70,11 @@ rvmrc () {
     rvm --create --ruby-version use ${1}
   fi
 }
+# https://github.com/chubin/wttr.in
+forecast () { curl -4 wttr.in/${1:-}\?uF }
+weather () { curl -4 wttr.in/${1:-}\?uF${2:-n1} }
 
-# Git
+# Git aliases and functions
 alias gcom='git com'                  # Short for `git checkout [default_branch]`, typically `main` or `master`
 alias git-bdiff='git-branch-diff' .   # Show commits in <source> that are not in <target>
 alias git-bin='git-branch-incoming'   # Lists commits in the <source> that are not in the current working branch
