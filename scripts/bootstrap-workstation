@@ -139,13 +139,12 @@ fi
 
 if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
   if ! is_update_mode; then
-    # TODO: The path might also be /opt/homebrew/bin/mise - can we detect on install?
     log_info "Activating Mise"
     add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate bash"   "${HOME}/.bash_profile"
     add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise completion bash" "${HOME}/.bash_completion"
     add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate zsh"    "${HOME}/.zprofile"
     # add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise completion zsh"  "/usr/local/share/zsh/site-functions/_mise"
-    eval "$(~/.local/bin/mise activate bash)"
+    eval "$(mise activate bash)"
   fi
 
   mise_args="--cd $HOME --env local --yes"
