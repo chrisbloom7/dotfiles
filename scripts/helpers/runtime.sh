@@ -80,7 +80,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   export PATH="${DOTFILES}/bin:${PATH}"
 
   # Options defaults
-  export ADDITIONAL_DEPENDENCIES_SERIALIZED=${ADDITIONAL_DEPENDENCIES_SERIALIZED:-common}
+  export ADDITIONAL_DEPENDENCIES_SERIALIZED=${ADDITIONAL_DEPENDENCIES_SERIALIZED:-"common|vscode.common"}
   export BOOTSTRAP_MODE=${BOOTSTRAP_MODE:-false}
   export DRY_RUN_MODE=${DRY_RUN_MODE:-false} # TODO: Implement this
   export FORCE_MODE=${FORCE_MODE:-false}
@@ -140,37 +140,37 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
 
     while [[ $# -gt 0 ]]; do
       case $1 in
-        -h | --help     ) printf >&1 '%s\n' "${USAGE[@]}" && exit 0
-                          ;;
-        -b | --bootstrap) BOOTSTRAP_MODE=true && MINIMAL_MODE=false && SKIP_LOCAL_MODE=false
-                          ;;
-        -f | --force    ) DRY_RUN_MODE=false && FORCE_MODE=true
-                          ;;
-        -m | --minimal  ) _can_use_minimal_mode && MINIMAL_MODE=true && SKIP_LOCAL_MODE=false
-                          ;;
-        -d | --dry-run  ) _can_use_dry_run_mode && DRY_RUN_MODE=true
-                          ;;
-        -p | --personal ) ADDITIONAL_DEPENDENCIES+=( personal )
-                          ;;
-        -q | --quiet    ) _can_use_quiet_mode && QUIET_MODE=true
-                          ;;
-        --skip-local    ) _can_use_skip_local_mode && SKIP_LOCAL_MODE=true
-                          ;;
-        -u | --update   ) _can_use_update_mode && UPDATE_MODE=true
-                          ;;
-        -v | --verbose  ) QUIET_MODE=false && VERBOSE_MODE=true
-                          ;;
-        *               ) if [[ "$1" =~ ^-[a-z]{2,} ]]; then
-                            # Handle multiple concatenated short options
-                            for (( i=1; i<${#1}; i++ )); do
-                              _parse_setup_options -${1:$i:1}
-                            done
-                          else
-                            log_error "Invalid option: $1"
-                            printf >&1 '%s\n' "${USAGE[@]}"
-                            exit 1
-                          fi
-                          ;;
+        -h | --help             ) printf >&1 '%s\n' "${USAGE[@]}" && exit 0
+                                  ;;
+        -b | --bootstrap        ) BOOTSTRAP_MODE=true && MINIMAL_MODE=false
+                                  ;;
+        -f | --force            ) FORCE_MODE=true && DRY_RUN_MODE=false
+                                  ;;
+        -m | --minimal          ) _can_use_minimal_mode && MINIMAL_MODE=true
+                                  ;;
+        -d | --dry-run          ) _can_use_dry_run_mode && DRY_RUN_MODE=true
+                                  ;;
+        -p | --personal         ) ADDITIONAL_DEPENDENCIES+=( personal vscode.personal )
+                                  ;;
+        -q | --quiet            ) _can_use_quiet_mode && QUIET_MODE=true
+                                  ;;
+        -u | --update           ) _can_use_update_mode && UPDATE_MODE=true
+                                  ;;
+        -v | --verbose          ) VERBOSE_MODE=true && QUIET_MODE=false
+                                  ;;
+        -w | --work | --business) ADDITIONAL_DEPENDENCIES+=( work )
+                                  ;;
+        *                       ) if [[ "$1" =~ ^-[a-z]{2,} ]]; then
+                                    # Handle multiple concatenated short options
+                                    for (( i=1; i<${#1}; i++ )); do
+                                      _parse_setup_options -${1:$i:1}
+                                    done
+                                  else
+                                    log_error "Invalid option: $1"
+                                    printf >&1 '%s\n' "${USAGE[@]}"
+                                    exit 1
+                                  fi
+                                  ;;
       esac
       shift
     done

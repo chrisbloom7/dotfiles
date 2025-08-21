@@ -1,0 +1,74 @@
+# Common VS Code extension bundle
+
+## VS code extensions
+vscode "alefragnani.bookmarks"                      # Mark lines and jump to them
+vscode "AlanWalk.markdown-navigation"               # Auto generate markdown navigation panel to the activity bar.
+vscode "assisrMatheus.sidebar-markdown-notes"       # Take notes in your sidebar using markdown
+vscode "castwide.solargraph"                        # A Ruby language server featuring code completion, intellisense, and inline documentation
+vscode "ciarant.vscode-structurizr"                 # Structurizr DSL syntax highlighting
+vscode "CraigMaslowski.erb"                         # Syntax Highlighting for Ruby ERB files
+vscode "DavidAnson.vscode-markdownlint"             # Markdown linting and style checking for Visual Studio Code
+vscode "dbaeumer.vscode-eslint"                     # Integrates ESLint JavaScript into VS Code.
+vscode "deaniusolutions.deckset"                    # Make Deckset files in VSCode splendiferously.
+vscode "DrMerfy.overtype"                           # Provides insert/overtype mode.
+vscode "eamodio.gitlens"                            # Supercharge Git within VS Code — Visualize code authorship at a glance via Git blame annotations and CodeLens, seamlessly navigate and explore Git repositories, gain valuable insights via rich visualizations and powerful comparison commands, and so much more
+vscode "emilast.logfilehighlighter"                 # Adds color highlighting to log files to make it easier to follow the flow of log events and identify problems
+vscode "erikphansen.vscode-toggle-column-selection" # Turn a selection into a column selection à la TextMate
+vscode "esbenp.prettier-vscode"                     # Code formatter using prettier
+vscode "foxundermoon.shell-format"                  # A formatter for shell scripts, Dockerfile, gitignore, dotenv, /etc/hosts, jvmoptions, and other file types
+vscode "GitHub.codespaces"                          # Your instant dev environment
+vscode "GitHub.remotehub"                           # Remotely browse and edit any GitHub repository
+vscode "github.vscode-github-actions"               # GitHub Actions workflows and runs for github.com hosted repositories in VS Code
+vscode "GitHub.vscode-pull-request-github"          # Pull Request and Issue Provider for GitHub
+vscode "golang.go"                                  # Rich Go language support for Visual Studio Code
+vscode "GraphQL.vscode-graphql-syntax"              # Adds syntax highlighting support for .graphql & embedded support for javascript, typescript, vue, markdown, python, php, reason, ocaml and rescript
+vscode "howardzuo.vscode-git-tags"                  # quick manage tags for a git repo
+vscode "hverlin.mise-vscode"                        # Mise (asdf rust clone) for VS Code
+vscode "IBM.output-colorizer"                       # Syntax highlighting for log files
+# vscode "itarato.byesig"                             # Hide Ruby Sorbet signatures
+vscode "janjoerke.align-by-regex"                   # Aligns selected lines of text by a regular expression.
+vscode "jetmartin.bats"                             # Bats (Bash Automated Testing System) language support for VSCode.
+vscode "loginspector.loginspector"                  # Analyze log files to better understand the program that it describes
+vscode "mechatroner.rainbow-csv"                    # Highlight CSV and TSV files, Run SQL-like queries
+vscode "MermaidChart.vscode-mermaid-chart"          # The Mermaid Chart extension for Visual Studio Code enables developers to view and edit diagrams stored in Mermaid charts within the Visual Studio Code. With integration to the Mermaid Chart service, this extension allows users to attach diagrams to their code. Gain quick access to edit diagrams.
+vscode "mikestead.dotenv"                           # Support for dotenv file syntax
+vscode "ms-azuretools.vscode-docker"                # Makes it easy to create, manage, and debug containerized applications.
+vscode "ms-vscode-remote.remote-containers"         # Open any folder or repository inside a Docker container and take advantage of Visual Studio Code's full feature set.
+vscode "ms-vscode.azure-repos"                      # Remotely browse and edit any Azure Repos
+vscode "ms-vscode.remote-repositories"              # Remotely browse and edit git repositories
+vscode "ms-vscode.vscode-github-issue-notebooks"    # GitHub Issue Notebooks for VS Code
+vscode "ms-vscode.wordcount"                        # Markdown Word Count Example - a status bar contribution that reports out the number of works in a Markdown document as you interact with it.
+vscode "MS-vsliveshare.vsliveshare"                 # Real-time collaborative development from the comfort of your favorite tools
+vscode "nextfaze.json-parse-stringify"              # Quickly flick between stringified JSON and POJOs
+vscode "oderwat.indent-rainbow"                     # Makes indentation easier to read
+vscode "phoihos.csv-to-md-table"                    # Convert CSV/TSV/PSV text to GitHub Flavored Markdown table
+vscode "redhat.vscode-yaml"                         # YAML Language Support by Red Hat, with built-in Kubernetes syntax support
+vscode "rubocop.vscode-rubocop"                     # VS Code extension for the RuboCop linter and code formatter.
+vscode "shardulm94.trailing-spaces"                 # Highlight trailing spaces and delete them in a flash!
+vscode "shd101wyy.markdown-preview-enhanced"        # Markdown Preview Enhanced ported to vscode
+# vscode "Shopify.ruby-lsp"                           # VS Code plugin for connecting with the Ruby LSP
+# vscode "sorbet.sorbet-vscode-extension"             # Ruby IDE features, powered by Sorbet.
+vscode "stkb.rewrap"                                # Hard word wrapping for comments and other text at a given column.
+vscode "streetsidesoftware.code-spell-checker"      # Spelling checker for source code
+vscode "stripe.endsmart"                            # A modern version of endwise that relies on more recent VSCode APIs.
+vscode "yzhang.markdown-all-in-one"                 # All you need to write Markdown (keyboard shortcuts, table of contents, auto preview and more)
+
+## VS Code Themes
+vscode "dustinsanders.an-old-hope-theme-vscode"     # vscode theme inspired by a galaxy far far away...
+vscode "PKief.material-icon-theme"                  # Material Design Icons for Visual Studio Code
+
+## VS Code Extension Packs
+#
+# Brew bundle doesn't do a good job of managing extension packs. Currently you
+# must specify the extension pack name and the individual extensions, otherwise
+# `brew bundle install --cleanup` will remove any extensions in the pack that
+# are not explicitly listed in the Brewfile.
+
+### GitHub Markdown Preview
+vscode "bierner.github-markdown-preview"        # [Extension Pack] Changes VS Code's built-in markdown preview to match GitHub
+vscode "bierner.markdown-checkbox"              # Adds checkbox support to the built-in markdown preview
+vscode "bierner.markdown-emoji"                 # Adds emoji syntax support to VS Code's built-in markdown preview and markdown cells in notebook
+vscode "bierner.markdown-footnotes"             # Adds [^footnote] syntax support to VS Code's built-in markdown preview
+vscode "bierner.markdown-mermaid"               # Adds Mermaid diagram and flowchart support to VS Code's builtin markdown preview
+vscode "bierner.markdown-preview-github-styles" # Changes VS Code's built-in markdown preview to match Github's style
+vscode "bierner.markdown-yaml-preamble"         # Renders yaml front matter as a table in the built-in markdown preview
