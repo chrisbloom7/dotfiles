@@ -9,6 +9,7 @@ TARGET="${HOME}"
 
 configs=(
   ".autotest"
+  ".devpack"
   ".gemrc"
   ".irbrc"
   ".pryrc"

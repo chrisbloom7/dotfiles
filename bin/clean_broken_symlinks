@@ -11,7 +11,9 @@ if [[ ! -d "${target}" ]]; then
   exit 1
 fi
 
+oldIFS=$IFS && IFS=$'\n'
 broken_links=($(find "${target}" -type l -exec test ! -e {} \; -print))
+IFS=$oldIFS
 
 for link in "${broken_links[@]}"; do
   # Process each file here

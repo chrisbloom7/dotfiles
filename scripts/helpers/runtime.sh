@@ -86,6 +86,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   export FORCE_MODE=${FORCE_MODE:-false}
   export MINIMAL_MODE=${MINIMAL_MODE:-false}
   export QUIET_MODE=${QUIET_MODE:-false}
+  export SKIP_LOCAL_MODE=${SKIP_LOCAL_MODE:-false}
   export UPDATE_MODE=${UPDATE_MODE:-false}
   export VERBOSE_MODE=${VERBOSE_MODE:-false}
 
@@ -93,47 +94,50 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   [[ -n "${CODESPACES:-}" ]] && VERBOSE_MODE=true
 
   # Export mode functions for rest of setup
-  is_verbose_mode() { [[ "${VERBOSE_MODE:-}" == true ]]; }  ; export -f is_verbose_mode
-  is_bootstrap_mode() { [[ ${BOOTSTRAP_MODE:-} == true ]]; }; export -f is_bootstrap_mode
-  is_dry_run_mode() { [[ ${DRY_RUN_MODE:-} == true ]]; }    ; export -f is_dry_run_mode
-  is_force_mode() { [[ ${FORCE_MODE:-} == true ]]; }        ; export -f is_force_mode
-  is_minimal_mode() { [[ ${MINIMAL_MODE:-} == true ]]; }    ; export -f is_minimal_mode
-  is_quiet_mode() { [[ "${QUIET_MODE:-}" == true ]]; }      ; export -f is_quiet_mode
-  is_update_mode() { [[ "${UPDATE_MODE:-}" == true ]]; }    ; export -f is_update_mode
-  is_verbose_mode() { [[ "${VERBOSE_MODE:-}" == true ]]; }  ; export -f is_verbose_mode
+  is_verbose_mode() { [[ "${VERBOSE_MODE:-}" == true ]]; }       ; export -f is_verbose_mode
+  is_bootstrap_mode() { [[ ${BOOTSTRAP_MODE:-} == true ]]; }     ; export -f is_bootstrap_mode
+  is_dry_run_mode() { [[ ${DRY_RUN_MODE:-} == true ]]; }         ; export -f is_dry_run_mode
+  is_force_mode() { [[ ${FORCE_MODE:-} == true ]]; }             ; export -f is_force_mode
+  is_minimal_mode() { [[ ${MINIMAL_MODE:-} == true ]]; }         ; export -f is_minimal_mode
+  is_quiet_mode() { [[ "${QUIET_MODE:-}" == true ]]; }           ; export -f is_quiet_mode
+  is_skip_local_mode() { [[ "${SKIP_LOCAL_MODE:-}" == true ]]; } ; export -f is_skip_local_mode
+  is_update_mode() { [[ "${UPDATE_MODE:-}" == true ]]; }         ; export -f is_update_mode
+  is_verbose_mode() { [[ "${VERBOSE_MODE:-}" == true ]]; }       ; export -f is_verbose_mode
 
   # Option validation functions (no export needed for these functions)
+  _can_use_dry_run_mode() { ! is_force_mode; }
   _can_use_minimal_mode() { ! is_bootstrap_mode; }
   _can_use_update_mode() { ! is_bootstrap_mode; }
   _can_use_quiet_mode() { ! is_verbose_mode; }
-  _can_use_dry_run_mode() { ! is_force_mode; }
+  _can_use_skip_local_mode() { ! is_bootstrap_mode && ! is_minimal_mode; }
 
   # Parse script options
   _parse_setup_options() {
     local USAGE=(
       "Usage: $0 [OPTIONS]"
       "Options:"
-      " -b, --bootstrap  Install only the prerequsites. Only applies to \`setup\`."
-      " -d, --dry-run    [limited implementation] Only print status messages; do not make any changes."
-      "                  (ignored if --force is set)"
-      " -f, --force      Replace regular files and directories with symlinks as necessary."
-      "                  Existing files and directories will be renamed with a \`.presetup\` extension."
-      " -h, --help       You're looking at it. Print this help message and exit."
-      " -m, --minimal    Install bare minimum packages. Only applies to \`setup\`."
-      "                  (ignored if --bootstrap is set)"
-      " -n               Same as -d for compatibility with other scripts."
-      " -p, --personal   Install additional dependencies for a personal workstation. Only applies to \`setup\`."
-      "                  (ignored if --bootstrap or --minimal is set)"
-      " -q, --quiet      Print fewer status messages. (ignored if --verbose is set)."
-      " -u, --update     Update existing packages, but don't install anything. (ignored if --bootstrap is set)"
-      "                  Combine with --force to also regenerate symlinks afterward."
-      "                  Can also be used with --minimal to only update the bare minimum packages."
-      " -v, --verbose    Print additional status messages."
-      " -w, --work       Install additional dependencies for a business workstation. Only applies to \`setup\`."
-      "                  (ignored if --bootstrap or --minimal is set)"
+      " -b, --bootstrap   Install only the prerequsites. Only applies to \`setup\`."
+      " -d, --dry-run     [LIMITED IMPLEMENTATION - USE WITH CAUTION] Only print status messages; do not make any changes."
+      "                   (ignored if --force is set)"
+      " -f, --force       Replace regular files and directories with symlinks as necessary."
+      "                   Existing files and directories will be suffixed with \`.symlink_config_backup\`."
+      " -h, --help        You're looking at it. Print this help message and exit."
+      " -m, --minimal     Install bare minimum packages. Only applies to \`setup\`."
+      "                   (ignored if --bootstrap is set)"
+      " -n                Same as -d for compatibility with other scripts."
+      " -p, --personal    Install additional dependencies from \`Brewfile.personal\` for a personal workstation."
+      "                   Only applies to \`setup\`. (ignored if --bootstrap or --minimal is set)"
+      " -q, --quiet       Print fewer status messages. (ignored if --verbose is set)."
+      "     --skip-local  Skip installation of any dependencies defined in Brewfile*.local files. Only applies"
+      "                   to \`setup\`. (implied if --bootstrap or --minimal is set)"
+      " -u, --update      Update existing packages, but don't install anything. (ignored if --bootstrap is set)"
+      "                   Combine with --force to also regenerate symlinks afterward."
+      "                   Can also be used with --minimal to only update the bare minimum packages."
+      " -v, --verbose     Print additional status messages."
     )
 
     deserialize_array ADDITIONAL_DEPENDENCIES_SERIALIZED ADDITIONAL_DEPENDENCIES '|'
+
     while [[ $# -gt 0 ]]; do
       case $1 in
         -h | --help             ) printf >&1 '%s\n' "${USAGE[@]}" && exit 0
@@ -170,6 +174,7 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
       esac
       shift
     done
+
     serialize_array ADDITIONAL_DEPENDENCIES ADDITIONAL_DEPENDENCIES_SERIALIZED '|'
 
     log_debug "Options processed successfully"
