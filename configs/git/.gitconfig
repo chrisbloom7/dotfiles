@@ -1,14 +1,3 @@
-[user]
-	name = Chris Bloom
-	email = chrisbloom7@gmail.com
-	signingkey = 7D1983282132E721
-	useConfigOnly = true
-[github]
-	user = chrisbloom7
-[core]
-	autocrlf = input
-	safecrlf = warn
-	excludesfile = ~/.gitignore_global
 [alias]
 	# Shortcuts
 	br = branch
@@ -34,6 +23,25 @@
 	# Cleanup
 	nuke = !git clean -df && git reset --hard
 	sweep = !git fetch && git branch --merged $([[ $1 != \"-f\" ]] && git rev-parse $(git head-branch)) | egrep -v \"(^\\*|^\\s*(`git head-branch`|develop)$)\" | xargs git branch -d
+[core]
+	autocrlf = input
+	safecrlf = warn
+	excludesfile = ~/.gitignore_global
+[credential]
+	# helper = cache
+	# helper = 1password
+	helper = osxkeychain
+	# helper = store
+[credential "https://github.com"]
+	username = chrisbloom7
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	username = chrisbloom7
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[github]
+	user = chrisbloom7
 [color]
 	diff = auto
 	status = auto
@@ -41,40 +49,41 @@
 	grep = auto
 	interactive = auto
 	ui = true
+[commit]
+	gpgsign = true
 [diff]
-  tool = default-difftool
+	tool = bcomp
+	tool = default-difftool
+[difftool "bcomp"]
+	path = /usr/local/bin/bcomp
+	cmd = bcomp -ro $LOCAL $REMOTE
 [difftool "default-difftool"]
   cmd = code --wait --diff $LOCAL $REMOTE
-[push]
-	default = simple
-	gpgsign = if-asked
-[remote "origin"]
-	push = HEAD
-[ui]
-	interactive = auto
+[fetch]
+	prune = true
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
-[credential]
-	helper = store
-[pull]
-	rebase = true
-[fetch]
-	prune = true
-[credential "https://gist.github.com"]
-	username = chrisbloom7
-	helper = !/opt/homebrew/bin/gh auth git-credential
 [gpg]
 	program = /usr/local/bin/gpg
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-[commit]
-	gpgsign = true
+[push]
+	default = simple
+[pull]
+	rebase = true
+[remote "origin"]
+	push = HEAD
 [tag]
 	gpgsign = true
-[credential "https://github.com"]
-	helper = !/opt/homebrew/bin/gh auth git-credential
+[ui]
+	interactive = auto
 # [url "git@github.com:"]
 # 	insteadOf = https://github.com/
+[user]
+	name = Chris Bloom
+	email = chrisbloom7@gmail.com
+	signingkey = 7D1983282132E721
+	useConfigOnly = true
