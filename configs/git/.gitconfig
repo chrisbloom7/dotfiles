@@ -14,7 +14,6 @@
 	tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
 	# Navigation
-	default-branch = !git config get --global --default="master" init.defaultBranch
 	ignored = ls-files -o -i --exclude-standard
 	ls = ls-files
 	upstream-name = !git remote | egrep -o '(upstream|origin)' | tail -1
@@ -23,6 +22,9 @@
 	# Cleanup
 	nuke = !git clean -df && git reset --hard
 	sweep = !git fetch && git branch --merged $([[ $1 != \"-f\" ]] && git rev-parse $(git head-branch)) | egrep -v \"(^\\*|^\\s*(`git head-branch`|develop)$)\" | xargs git branch -d
+[branch]
+	autoSetupMerge = inherit
+	autoSetupRebase = remote
 [core]
 	autocrlf = input
 	safecrlf = warn
