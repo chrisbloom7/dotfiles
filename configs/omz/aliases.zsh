@@ -134,3 +134,7 @@ git-branch-outgoing () {
   fi
   git-branch-diff "${1}" "$(_parse_git_branch)"
 }
+function git_recent() # Courtesy of Jay McGavren at Huntress
+{
+  git switch $(git for-each-ref --sort=-committerdate refs/heads/ --format='%(refname:short)' --color | head -n 8 | fzf --height 20%)
+}
