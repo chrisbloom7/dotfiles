@@ -2,6 +2,7 @@
 	name = Chris Bloom
 	email = chrisbloom7@gmail.com
 	signingkey = 7D1983282132E721
+	useConfigOnly = true
 [github]
 	user = chrisbloom7
 [core]
@@ -19,7 +20,7 @@
 
 	# Log reporting
 	last = log -1 HEAD
-	me = !git pretty | grep Chris\\ Bloom | less
+	me = !git pretty | grep "$(git config --get user.name)" | less
 	pretty = log --pretty=format:"%h%x09%an%x09%ad%x09%s"
 	tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
@@ -58,23 +59,13 @@
 	clean = git-lfs clean -- %f
 [credential]
 	helper = store
-# [credential "https://github.com"]
-# 	username = chrisbloom7
-# 	helper = !/opt/homebrew/bin/gh auth git-credential
-# [url "git@github.com:"]
-# 	insteadOf = https://github.com/
-[init]
-	defaultBranch = main
 [pull]
 	rebase = true
 [fetch]
 	prune = true
 [credential "https://gist.github.com"]
 	username = chrisbloom7
-	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
-# [commit]
-# 	gpgsign = true
 [gpg]
 	program = /usr/local/bin/gpg
 [gpg "ssh"]
@@ -84,5 +75,6 @@
 [tag]
 	gpgsign = true
 [credential "https://github.com"]
-	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+# [url "git@github.com:"]
+# 	insteadOf = https://github.com/

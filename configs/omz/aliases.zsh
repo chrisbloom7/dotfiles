@@ -76,9 +76,11 @@ weather () { curl -4 wttr.in/${1:-}\?uF${2:-n1} }
 
 # Git aliases and functions
 alias gcom='git com'                  # Short for `git checkout [default_branch]`, typically `main` or `master`
-alias git-bdiff='git-branch-diff' .   # Show commits in <source> that are not in <target>
+alias git-bdiff='git-branch-diff'     # Show commits in <source> that are not in <target>
 alias git-bin='git-branch-incoming'   # Lists commits in the <source> that are not in the current working branch
+alias gbin='git-branch-incoming'
 alias git-bout='git-branch-outgoing'  # Lists commits in the current working branch that are not in the <target>
+alias gbout='git-branch-outgoing'
 alias git-mb='git-make-branch'        # Create a new branch from the current branch with a name based on the supplied arguments
 alias gpom='git pom'                  # Short for `git pull origin [default_branch]`, typically `main` or `master`
 git-make-branch () {
