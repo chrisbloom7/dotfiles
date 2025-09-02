@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 source "${PWD}/helpers/trap_and_trace.sh"
-PATH="${PWD}:$PATH"
+PATH="${PWD}:${PATH}"
 
 subject=${1:?Subject is required}
 target=${2:?Target is required}

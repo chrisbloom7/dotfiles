@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 source "${PWD}/helpers/trap_and_trace.sh"
-PATH="${PWD}:$PATH"
+PATH="${PWD}:${PATH}"
 
 if [[ $# < 2 ]]; then
   log_error "You must provide at least two arguments"
