@@ -81,11 +81,8 @@ HIST_STAMPS="yyyy-mm-dd"
 # See https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/
 plugins=(
   # Runtimes and auto-completions
-  brew
-  chruby                       # Mainly for ruby-build autocomplete
   docker
   iterm2
-  mise
   ngrok
   nodenv
   nvm
@@ -93,7 +90,6 @@ plugins=(
   zsh-autosuggestions
   zsh-completions
 
-  # Utilities
   common-aliases               # creates helpful shortcut aliases for many commonly used commands
   encode64                     # encode64/e64; encodefile64/ef64; decode64/d64
   history                      # h (history); hl (less); hs (grep); hsi (grep -i)

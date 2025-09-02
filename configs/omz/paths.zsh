@@ -2,28 +2,28 @@
 _prepend_to_path() {
   NEW_PATH="${1:?Path is required}"
   if [[ -d "${NEW_PATH}" ]] && [[ ":${PATH}:" != *":${NEW_PATH}:"* ]]; then
-    export PATH="${NEW_PATH}:${PATH}"
+    export PATH="$NEW_PATH:$PATH"
   fi
 }
-
-## PREPEND IN REVERSE ORDER OF PRECEDENCE!
-
-# Add Java to path
-_prepend_to_path "$(brew --prefix openjdk)/bin" || true
-
-# Add Homebrew coreutils to path for GNU utilities
-_prepend_to_path "$(brew --prefix coreutils)/libexec/gnubin" || true
-
-# Load global Node installed binaries
-_prepend_to_path "${HOME}/.node/bin"
 
 # Load personal binaries
 _prepend_to_path "${HOME}/bin"
 
+# Add Homebrew coreutils to path for GNU utilities
+_prepend_to_path "/usr/local/opt/coreutils/libexec/gnubin"
+
+# Load global Node installed binaries
+_prepend_to_path "${HOME}/.node/bin"
+
 # Use project specific binaries before global ones
 _prepend_to_path "node_modules/.bin"
 _prepend_to_path "vendor/bin"
-_prepend_to_path "bin"
+
+# Local bin directories before anything else
+_prepend_to_path "/usr/local/bin"
+
+# Add Java to path
+_prepend_to_path "/opt/homebrew/opt/openjdk/bin"
 
 # Add linux's man to the manpath
 export MANPATH="/usr/local/man:${MANPATH}"
