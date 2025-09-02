@@ -4,7 +4,7 @@
 export DOTFILES="${HOME}/.dotfiles"
 
 # If you come from bash you might have to change your $PATH.
-export PATH="${DOTFILES}/bin:/usr/local/bin:${PATH}"
+export PATH="${DOTFILES}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
@@ -81,8 +81,10 @@ HIST_STAMPS="yyyy-mm-dd"
 # See https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/
 plugins=(
   # Runtimes and auto-completions
+  brew
   docker
   iterm2
+  mise
   ngrok
   nodenv
   nvm
