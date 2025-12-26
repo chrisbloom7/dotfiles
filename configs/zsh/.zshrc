@@ -137,11 +137,13 @@ export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 export BUILDKIT_PROGRESS=plain
 
 # Load project aliases (backed up by Mackup to prevent leaking sensitive info)
-[[ -e "${HOME}/.aliases" ]] && source "${HOME}/.aliases"
+test -e "${HOME}/.aliases" && source "${HOME}/.aliases"
 
-if [[ -f "${HOME}/.hunt-cli/autocomplete_zsh" ]]; then
-  source "${HOME}/.hunt-cli/autocomplete_zsh"
-fi
+# Other completions added by installed tools
+test -e "${HOME}/.hunt-cli/autocomplete_zsh" && source "${HOME}/.hunt-cli/autocomplete_zsh"
+test -e "${HOME}/.config/op/plugins.sh" && source "${HOME}/.config/op/plugins.sh"
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+test -e "${HOME}/.stripe-completion.zsh" && source "${HOME}/.stripe-completion.zsh"
+
 autoload -Uz compinit
 compinit
-source /Users/chris.bloom/.hunt-cli/autocomplete_zsh

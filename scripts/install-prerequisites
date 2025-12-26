@@ -29,8 +29,11 @@ if is_force_mode; then
 fi
 if is_verbose_mode; then
   brew_args="$brew_args --verbose"
-else
+elif is_quiet_mode; then
   brew_args="$brew_args --quiet"
+fi
+if ! is_quiet_mode; then
+  brew_args="$brew_args --display-times"
 fi
 
 log_debug "Checking for coreutils formulae"
@@ -88,3 +91,114 @@ if [[ "$(is_macos)" == "true" ]]; then
 fi
 
 log_success "Prerequisites installed!"
+
+
+# install_code_dependencies() {
+#     print_progress "Setting up mise package manager & installing dependencies..."
+#     cd $PORTAL_DIR
+#     errors=0
+
+#     # install everything in .tool-versions
+#     if check_err "mise install"; then errors=1; fi
+#     mise use --global aws-vault@latest
+#     mise settings add idiomatic_version_file_enable_tools ruby
+
+#     source "${SHELL_STARTUP_FILE}"
+
+#     mise_gem=$(mise which gem)
+#     mise_bundle=$(mise which bundle)
+#     mise_yarn=$(mise which yarn)
+
+#     print_progress "Installing gems & node packages..."
+#     if check_err "${mise_gem} install foreman"; then errors=1; fi
+#     # overmind is installed via brew on macOS
+#     if [[ $PLATFORM != "Darwin" ]]; then
+#         if check_err "${mise_gem} install overmind"; then errors=1; fi
+#     fi
+#     pg_config="pg_config"
+#     if [[ $PLATFORM = "Darwin" ]]; then
+#         pg_config="$(brew --prefix libpq)/bin/pg_config"
+#     fi
+#     if check_err "${mise_bundle} config build.pg --with-pg-config=$pg_config &> /dev/null"; then errors=1; fi
+#     if check_err "${mise_bundle} install"; then errors=1; fi
+#     if check_err "${mise_yarn} install"; then errors=1; fi
+
+#     if [[ errors -eq 0 ]]; then
+#         print_success "mise set up & dependencies installed."
+#     else
+#         print_failure "There were errors installing dependencies, some dependencies may not have been installed."
+#     fi
+# }
+
+# install_homebrew() {
+#     print_progress "Checking for Homebrew install..."
+#     not_used=$(brew help)
+#     if [[ $? -ne 0 ]]; then
+#         print_warning "Homebrew not found."
+#         print_progress "Installing Homebrew..."
+#         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#         print_success "Homebrew installed."
+#     else
+#         print_success "Homebrew already installed."
+#     fi
+# }
+
+# install_xcode_command_tools() {
+#     print_progress "Installing Xcode command line tools..."
+#     not_used=$(git --version)
+#     if [[ $? -ne 0 ]]; then
+#         if check_err "xcode-select --install"; then
+#             print_failure "Failed to install Xcode command line tools."
+#             return
+#         else
+#             print_warning 'Requested installation of Xcode command line tools.
+# You may need to download them from System Settings > General > Software Update.
+# Once you have done so and verified commands like "make" and "git" work, press ENTER to continue...'
+# read _
+#         fi
+#         print_success "Xcode command line tools installed."
+#     else
+#         print_success "Xcode command line tools already installed."
+#     fi
+# }
+
+# update_shell_startup_file() {
+#     print_progress "Modifying ${SHELL_STARTUP_FILE}..."
+#     add_to_file_once "$SHELL_STARTUP_FILE" "eval \$(/opt/homebrew/bin/brew shellenv)"
+#     add_to_file_once "$SHELL_STARTUP_FILE" "eval \"\$(mise activate $(basename $SHELL))\""
+#     source "$SHELL_STARTUP_FILE"
+#     print_success "${SHELL_STARTUP_FILE} updated."
+# }
+
+# setup_brew_environment() {
+#     print_progress "Checking on Brew environment..."
+#     if [[ -z "${HOMEBREW_PREFIX}" ]]; then
+#         print_warning "Brew environment not set up."
+#         print_progress "Setting up Brew environment..."
+#         source "${SHELL_STARTUP_FILE}"
+#     fi
+#     print_success "Brew environment set up."
+# }
+
+# install_brew_dependencies() {
+#     print_progress "Installing Brew dependencies..."
+#     cd $PORTAL_DIR
+#     eval "$(brew --prefix)/bin/brew update"
+#     eval "$(brew --prefix)/bin/brew bundle install"
+#     eval "$(brew --prefix)/bin/brew install --cask docker"
+#     eval "$(brew --prefix)/bin/brew install jq"
+#     eval "$(brew --prefix)/bin/brew upgrade"
+#     source "$SHELL_STARTUP_FILE"
+#     print_success "Brew dependencies installed."
+#     print_warning "Please open the Docker application (Finder > Applications > Docker), then come back and press ENTER..."
+#     read _
+# }
+
+# set_no_mac_keychain_timeout() {
+#     print_progress "Setting aws-vault keychain to have no timeout..."
+#     if check_err "security set-keychain-settings aws-vault.keychain-db"; then
+#         print_failure "Failed to unset aws-vault keychain timeout"
+#         return
+#     fi
+#     print_success "aws-vault keychain timeout unset"
+# }

@@ -90,7 +90,7 @@ cask "webpquicklook"      # Quick Look plugin for webp files
 
 ## Fonts
 cask "font-mona-sans"                     # Mona-Sans font
-cask "font-monaspace-nerd-font"           # Monospace Nerd font
+cask "font-monaspice-nerd-font"           # Monospace Nerd font
 cask "font-monaspace"                     # Monospaced font
 cask "font-open-sans"                     # Open Sans font
 cask "font-powerline-symbols"             # Powerline Symbols font

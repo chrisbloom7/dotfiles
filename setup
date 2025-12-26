@@ -7,7 +7,7 @@
 
 original_args="$@"
 [[ -n "${DEBUG:-}" ]] && echo -e "\033[90mCDing into $(dirname "$0")\033[0m" || true
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" # SCRIPT_DIR_PATH="${0:A:h}"
 [[ -n "${DEBUG:-}" ]] && echo -e "\033[90mSourcing runtime script\033[0m" || true
 source ./scripts/helpers/runtime.sh
 [[ -n "${DEBUG:-}" ]] && echo -e "\033[90mSourcing trap and trace script\033[0m" || true
@@ -40,3 +40,67 @@ fi
 
 log_debug "Finished running \`$0 ${original_args}\`"
 log_success "Setup complete!"
+
+# setup_permissions() {
+#     print_progress "Setting permissions so that stuff works, you may need your sudo password..."
+#     if check_err "sudo chown -R ${USER}:staff ~/.local/share/mise/installs ${PORTAL_DIR}"; then
+#         print_failure "Failed to set file/folder permissions."
+#     fi
+#     print_success "Permissions set."
+# }
+
+# finish() {
+#     print_warning "Setup script execution complete. Check ${ERROR_LOG} for setup script errors.
+# Please run:
+# 1. \"source $SHELL_STARTUP_FILE\" to load required environment variables
+# 2. \"make dev.server\" from the top-level "portal" directory to start your local Portal
+
+# View the Makefile in the top-level portal directory for more commands.
+
+# For commands requiring AWS access, prepend \"aws-vault exec $USER -- \" to the command, or simply
+# run \"aws-vault exec $USER\" to drop into an AWS-authenticated shell.
+
+# You can change your AWS profile name from \"$USER\" to whatever you like by editing ~/.aws/config
+# (you will need to change AWS_PROFILE in $SHELL_STARTUP_FILE as well).
+
+# Several executables have been installed as mise packages (https://mise.jdx.dev/getting-started.html). When in the
+# root portal directory, mise package versions are tied to the .tool-versions file. Run 'mise list' to view packages
+# installed with mise. If you wish to set a package version globally to use a package outside of the portal directory,
+# run 'mise use --global <package>@<version>'
+
+# If you encountered any issues with this script, or if your environment is non-functional
+# after running it, please inform the IDEX team in the #product-idex-platform-support Slack
+# channel.
+# "
+# }
+
+# ERROR_LOG="$PORTAL_DIR/bin/setups/setup.errors"
+# clear_error_log() {
+#     echo "No errors" > $ERROR_LOG
+# }
+
+# disclaimer_prompt() {
+#     print_color_msg "
+# PLEASE READ:
+# This script assumes you are using zsh if on macOS, and bash if on WSL.
+# The intent of this script is to get your development environment functional
+# as quickly as possible; deviate from its defaults at your own peril.
+
+# Before running this script:
+# 1. Ensure you've been added to the BackendEngineers SSO group.
+#    This can be requested through Torii.
+
+# 2. Ensure you've properly cloned the portal repo via git.
+#    This script should be run from the top-level portal/ directory of the cloned repo.
+#    For example: ./bin/setups/mac_arm_only_setup.zsh (or ./bin/setups/wsl_ubuntu_only_setup.sh for WSL)
+
+# - This script is idempotent; it can be re-run.
+# - This script will prompt you for your sudo password and other interactivity
+#   at several points during its execution.
+# - If you encounter issues with this script, or if additional setup steps
+#   need to be added, PLEASE inform the IDEX team in the
+#   #product-idex-platform-support Slack channel, or open a Pull Request.
+
+# Press ENTER to continue (Ctrl+C at any time to exit)..." $RED
+#     read _
+# }

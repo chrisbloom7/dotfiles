@@ -4,3 +4,24 @@ cd "$(dirname "$0")"
 source "${PWD}/helpers/color_codes.sh"
 
 echo -e "${ANSI_BOLD_RED}Error:${ANSI_RESET} $@" >&2
+sleep 0.5
+
+# #######################################
+# # Run a command and check its exit code. Logs errors to $ERROR_LOG.
+# # Arguments:
+# #   $1 = Command to run
+# # Returns:
+# #   0 if command returns a non-zero exit code, 1 otherwise
+# #######################################
+# check_err() {
+#     print_progress "Running $1..."
+#     out="$(eval $1 2>&1)"
+#     exit_code=$?
+#     echo "$out"
+#     if [[ $exit_code -ne 0 ]]; then
+#         echo "Command \"$1\" exit code was $exit_code" >> "$ERROR_LOG"
+#         echo "  Output: $out\n" >> "$ERROR_LOG"
+#         return 0
+#     fi
+#     return 1
+# }

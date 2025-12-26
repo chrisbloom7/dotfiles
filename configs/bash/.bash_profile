@@ -65,3 +65,5 @@ source "$BASH_IT"/bash_it.sh
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+[[ -f "/opt/homebrew/bin/brew" ]] && eval "$("/opt/homebrew/bin/brew" shellenv)" || true
+[[ -n "$(command -v mise 2>/dev/null)" ]] && eval "$(mise activate bash)" || true

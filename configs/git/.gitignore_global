@@ -39,3 +39,9 @@ Thumbs.db
 .vscode
 .vagrant/
 .rake_tasks
+
+# Personal configs and notes #
+##############################
+.chrisbloom7/
+*.chrisbloom7.md
+Warp.md

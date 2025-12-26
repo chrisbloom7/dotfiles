@@ -31,8 +31,10 @@ add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)
 log_debug "Updating Homebrew"
 if is_verbose_mode; then
   brew_args="--verbose"
-else
+elif is_quiet_mode; then
   brew_args="--quiet"
+else
+  brew_args=""
 fi
 brew update $brew_args
 
@@ -42,6 +44,11 @@ brew tap buo/cask-upgrade
 if is_force_mode; then
   brew_args="${brew_args} --force"
 fi
+
+# TODO: --display-times is not supported on brew bundle
+# if ! is_quiet_mode; then
+#   brew_args="${brew_args} --display-times"
+# fi
 
 log_debug "Disabling Exit on error for Homebrew bundle/upgrade"
 if [[  $- =~ e ]]; then
@@ -56,7 +63,7 @@ else
   # To restrict app installations to current user, add args:
   #   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
   log_info "Installing minimal Homebrew packages from Brewfile"
-  bundle_args="${brew_args} --cleanup --no-upgrade"
+  bundle_args="${brew_args} --no-upgrade"
   log_debug "Running brew bundle with args: ${bundle_args}"
   brew bundle --file ../Brewfile.minimal $bundle_args
 fi
@@ -114,7 +121,15 @@ if ! is_minimal_mode && ! is_update_mode; then
 fi
 
 log_info "Cleaning up Homebrew services"
-brew services cleanup
+brew services cleanup ${brew_args}
+
+log_info "Cleaning up stale lock files and outdated downloads for Homebrew"
+brew_cleanup_args="${brew_args} --prune=all"
+if ! is_verbose_mode; then
+  # This command is particularly noisy; only show output in verbose mode
+  brew_cleanup_args="${brew_cleanup_args} --quiet"
+fi
+brew cleanup ${brew_cleanup_args}
 
 if ! is_minimal_mode && ! is_update_mode; then
   # Uninstall default Mac apps
@@ -150,7 +165,7 @@ if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
   mise_args="--cd $HOME --env local --yes"
   if is_verbose_mode; then
     mise_args="${mise_args} --verbose"
-  else
+  elif is_quiet_mode; then
     mise_args="${mise_args} --quiet"
   fi
   if is_update_mode; then

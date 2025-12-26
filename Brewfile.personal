@@ -55,6 +55,7 @@ cask "voodoopad"              # Notes organiser
 cask "warp"                   # Rust-based terminal
 # cask "wavebox"                # Web browser
 # cask "yubico-yubikey-manager" # Application for configuring any YubiKey
+cask "zoom"                   # Video communication and virtual meeting platform - moved here because it's a managed app on work laptops
 
 ## Apps from the Mac App Store
 mas "1Password for Safari", id: 1569813296

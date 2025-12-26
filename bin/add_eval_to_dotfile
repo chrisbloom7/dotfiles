@@ -33,3 +33,19 @@ for target in ${@:3}; do
     echo "${new_eval}" >> "${target}"
   fi
 done
+
+# #######################################
+# # Write a line to a file only if that line isn't already present.
+# # Arguments:
+# #   $1 = File to write to
+# #   $2 = Line to write
+# #######################################
+# add_to_file_once() {
+#   target_file=$1
+#   line=$2
+#   grep "^${line}$" "${target_file}" > /dev/null
+
+#   if [[ $? -eq 1 ]]; then
+#     echo "${line}" >> "${target_file}"
+#   fi
+# }

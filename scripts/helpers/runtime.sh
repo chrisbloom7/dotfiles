@@ -201,3 +201,46 @@ log_debug "  QUIET_MODE:              ${QUIET_MODE:?Not set!}"
 log_debug "  UPDATE_MODE:             ${UPDATE_MODE:?Not set!}"
 log_debug "  VERBOSE_MODE:            ${VERBOSE_MODE:?Not set!}"
 log_debug "  DOTFILES:                ${DOTFILES:?Not set!}"
+
+# PLATFORM="$(uname)"
+
+# if [[ $(basename "$SHELL") == zsh ]]; then
+#     SHELL_STARTUP_FILE="$HOME/.zprofile"
+# else
+#     SHELL_STARTUP_FILE="$HOME/.bashrc"
+# fi
+
+# require_not_root() {
+#     if [ "$EUID" -eq 0 ]; then
+#         echo "Please do not run this script as root. Exiting."
+#         exit 0
+#     fi
+# }
+
+# require_root() {
+#     if [ "$EUID" -ne 0 ]; then
+#         echo "Please run this script as root. Exiting."
+#         exit 0
+#     fi
+# }
+
+# require_mac() {
+#     if [ "$(uname)" != "Darwin" ]; then
+#         echo "This script should only be run on Mac. Exiting."
+#         exit 0
+#     fi
+# }
+
+# require_linux() {
+#     if [ "$(uname)" != "Linux" ]; then
+#         echo "This script should only be run on Linux. Exiting."
+#         exit 0
+#     fi
+# }
+
+# require_arm_mac() {
+#     if [ "$(uname -m)" != 'arm64' ] || [ "$(uname)" != "Darwin" ]; then
+#         print_warning "This script may only be run on an ARM Mac, exiting now."
+#         exit 0
+#     fi
+# }

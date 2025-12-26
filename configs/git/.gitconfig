@@ -18,6 +18,7 @@
 	ls = ls-files
 	upstream-name = !git remote | egrep -o '(upstream|origin)' | tail -1
 	head-branch = !git remote show $(git upstream-name) | awk '/HEAD branch/ {print $NF}'
+	recent = !git switch $(git for-each-ref --sort=-committerdate refs/heads/ --format='%(refname:short)' --color | head -n 8 | fzf --height 20%)
 
 	# Cleanup
 	nuke = !git clean -df && git reset --hard

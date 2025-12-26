@@ -4,3 +4,4 @@ cd "$(dirname "$0")"
 source "${PWD}/helpers/color_codes.sh"
 
 echo -e "${ANSI_BOLD_GREEN}Success:${ANSI_RESET} $@"
+sleep 0.5

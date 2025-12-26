@@ -33,3 +33,43 @@ ssh-add -K ~/.ssh/id_ed25519
 # Adding your SSH key to your GitHub account
 # https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account
 log_success "SSH key generated. To add your public key to GitHub, etc., run 'pbcopy < ~/.ssh/id_ed25519.pub' to copy the key to your clipboard."
+
+# check_github_keys() {
+#     print_progress "Checking Github Keys..."
+#     if [ -f ~/.ssh/id_ed25519.pub ]; then
+#         print_success "You already have a public key at ~/.ssh/id_ed25519.pub"
+#     else
+#         print_progress "Generating new SSH key..."
+
+#         if check_err "ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N \"\""; then
+#             print_failure "Failed to generate new SSH key."
+#             return
+#         fi
+#         if [[ $PLATFORM = "Darwin" ]]; then
+#             if check_err "ssh-add --apple-use-keychain ~/.ssh/id_ed25519"; then
+#                 print_failure "Failed to run ssh-add on newly generated key."
+#                 return
+#             fi
+#         else
+#             if check_err "eval \"ssh-agent -s\""; then
+#                 print_failure "Failed to start ssh-agent."
+#                 return
+#             fi
+#             if check_err "ssh-add ~/.ssh/id_ed25519"; then
+#                 print_failure "Failed to run ssh-add on newly generated key."
+#                 return
+#             fi
+#         fi
+
+#         print_success "New SSH key pair generated. Public key is at ~/.ssh/id_ed25519.pub"
+#     fi
+
+#     print_warning "If you haven't already added an SSH key to GitHub, follow these steps:"
+#     printf "1. Go to https://github.com/settings/ssh/new.\n"
+#     printf "2. Give your key a title ('default' is okay), make sure 'Authentication Key' is selected, and copy the following key into the 'Key' box:\n"
+#     cat ~/.ssh/id_ed25519.pub
+#     printf "3. Click on 'Add SSH key' and enter your GitHub password if prompted.\n"
+#     printf "4. Authorize the SSH key for SSO by clicking 'Configure SSO', then 'Authorize', then following the prompts.\n\n"
+#     printf "Press ENTER after you've completed these steps (or if you've already added an SSH key to GitHub)...\n"
+#     read _
+# }

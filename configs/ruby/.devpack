@@ -4,6 +4,10 @@ activerecord-analyze
 amazing_print
 better_errors
 debug
+parser
+# rspec-fuubar
 ruby-lsp
-rufo
-solargraph
+ruby-lsp-rails
+ruby-lsp-rails-factory-bot
+ruby-lsp-rake
+ruby-lsp-rspec

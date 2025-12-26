@@ -5,4 +5,5 @@ source "${PWD}/helpers/color_codes.sh"
 
 if [[ "${VERBOSE_MODE:-}" == true ]]; then
   echo -e "${ANSI_GRAY}$@${ANSI_RESET}"
+  sleep 0.5
 fi

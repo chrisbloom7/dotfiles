@@ -5,3 +5,4 @@ source "${PWD}/helpers/color_codes.sh"
 
 [[ "${QUIET_MODE:-false}" == true ]] && exit 0
 echo -e "${ANSI_BOLD_BLUE}Info:${ANSI_RESET} $@"
+sleep 0.5

@@ -17,6 +17,11 @@ fi
 yn() {
   test $@ && echo yup || echo nope
 }
+avs () {
+  profile=$1
+  shift
+  aws-vault exec $profile -- "$@"
+}
 
 # Python aliases and functions
 alias python="python3"
