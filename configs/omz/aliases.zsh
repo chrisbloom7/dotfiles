@@ -40,6 +40,32 @@ ehosts () {
 edotaliases () {
   ${EDITOR:?EDITOR not defined} "${HOME}/.aliases"
 }
+egem () {
+  ${EDITOR:?EDITOR not defined}
+  if [[ -z "${1:-}" ]]; then
+    echo "Usage: egem <gem_name>"
+    return 1
+  fi
+
+  # echo "Attempting to open gem '$1' from bundler gems"
+  bundle_stat=$(bundle show "$1" &>/dev/null; echo $?)
+  # echo "Bundle show exit status: $bundle_stat"
+  if [[ $bundle_stat -eq 0 ]]; then
+    echo "Opening gem '$1' from bundler gems"
+    bundle open "$1"
+  else
+    # echo "Could not find gem '$1' in bundler gems, trying system gems"
+    gem_stat=$(gem which "$1" &>/dev/null; echo $?)
+    # echo "Gem which exit status: $gem_stat"
+    if [[ $gem_stat -eq 0 ]]; then
+      echo "Opening gem '$1' from system gems"
+      gem open "$1"
+    else
+      echo "Could not find gem '$1' in bundler or system gems"
+      return 1
+    fi
+  fi
+}
 
 # Utility aliases and functions
 epoch () {
