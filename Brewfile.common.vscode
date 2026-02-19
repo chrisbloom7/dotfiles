@@ -10,7 +10,6 @@ vscode "CraigMaslowski.erb"                         # Syntax Highlighting for Ru
 vscode "DavidAnson.vscode-markdownlint"             # Markdown linting and style checking for Visual Studio Code
 vscode "dbaeumer.vscode-eslint"                     # Integrates ESLint JavaScript into VS Code.
 vscode "deaniusolutions.deckset"                    # Make Deckset files in VSCode splendiferously.
-vscode "DrMerfy.overtype"                           # Provides insert/overtype mode.
 vscode "eamodio.gitlens"                            # Supercharge Git within VS Code — Visualize code authorship at a glance via Git blame annotations and CodeLens, seamlessly navigate and explore Git repositories, gain valuable insights via rich visualizations and powerful comparison commands, and so much more
 vscode "emilast.logfilehighlighter"                 # Adds color highlighting to log files to make it easier to follow the flow of log events and identify problems
 vscode "erikphansen.vscode-toggle-column-selection" # Turn a selection into a column selection à la TextMate
@@ -27,6 +26,7 @@ vscode "hverlin.mise-vscode"                        # Mise (asdf rust clone) for
 vscode "IBM.output-colorizer"                       # Syntax highlighting for log files
 # vscode "itarato.byesig"                             # Hide Ruby Sorbet signatures
 vscode "janjoerke.align-by-regex"                   # Aligns selected lines of text by a regular expression.
+vscode "jasonnutter.vscode-codeowners"              # VS Code extension for CODEOWNERS file
 vscode "jetmartin.bats"                             # Bats (Bash Automated Testing System) language support for VSCode.
 vscode "loginspector.loginspector"                  # Analyze log files to better understand the program that it describes
 vscode "mechatroner.rainbow-csv"                    # Highlight CSV and TSV files, Run SQL-like queries
