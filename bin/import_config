@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+# Imports files from an existing tool config directory into the dotfiles repo,
+# generates a symlink_<tool> script, and runs it to create the symlinks.
+#
+# Usage:
+#   import_config <tool-name> <source-dir> <file1> [file2 ...]
+#
+# Examples:
+#   import_config claude ~/.claude CLAUDE.md settings.json config.json
+#   import_config aws ~/.aws config
+#   import_config mise ~/.config/mise config.toml
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+tool=${1:?Tool name is required (e.g. claude)}
+source_dir=${2:?Source directory is required (e.g. ~/.claude)}
+shift 2
+files=("$@")
+
+if [[ ${#files[@]} -eq 0 ]]; then
+  log_error "At least one file to import is required"
+  exit 1
+fi
+
+# Resolve source_dir (expand ~)
+source_dir="${source_dir/#\~/$HOME}"
+
+dotfiles_root="$(cd "${PWD}/.." && pwd)"
+config_dir="${dotfiles_root}/configs/${tool}"
+symlink_script="${config_dir}/symlink_${tool}"
+
+log_info "Importing ${tool} configs from ${source_dir}"
+
+mkdir -p "${config_dir}"
+
+# Move each file into the config dir
+for file in "${files[@]}"; do
+  src="${source_dir}/${file}"
+  dest="${config_dir}/${file}"
+
+  if [[ ! -e "${src}" ]] && [[ ! -L "${src}" ]]; then
+    log_attention "${src} not found; skipping"
+    continue
+  fi
+
+  if [[ -e "${dest}" ]] || [[ -L "${dest}" ]]; then
+    log_attention "${dest} already exists in dotfiles; skipping move (file may already be managed)"
+    continue
+  fi
+
+  # Create parent dir inside config_dir if the file has subdirectory components
+  file_parent="$(dirname "${file}")"
+  if [[ "${file_parent}" != "." ]]; then
+    mkdir -p "${config_dir}/${file_parent}"
+  fi
+
+  log_info "Moving ${src} → ${dest}"
+  mv "${src}" "${dest}"
+done
+
+# Build the TARGET shell expression from source_dir
+# ~/.claude     → "${HOME}/.claude"
+# ~/.config/foo → "${HOME}/.config/foo"
+# ~/            → "${HOME}"
+home_rel="${source_dir/#$HOME/}"
+if [[ -z "${home_rel}" ]] || [[ "${home_rel}" == "/" ]]; then
+  target_expr='"${HOME}"'
+  use_subdir=false
+else
+  # Strip leading slash
+  home_rel="${home_rel#/}"
+  target_expr='"${HOME}/'"${home_rel}"'"'
+  use_subdir=true
+fi
+
+# Generate the symlink script only if it doesn't already exist
+if [[ -e "${symlink_script}" ]]; then
+  log_attention "${symlink_script} already exists; skipping generation (update it manually if needed)"
+else
+  log_info "Generating ${symlink_script}"
+
+  # Build configs array entries
+  configs_entries=""
+  for file in "${files[@]}"; do
+    configs_entries+="  \"${file}\"\n"
+  done
+
+  # Write the symlink script
+  mkdir_line=""
+  clean_line=""
+  if [[ "${use_subdir}" == true ]]; then
+    mkdir_line='mkdir -p "${TARGET}"'$'\n'"clean_broken_symlinks \"\${TARGET}\""$'\n'
+  fi
+
+  cat > "${symlink_script}" <<SCRIPT
+#!/usr/bin/env bash
+cd "\$(dirname "\$0")"
+source ../../scripts/helpers/runtime.sh
+source ../../bin/helpers/trap_and_trace.sh
+
+log_info "Symlinking ${tool} configs"
+
+TARGET=${target_expr}
+${mkdir_line}
+configs=(
+$(printf "  \"%s\"\n" "${files[@]}")
+)
+for config in "\${configs[@]}"; do
+  symlink_config "\${PWD}/\${config}" "\${TARGET}/\${config}"
+done
+SCRIPT
+
+  chmod +x "${symlink_script}"
+  log_success "Generated ${symlink_script}"
+fi
+
+# Run the symlink script
+log_info "Running symlink script"
+"${symlink_script}"
+
+log_success "Done! ${tool} configs are now managed in ${config_dir}"
