@@ -9,9 +9,6 @@ export PATH="${DOTFILES}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
 
-# Enable completions
-autoload -Uz compinit && compinit
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -84,11 +81,7 @@ plugins=(
   brew
   docker
   iterm2
-  mise
   ngrok
-  nodenv
-  nvm
-  rbenv
   zsh-autosuggestions
   zsh-completions
 
@@ -98,11 +91,16 @@ plugins=(
   jsontools                    # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
   zbell                        # prints a bell character when a command finishes if it has been running for longer than a specified duration
   zsh-history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
-  zsh-syntax-highlighting      # Fish shell like syntax highlighting for Zsh
 )
 
 # User configuration for oh-my-zsh and plugins
 DEFAULT_USER="chrisbloom7"
+
+# Activate mise before OMZ loads so plugins can use mise-managed tools
+[[ -n "$(command -v mise 2>/dev/null)" ]] && eval "$(mise activate zsh)" || true
+
+# Docker CLI completions must be added to fpath before compinit (called by OMZ)
+fpath=("${HOME}/.docker/completions" $fpath)
 
 # Initialize oh-my-zsh
 [[ ! -f $ZSH/oh-my-zsh.sh ]] && echo "oh-my-zsh not found at $ZSH" && exit 1
@@ -145,9 +143,3 @@ test -e "${HOME}/.hunt-cli/autocomplete_zsh" && source "${HOME}/.hunt-cli/autoco
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 test -e "${HOME}/.stripe-completion.zsh" && source "${HOME}/.stripe-completion.zsh"
 
-# Docker CLI completions
-fpath=("${HOME}/.docker/completions" $fpath)
-autoload -Uz compinit
-compinit
-
-if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
