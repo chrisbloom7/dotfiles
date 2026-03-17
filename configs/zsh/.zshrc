@@ -141,9 +141,13 @@ test -e "${HOME}/.aliases" && source "${HOME}/.aliases"
 
 # Other completions added by installed tools
 test -e "${HOME}/.hunt-cli/autocomplete_zsh" && source "${HOME}/.hunt-cli/autocomplete_zsh"
-test -e "${HOME}/.config/op/plugins.sh" && source "${HOME}/.config/op/plugins.sh"
+# test -e "${HOME}/.config/op/plugins.sh" && source "${HOME}/.config/op/plugins.sh"
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 test -e "${HOME}/.stripe-completion.zsh" && source "${HOME}/.stripe-completion.zsh"
 
+# Docker CLI completions
+fpath=("${HOME}/.docker/completions" $fpath)
 autoload -Uz compinit
 compinit
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi

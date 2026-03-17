@@ -11,3 +11,6 @@ export AWS_VAULT_BACKEND=keychain
 export AWS_REGION=us-east-1
 [[ -f "/opt/homebrew/bin/brew" ]] && [[ -f "/opt/homebrew/bin/brew" ]] && eval "$("/opt/homebrew/bin/brew" shellenv)" || true || true
 [[ -n "$(command -v mise 2>/dev/null)" ]] && eval "$(mise activate zsh)" || true
+
+# Machine-specific overrides (not tracked in dotfiles)
+[[ -f "${HOME}/.zprofile.local" ]] && source "${HOME}/.zprofile.local" || true
