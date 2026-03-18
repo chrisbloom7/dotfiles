@@ -108,6 +108,7 @@ configs=(
 $(printf "  \"%s\"\n" "${files[@]}")
 )
 for config in "\${configs[@]}"; do
+  mkdir -p "\$(dirname "\${TARGET}/\${config}")"
   symlink_config "\${PWD}/\${config}" "\${TARGET}/\${config}"
 done
 SCRIPT

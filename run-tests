@@ -13,4 +13,15 @@ fi
 
 BATS="$(command -v bats 2>/dev/null || echo "${BATS_BIN}")"
 
-exec "${BATS}" --recursive tests/ "$@"
+# If any argument is a file/directory path (not a flag), pass args directly
+# to bats without the default --recursive tests/ so the file isn't run twice.
+has_path_arg=false
+for arg in "$@"; do
+  [[ "${arg}" != --* ]] && has_path_arg=true && break
+done
+
+if [[ "${has_path_arg}" == false ]]; then
+  exec "${BATS}" --recursive tests/ "$@"
+else
+  exec "${BATS}" "$@"
+fi
