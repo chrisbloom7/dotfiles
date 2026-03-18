@@ -139,7 +139,10 @@ test -e "${HOME}/.aliases" && source "${HOME}/.aliases"
 
 # Other completions added by installed tools
 test -e "${HOME}/.hunt-cli/autocomplete_zsh" && source "${HOME}/.hunt-cli/autocomplete_zsh"
-# test -e "${HOME}/.config/op/plugins.sh" && source "${HOME}/.config/op/plugins.sh"
+if test -e "${HOME}/.config/op/plugins.sh"; then
+  source "${HOME}/.config/op/plugins.sh"
+  unalias gh 2>/dev/null || true  # gh uses its own auth via `gh auth login`
+fi
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 test -e "${HOME}/.stripe-completion.zsh" && source "${HOME}/.stripe-completion.zsh"
 
