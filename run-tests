@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BATS_BIN="${BATS_BIN:-/opt/homebrew/bin/bats}"
+
+if ! command -v bats &>/dev/null && [[ ! -x "${BATS_BIN}" ]]; then
+  echo "Error: bats is not installed or not found." >&2
+  echo "" >&2
+  echo "Install it with:" >&2
+  echo "  brew install bats-core" >&2
+  exit 1
+fi
+
+BATS="$(command -v bats 2>/dev/null || echo "${BATS_BIN}")"
+
+exec "${BATS}" --recursive tests/ "$@"
