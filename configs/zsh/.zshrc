@@ -6,6 +6,11 @@ export DOTFILES="${HOME}/.dotfiles"
 # If you come from bash you might have to change your $PATH.
 export PATH="${DOTFILES}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
+# Re-prepend mise shims after PATH reset so they come before /usr/bin.
+# path_helper (macOS) and .zshrc's hardcoded PATH push shims back behind /usr/bin;
+# mise exec inserts tool bins relative to shim position, so shims must lead.
+export PATH="${HOME}/.local/share/mise/shims:${PATH}"
+
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
 
@@ -146,3 +151,5 @@ fi
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 test -e "${HOME}/.stripe-completion.zsh" && source "${HOME}/.stripe-completion.zsh"
 
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi

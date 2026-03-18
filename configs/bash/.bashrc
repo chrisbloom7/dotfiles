@@ -1,4 +1,4 @@
-export PATH="${HOME}/.yarn/bin:${PATH}"
+export PATH="${HOME}/.local/share/mise/shims:${HOME}/.yarn/bin:${PATH}"
 
 # Preferred editor for local and remote sessions
 _DEFAULT_EDITOR=vim
