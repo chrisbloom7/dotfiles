@@ -38,10 +38,10 @@ if [[ -e "${target}" ]] || [[ -L "${target}" ]]; then
     fi
 
     if [[ ${diff_stat} -ne 0 ]]; then
-      if [[ "${FORCE_MODE}" != true ]] && [[ ${diff_stat} -gt 1 ]]; then
+      if [[ "${FORCE_MODE:-false}" != true ]] && [[ ${diff_stat} -gt 1 ]]; then
         log_attention "${target} already exists but diff operation failed; move it or use FORCE_MODE to rename it"
         exit 0
-      elif [[ "${FORCE_MODE}" != true ]]; then
+      elif [[ "${FORCE_MODE:-false}" != true ]]; then
         log_attention "${target} already exists and is different than ${subject}; move it or use FORCE_MODE to rename it"
         exit 0
       else

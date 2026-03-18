@@ -27,13 +27,11 @@ EOF
 
   export PATH="${TEST_TMPDIR}/mock_bin:${PATH}"
 
-  # Initialize env vars that scripts depend on (mirrors what runtime.sh does).
-  # Unsetting them would trigger set -u failures since scripts reference them
-  # without defaults (e.g. "${FORCE_MODE}" not "${FORCE_MODE:-}").
-  export FORCE_MODE=false
-  export VERBOSE_MODE=false
-  export QUIET_MODE=false
-  unset CODESPACES || true
+  # Clear env vars that alter script behavior
+  unset FORCE_MODE   || true
+  unset VERBOSE_MODE || true
+  unset QUIET_MODE   || true
+  unset CODESPACES   || true
 }
 
 # _teardown_common
