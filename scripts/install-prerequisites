@@ -23,55 +23,55 @@ source ./helpers/source_homebrew.sh
 
 # Install prerequisite Homebrew formulae
 log_info "Installing prerequisite Homebrew formulae"
-brew_args="--require-sha --no-quarantine --overwrite"
+brew_args=(--require-sha --no-quarantine --overwrite)
 if is_force_mode; then
-  brew_args="$brew_args --force"
+  brew_args+=(--force)
 fi
 if is_verbose_mode; then
-  brew_args="$brew_args --verbose"
+  brew_args+=(--verbose)
 elif is_quiet_mode; then
-  brew_args="$brew_args --quiet"
+  brew_args+=(--quiet)
 fi
 if ! is_quiet_mode; then
-  brew_args="$brew_args --display-times"
+  brew_args+=(--display-times)
 fi
 
 log_debug "Checking for coreutils formulae"
 if [ -z "$(brew ls coreutils 2>/dev/null)" ]; then
   log_info "Installing coreutils formulae"
-  brew install $brew_args coreutils
+  brew install "${brew_args[@]}" coreutils
 fi
 
 log_debug "Checking for git formulae"
 if [ -z "$(brew ls git 2>/dev/null)" ]; then
   log_info "Installing git formulae"
-  brew install $brew_args git
+  brew install "${brew_args[@]}" git
 fi
 
 log_debug "Checking for gpg-suite formulae"
 if [ -z "$(brew ls gpg-suite 2>/dev/null)" ]; then
   log_info "Installing gpg-suite formulae"
-  brew install $brew_args gpg-suite
+  brew install "${brew_args[@]}" gpg-suite
 fi
 
 log_debug "Checking for zsh formulae"
 if [ -z "$(brew ls zsh 2>/dev/null)" ]; then
   log_info "Installing zsh formulae"
-  brew install $brew_args zsh
+  brew install "${brew_args[@]}" zsh
 fi
 
 # Check for bats-core
 log_debug "Checking for bats-core formulae"
 if [ -z "$(brew ls bats-core 2>/dev/null)" ]; then
   log_info "Installing bats-core formulae"
-  brew install $brew_args bats-core
+  brew install "${brew_args[@]}" bats-core
 fi
 
 if [[ "$(is_macos)" == "true" ]]; then
   log_debug "Checking for mas formulae"
   if [ -z "$(brew ls mas 2>/dev/null)" ]; then
     log_info "Installing mas formulae"
-    brew install $brew_args mas
+    brew install "${brew_args[@]}" mas
   fi
 
   log_debug "Checking for xcode-select"

@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 source "${PWD}/helpers/color_codes.sh"
 
 echo -e "${ANSI_BOLD_RED}Error:${ANSI_RESET} $@" >&2
-sleep 0.5
+sleep "${LOG_SLEEP_DURATION:-0}"
 
 # #######################################
 # # Run a command and check its exit code. Logs errors to $ERROR_LOG.

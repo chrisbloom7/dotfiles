@@ -19,7 +19,7 @@ log_debug "Sourcing homebrew script"
 source ./helpers/source_homebrew.sh
 
 log_info "Adding Homebrew evals to shell profiles"
-add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)/bin/brew\" shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+add_eval_to_dotfile "[[ -f \"${HOMEBREW_PREFIX}/bin/brew\" ]]" "\"${HOMEBREW_PREFIX}/bin/brew\" shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
 
 # log_info "Adding HOMEBREW_CASK_OPTS to shell profiles"
 # if [[ "$(is_macos)" == "true" ]]; then
@@ -30,19 +30,19 @@ add_eval_to_dotfile "[[ -f \"$(brew --prefix)/bin/brew\" ]]" "\"$(brew --prefix)
 
 log_debug "Updating Homebrew"
 if is_verbose_mode; then
-  brew_args="--verbose"
+  brew_args=(--verbose)
 elif is_quiet_mode; then
-  brew_args="--quiet"
+  brew_args=(--quiet)
 else
-  brew_args=""
+  brew_args=()
 fi
-brew update $brew_args
+brew update "${brew_args[@]}"
 
 log_info "Installing Homebrew support for upgrading casks"
 brew tap buo/cask-upgrade
 
 if is_force_mode; then
-  brew_args="${brew_args} --force"
+  brew_args+=(--force)
 fi
 
 # TODO: --display-times is not supported on brew bundle
@@ -50,27 +50,17 @@ fi
 #   brew_args="${brew_args} --display-times"
 # fi
 
-log_debug "Disabling Exit on error for Homebrew bundle/upgrade"
-if [[  $- =~ e ]]; then
-  set +e
-  RESTORE_EXIT_ON_ERROR=true
-fi
 if is_update_mode; then
   log_info "Upgrading existing Homebrew packages"
-  log_debug "Running brew upgrade with args: ${brew_args}"
-  brew upgrade $brew_args
+  log_debug "Running brew upgrade with args: ${brew_args[*]}"
+  brew upgrade "${brew_args[@]}" || true
 else
   # To restrict app installations to current user, add args:
   #   --appdir "${HOME}/Applications" --fontdir "${HOME}/Library/Fonts"
   log_info "Installing minimal Homebrew packages from Brewfile"
-  bundle_args="${brew_args} --no-upgrade"
-  log_debug "Running brew bundle with args: ${bundle_args}"
-  brew bundle --file ../Brewfile.minimal $bundle_args
-fi
-log_debug "Re-enabling Exit on error"
-if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
-  set -e
-  unset RESTORE_EXIT_ON_ERROR
+  bundle_args=("${brew_args[@]}" --no-upgrade)
+  log_debug "Running brew bundle with args: ${bundle_args[*]}"
+  brew bundle --file ../Brewfile.minimal "${bundle_args[@]}" || true
 fi
 
 if ! is_minimal_mode && ! is_update_mode; then
@@ -79,18 +69,8 @@ if ! is_minimal_mode && ! is_update_mode; then
   deserialize_array ADDITIONAL_DEPENDENCIES_SERIALIZED ADDITIONAL_DEPENDENCIES '|'
   for dependency_suffix in "${ADDITIONAL_DEPENDENCIES[@]}"; do
     log_info "Installing additional Homebrew packages from Brewfile.${dependency_suffix}"
-    log_debug "Disabling Exit on error for Brewfile.${dependency_suffix}"
-    if [[  $- =~ e ]]; then
-      set +e
-      RESTORE_EXIT_ON_ERROR=true
-    fi
-    log_debug "Running brew bundle with args: ${bundle_args}"
-    brew bundle --file ../Brewfile.${dependency_suffix} $bundle_args
-    log_debug "Re-enabling Exit on error"
-    if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
-      set -e
-      unset RESTORE_EXIT_ON_ERROR
-    fi
+    log_debug "Running brew bundle with args: ${bundle_args[*]}"
+    brew bundle --file "../Brewfile.${dependency_suffix}" "${bundle_args[@]}" || true
   done
 
   if ! is_skip_local_mode; then
@@ -102,18 +82,8 @@ if ! is_minimal_mode && ! is_update_mode; then
 
     for brewfile in "${local_brewfiles[@]}"; do
       log_info "Installing additional Homebrew packages from ${brewfile}"
-      log_debug "Disabling Exit on error for ${brewfile}"
-      if [[  $- =~ e ]]; then
-        set +e
-        RESTORE_EXIT_ON_ERROR=true
-      fi
-      log_debug "Running brew bundle with args: ${bundle_args}"
-      brew bundle --file "${brewfile}" $bundle_args
-      log_debug "Re-enabling Exit on error"
-      if [[ ${RESTORE_EXIT_ON_ERROR:-} == true ]]; then
-        set -e
-        unset RESTORE_EXIT_ON_ERROR
-      fi
+      log_debug "Running brew bundle with args: ${bundle_args[*]}"
+      brew bundle --file "${brewfile}" "${bundle_args[@]}" || true
     done
   else
     log_debug "SKIP_LOCAL_MODE is enabled; skipping search for Brewfile*.local files"
@@ -121,15 +91,15 @@ if ! is_minimal_mode && ! is_update_mode; then
 fi
 
 log_info "Cleaning up Homebrew services"
-brew services cleanup ${brew_args}
+brew services cleanup "${brew_args[@]}"
 
 log_info "Cleaning up stale lock files and outdated downloads for Homebrew"
-brew_cleanup_args="${brew_args} --prune=all"
+brew_cleanup_args=("${brew_args[@]}" --prune=all)
 if ! is_verbose_mode; then
   # This command is particularly noisy; only show output in verbose mode
-  brew_cleanup_args="${brew_cleanup_args} --quiet"
+  brew_cleanup_args+=(--quiet)
 fi
-brew cleanup ${brew_cleanup_args}
+brew cleanup "${brew_cleanup_args[@]}"
 
 if ! is_minimal_mode && ! is_update_mode; then
   # Uninstall default Mac apps
@@ -157,38 +127,38 @@ if [[ -n "$(command -v mise 2>/dev/null)" ]]; then
     log_info "Activating Mise"
     add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate bash"   "${HOME}/.bash_profile"
     add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise completion bash" "${HOME}/.bash_completion"
-    add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate zsh"    "${HOME}/.zprofile"
+    add_eval_to_dotfile '[[ -n "$(command -v mise 2>/dev/null)" ]]' "mise activate zsh"    "${HOME}/.zshrc"
     # add_eval_to_dotfile '[[ -f "~/.local/bin/mise" ]]' "~/.local/bin/mise completion zsh"  "/usr/local/share/zsh/site-functions/_mise"
     eval "$(~/.local/bin/mise activate bash)"
   fi
 
-  mise_args="--cd $HOME --env local --yes"
+  mise_args=(--cd "$HOME" --env local --yes)
   if is_verbose_mode; then
-    mise_args="${mise_args} --verbose"
+    mise_args+=(--verbose)
   elif is_quiet_mode; then
-    mise_args="${mise_args} --quiet"
+    mise_args+=(--quiet)
   fi
   if is_update_mode; then
     log_info "Updating installed Mise plugins"
-    log_debug "Running mise upgrade with args: ${mise_args}"
-    mise upgrade $mise_args
+    log_debug "Running mise upgrade with args: ${mise_args[*]}"
+    mise upgrade "${mise_args[@]}"
   else
-    mise_plugins="python node@lts"
+    mise_plugins=(python node@lts)
     if ! is_minimal_mode; then
-      mise_plugins="${mise_plugins} go java@lts ruby rust"
+      mise_plugins+=(go java@lts ruby rust)
     fi
     log_info "Installing Mise plugins"
-    log_debug "Running mise use with args: ${mise_args} ${mise_plugins}"
-    mise use $mise_args $mise_plugins
+    log_debug "Running mise use with args: ${mise_args[*]} ${mise_plugins[*]}"
+    mise use "${mise_args[@]}" "${mise_plugins[@]}"
   fi
 
   log_info "Reshimming Mise plugins"
-  mise_reshim_args="--cd $HOME --yes"
+  mise_reshim_args=(--cd "$HOME" --yes)
   if is_force_mode; then
-    mise_reshim_args="${mise_reshim_args} --force"
+    mise_reshim_args+=(--force)
   fi
-  log_debug "Running mise reshim with args: ${mise_reshim_args}"
-  mise reshim $mise_reshim_args
+  log_debug "Running mise reshim with args: ${mise_reshim_args[*]}"
+  mise reshim "${mise_reshim_args[@]}"
 else
   log_attention "Mise not found; skipping Mise setup"
 fi
@@ -222,4 +192,4 @@ log_debug "calling config symlink script"
 log_attention "Some changes may require a logout/restart to take effect"
 log_attention "You may need to manually set fonts in your terminal profiles"
 
-log_success "Done codespace specific bootstrapping!"
+log_success "Done workstation bootstrapping!"

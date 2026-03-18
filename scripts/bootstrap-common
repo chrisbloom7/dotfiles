@@ -32,7 +32,6 @@ if [[ -n "${ZSH_PATH}" ]] && [[ -d "${ZSH_CUSTOM}" ]]; then
   log_debug "Installing OMZ plugins"
   mkdir -p "${ZSH_CUSTOM}/plugins"
   plugins=(
-    "zsh-syntax-highlighting"
     "zsh-autosuggestions"
     "zsh-completions"
     "zsh-history-substring-search"
