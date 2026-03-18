@@ -4,7 +4,7 @@
 export DOTFILES="${HOME}/.dotfiles"
 
 # If you come from bash you might have to change your $PATH.
-export PATH="${DOTFILES}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="${DOTFILES}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
