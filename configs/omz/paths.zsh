@@ -11,8 +11,8 @@ _prepend_to_path "${HOME}/.local/bin"
 _prepend_to_path "${HOME}/bin"
 
 # Add Homebrew coreutils to path for GNU utilities
-if [[ -n $(command -v brew 2>/dev/null) ]]; then
-  _prepend_to_path "$(brew --prefix coreutils)/libexec/gnubin"
+if [[ -n "${HOMEBREW_PREFIX:-}" ]]; then
+  _prepend_to_path "${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin"
 fi
 
 # Load global Node installed binaries
@@ -26,8 +26,8 @@ _prepend_to_path "vendor/bin"
 _prepend_to_path "/usr/local/bin"
 
 # Add Java to path
-if [[ -n $(command -v brew 2>/dev/null) ]]; then
-  _prepend_to_path "$(brew --prefix openjdk)/bin"
+if [[ -n "${HOMEBREW_PREFIX:-}" ]]; then
+  _prepend_to_path "${HOMEBREW_PREFIX}/opt/openjdk/bin"
 fi
 
 # Add linux's man to the manpath
