@@ -1,0 +1,6 @@
+# .bashenv is sourced for ALL bash invocations via BASH_ENV (set in .zshenv).
+# Keep this file minimal — only things that must be available in every bash context.
+
+# Add mise shims to PATH so mise-managed tools (e.g. ruby, node) are available
+# in non-interactive bash subshells (e.g. git hooks, wt post-create hooks).
+export PATH="${HOME}/.local/share/mise/shims:${PATH}"

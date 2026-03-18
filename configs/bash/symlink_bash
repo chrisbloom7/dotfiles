@@ -23,6 +23,7 @@ configs=(
   ".bash_login"
   ".profile"
   ".bashrc"
+  ".bashenv"
   ".bash_logout"
   ".inputrc"
   ".bash_aliases"
