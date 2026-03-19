@@ -23,7 +23,7 @@ brew "bat"               # Clone of cat(1) with syntax highlighting and Git inte
 brew "claude-cmd"        # Claude Code Commands Manager
 brew "claude-code-templates" # CLI tool for configuring and monitoring Claude Code
 brew "devcontainer"      # Reference implementation for the Development Containers specification
-brew "difftastic"        # Diff that understands syntax
+brew "difftastic"        # Diff that understands s˛yntax
 brew "dockutil"          # Command-line utility to manage applications in the macOS Dock
 brew "gmailctl"          # Declarative configuration for Gmail filters
 brew "httpie"            # User-friendly cURL replacement (command-line HTTP client)
@@ -42,6 +42,7 @@ brew "telnet"            # User interface to the TELNET protocol
 brew "terminal-notifier" # Send macOS User Notifications from the command-line
 brew "tmux"              # Terminal multiplexer
 brew "watch"             # Executes a program periodically, showing output fullscreen
+brew "worktrunk"         # CLI for Git worktree management, designed for parallel AI agent workflows
 
 ## Casks
 cask "1password"            # Password manager that keeps all passwords secure behind one password
