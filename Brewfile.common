@@ -20,16 +20,19 @@ brew "claude-cmd"        # Claude Code Commands Manager
 brew "claude-code-templates" # CLI tool for configuring and monitoring Claude Code
 brew "devcontainer"      # Reference implementation for the Development Containers specification
 brew "difftastic"        # Diff that understands s˛yntax
+brew "direnv"            # Load/unload environment variables based on $PWD
 brew "dockutil"          # Command-line utility to manage applications in the macOS Dock
 brew "gmailctl"          # Declarative configuration for Gmail filters
 brew "httpie"            # User-friendly cURL replacement (command-line HTTP client)
 brew "imagemagick"       # Tools and libraries to manipulate images in many formats
+brew "jq"                # Lightweight and flexible command-line JSON processor
 brew "lynx"              # Text-based web browser
 brew "mackup"            # Keep your Mac's application settings in sync
 brew "markdownlint-cli"  # CLI for Node.js style checker and lint tool for Markdown files
 brew "notify"            # Stream the output of any CLI and publish it to a variety of supported platforms
 brew "pandoc"            # Swiss-army knife of markup format conversion
 brew "pgcli"             # CLI for Postgres with auto-completion and syntax highlighting
+brew "rubyfmt"           # Ruby autoformatter
 brew "shfmt"             # Autoformat shell script source code
 brew "showkey"           # Simple keystroke visualizer
 brew "telnet"            # User interface to the TELNET protocol
