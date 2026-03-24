@@ -10,11 +10,6 @@ _prepend_to_path() {
 _prepend_to_path "${HOME}/.local/bin"
 _prepend_to_path "${HOME}/bin"
 
-# Add Homebrew coreutils to path for GNU utilities
-if [[ -n "${HOMEBREW_PREFIX:-}" ]]; then
-  _prepend_to_path "${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin"
-fi
-
 # Load global Node installed binaries
 _prepend_to_path "${HOME}/.node/bin"
 
