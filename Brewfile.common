@@ -26,6 +26,7 @@ brew "gmailctl"          # Declarative configuration for Gmail filters
 brew "httpie"            # User-friendly cURL replacement (command-line HTTP client)
 brew "imagemagick"       # Tools and libraries to manipulate images in many formats
 brew "jq"                # Lightweight and flexible command-line JSON processor
+brew "lazygit"           # Simple terminal UI for git commands
 brew "mackup"            # Keep your Mac's application settings in sync
 brew "markdownlint-cli"  # CLI for Node.js style checker and lint tool for Markdown files
 brew "notify"            # Stream the output of any CLI and publish it to a variety of supported platforms

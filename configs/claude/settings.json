@@ -209,13 +209,15 @@
       "source": {
         "source": "github",
         "repo": "anthropics/skills"
-      }
+      },
+      "autoUpdate": true
     },
     "worktrunk": {
       "source": {
         "source": "github",
         "repo": "max-sixty/worktrunk"
-      }
+      },
+      "autoUpdate": true
     }
   },
   "promptSuggestionEnabled": false
