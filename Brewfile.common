@@ -34,7 +34,6 @@ brew "notify"            # Stream the output of any CLI and publish it to a vari
 brew "pandoc"            # Swiss-army knife of markup format conversion
 brew "pgcli"             # CLI for Postgres with auto-completion and syntax highlighting
 brew "pkg-config"        # Manage compile and link flags for libraries
-brew "putty"             # Implementation of Telnet and SSH
 brew "shfmt"             # Autoformat shell script source code
 brew "showkey"           # Simple keystroke visualizer
 brew "telnet"            # User interface to the TELNET protocol
