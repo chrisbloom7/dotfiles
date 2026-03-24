@@ -26,7 +26,6 @@ brew "gmailctl"          # Declarative configuration for Gmail filters
 brew "httpie"            # User-friendly cURL replacement (command-line HTTP client)
 brew "imagemagick"       # Tools and libraries to manipulate images in many formats
 brew "jq"                # Lightweight and flexible command-line JSON processor
-brew "lynx"              # Text-based web browser
 brew "mackup"            # Keep your Mac's application settings in sync
 brew "markdownlint-cli"  # CLI for Node.js style checker and lint tool for Markdown files
 brew "notify"            # Stream the output of any CLI and publish it to a variety of supported platforms
@@ -34,17 +33,15 @@ brew "pandoc"            # Swiss-army knife of markup format conversion
 brew "pgcli"             # CLI for Postgres with auto-completion and syntax highlighting
 brew "rubyfmt"           # Ruby autoformatter
 brew "shfmt"             # Autoformat shell script source code
-brew "showkey"           # Simple keystroke visualizer
-brew "telnet"            # User interface to the TELNET protocol
 brew "terminal-notifier" # Send macOS User Notifications from the command-line
 brew "watch"             # Executes a program periodically, showing output fullscreen
+brew "watchman"          # Watches files and records when they change
 brew "worktrunk"         # CLI for Git worktree management, designed for parallel AI agent workflows
 
 ## Casks
 cask "1password"            # Password manager that keeps all passwords secure behind one password
 cask "1password-cli"        # Command-line interface for 1Password
 cask "alfred"               # Application launcher and productivity software
-cask "adobe-acrobat-reader" # View, print, and comment on PDF documents
 # cask "claude"               # Anthropic's official Claude AI desktop app
 cask "claude-code"          # Terminal-based AI coding assistant
 cask "deckset"              # Presentations from Markdown
@@ -57,9 +54,6 @@ cask "monitorcontrol"       # Tool to control external monitor brightness & volu
 cask "monodraw"             # ASCII art editor
 cask "ngrok"                # Reverse proxy, secure introspectable tunnels to localhost
 cask "notunes"              # Tool to disable iTunes launching when media keys are pressed
-cask "pgadmin4"             # Administration and development platform for PostgreSQL
-cask "postgres-unofficial"  # App wrapper for PostgreSQL with support for multiple versions and databases
-cask "sequel-ace"           # MySQL/MariaDB database management
 cask "slack"                # Team communication and collaboration software
 
 ## Fonts
@@ -72,8 +66,6 @@ cask "font-bungee-outline"    # Bungee Outline font
 cask "font-bungee-shade"      # Bungee Shade font
 cask "font-bungee-spice"      # Bungee Spice font
 cask "font-bungee"            # Bungee font
-cask "font-creepster-caps"    # Creepster Caps font
-cask "font-creepster"         # Creepster font
 
 ## Apps from the Mac App Store
 # mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/

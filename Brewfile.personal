@@ -24,7 +24,6 @@ cask "cleanmymac"             # Tool to remove unnecessary files and folders fro
 cask "cursor"                 # Write, edit, and chat about your code with AI
 cask "cyberduck"              # Server and cloud storage browser
 cask "discord"                # Voice and text chat software
-cask "drawio"                 # Online diagram software
 cask "drivethrurpg"           # Sync DriveThruRPG libraries to compatible devices
 # cask "firefox"                # Web browser
 # cask "flotato"                # Tool to turn any web page into a desktop app
@@ -33,7 +32,6 @@ cask "focusrite-control"      # Focusrite interface controller
 cask "garmin-express"         # Update maps and software, sync with Garmin Connect and register your device
 cask "gemini"                 # Disk space cleaner that finds and deletes duplicated and similar files
 cask "google-drive"           # Client for the Google Drive storage service
-cask "graphiql"               # Light, Electron-based Wrapper around GraphiQL
 cask "imageoptim"             # Tool to optimise images to a smaller size
 cask "lm-studio"              # Discover, download, and run local LLMs
 # cask "mailplane"              # Gmail client ! Deprecated client
@@ -49,7 +47,6 @@ cask "spotify"                # Music streaming service
 cask "steam"                  # Video game digital distribution service
 cask "the-unarchiver"         # Unpacks archive files
 cask "transmit"               # File transfer application
-cask "versions"               # Subversion client
 # cask "viscosity"              # OpenVPN client with AppleScript support
 cask "voodoopad"              # Notes organiser
 cask "warp"                   # Rust-based terminal

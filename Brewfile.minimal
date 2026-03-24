@@ -58,12 +58,7 @@ brew "github-keygen"                # Bootstrap GitHub SSH configuration
 brew "grep"                         # GNU grep, egrep and fgrep
 brew "mas"                          # Mac App Store command-line interface
 brew "mise"                         # Polyglot runtime manager (asdf rust clone)
-brew "mpg123"                       # Fast console MPEG Audio Player and decoder library
-brew "php"                          # General-purpose scripting language
 brew "pinentry-mac"                 # Pinentry for GPG on Mac
-brew "ruby-build"                   # Install various Ruby versions and implementations
-brew "vsce"                         # Tool for packaging, publishing and managing VS Code extensions
-brew "watchman"                     # Watches files and records when they change
 brew "zsh-autosuggestions"          # Fish-like fast/unobtrusive autosuggestions for zsh
 brew "zsh-completions"              # Additional completion definitions for zsh
 brew "zsh-git-prompt"               # Informative git prompt for zsh
@@ -78,7 +73,6 @@ cask "gpg-suite"          # Tools to protect your emails and files
 cask "iterm2"             # Terminal emulator as alternative to Apple's Terminal app
 cask "logi-options+"      # Software for Logitech devices
 # cask "obsbot-center"      # Configuration and firmware update utility for OBSBOT Tiny and Meet series ! Cask is often out of date; prefer downloading directly from publisher
-cask "qlvideo"            # Thumbnails, static previews, cover art and metadata for video files
 cask "visual-studio-code" # Open-source code editor
 
 ## Fonts
