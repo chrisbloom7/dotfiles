@@ -13,7 +13,6 @@ brew "docker-clean"             # Clean Docker containers, images, networks, and
 brew "docker-completion"        # Bash, Zsh and Fish completion for Docker
 brew "docker-compose"           # Isolated development environments using Docker
 brew "docker-credential-helper" # Platform keystore credential helper for Docker
-brew "docker-ls"                # Tools for browsing and manipulating docker registries
 brew "docker-slim"              # Minify and secure Docker images
 
 ## Formulae
@@ -49,7 +48,6 @@ cask "1password"            # Password manager that keeps all passwords secure b
 cask "1password-cli"        # Command-line interface for 1Password
 cask "alfred"               # Application launcher and productivity software
 cask "adobe-acrobat-reader" # View, print, and comment on PDF documents
-cask "chromedriver"         # Automated testing of webapps for Google Chrome
 # cask "claude"               # Anthropic's official Claude AI desktop app
 cask "claude-code"          # Terminal-based AI coding assistant
 cask "deckset"              # Presentations from Markdown
