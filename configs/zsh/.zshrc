@@ -4,7 +4,7 @@
 export DOTFILES="${HOME}/.dotfiles"
 
 # If you come from bash you might have to change your $PATH.
-export PATH="${DOTFILES}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
+export PATH="${DOTFILES}/bin:${PATH}"
 
 # Re-prepend mise shims after PATH reset so they come before /usr/bin.
 # path_helper (macOS) and .zshrc's hardcoded PATH push shims back behind /usr/bin;
