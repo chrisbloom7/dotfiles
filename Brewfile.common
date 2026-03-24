@@ -10,13 +10,10 @@ cask_args require_sha: true, no_quarantine: true
 cask "docker-desktop"           # App to build and share containerised applications and microservices
 brew "docker-buildx"            # Docker CLI plugin for extended build capabilities with BuildKit
 brew "docker-clean"             # Clean Docker containers, images, networks, and volumes
-brew "docker-completion"        # Bash, Zsh and Fish completion for Docker
 brew "docker-compose"           # Isolated development environments using Docker
 brew "docker-credential-helper" # Platform keystore credential helper for Docker
-brew "docker-slim"              # Minify and secure Docker images
 
 ## Formulae
-brew "aom"               # Codec library for encoding and decoding AV1 video streams
 brew "awscli"            # Official Amazon AWS command-line interface
 brew "bat"               # Clone of cat(1) with syntax highlighting and Git integration
 brew "claude-cmd"        # Claude Code Commands Manager
@@ -33,12 +30,10 @@ brew "markdownlint-cli"  # CLI for Node.js style checker and lint tool for Markd
 brew "notify"            # Stream the output of any CLI and publish it to a variety of supported platforms
 brew "pandoc"            # Swiss-army knife of markup format conversion
 brew "pgcli"             # CLI for Postgres with auto-completion and syntax highlighting
-brew "pkg-config"        # Manage compile and link flags for libraries
 brew "shfmt"             # Autoformat shell script source code
 brew "showkey"           # Simple keystroke visualizer
 brew "telnet"            # User interface to the TELNET protocol
 brew "terminal-notifier" # Send macOS User Notifications from the command-line
-brew "tmux"              # Terminal multiplexer
 brew "watch"             # Executes a program periodically, showing output fullscreen
 brew "worktrunk"         # CLI for Git worktree management, designed for parallel AI agent workflows
 
