@@ -106,7 +106,6 @@ forecast () { curl -4 wttr.in/${1:-}\?uF }
 weather () { curl -4 wttr.in/${1:-}\?uF${2:-n1} }
 
 # Git aliases and functions
-alias gcom='git com'                  # Short for `git checkout [default_branch]`, typically `main` or `master`
 alias git-bdiff='git-branch-diff'     # Show commits in <source> that are not in <target>
 alias git-bin='git-branch-incoming'   # Lists commits in the <source> that are not in the current working branch
 alias git-bout='git-branch-outgoing'  # Lists commits in the current working branch that are not in the <target>
@@ -126,10 +125,6 @@ git-make-branch () {
     echo "-- No arguments supplied"
     return 1
   fi
-}
-_parse_git_branch () {
-  # From http://stackoverflow.com/a/2831173/83743
-  git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
 git-branch-diff () {
   if [[ "$#" -lt 2 ]] || [[ "${1:-}" = "--help" ]] || [[ "${1:-}" = "-h" ]]; then
@@ -154,7 +149,7 @@ git-branch-incoming () {
     echo "Alias: git-bin"
     return 0
   fi
-  git-branch-diff "$(_parse_git_branch)" "${1}"
+  git-branch-diff "$(git branch --show-current)" "${1}"
 }
 git-branch-outgoing () {
   if [[ "$#" -ne 1 ]]; then
@@ -163,7 +158,7 @@ git-branch-outgoing () {
     echo "Alias: git-bout"
     return 0
   fi
-  git-branch-diff "${1}" "$(_parse_git_branch)"
+  git-branch-diff "${1}" "$(git branch --show-current)"
 }
 function git_recent() # Courtesy of Jay McGavren at Huntress
 {
