@@ -21,6 +21,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 bin/import_config <tool-name> <source-dir> <file1> [file2 ...]
 # e.g. bin/import_config starship ~/.config starship.toml
 
+# Add a single file to an existing tool's config dir
+bin/import_config_file <tool-name> <source-file> [<dest-name>]
+# e.g. bin/import_config_file claude ~/.claude/keybindings.json
+
 # Full workstation setup
 ./setup [--bootstrap|--minimal|--help]
 ```

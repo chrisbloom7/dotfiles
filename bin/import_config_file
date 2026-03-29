@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# Adds a single file to an existing tool config directory in the dotfiles repo,
+# updates the symlink_<tool> script, and runs it to create the symlink.
+#
+# Usage:
+#   import_config_file <tool-name> <source-file> [<dest-name>]
+#
+# Examples:
+#   import_config_file claude ~/.claude/keybindings.json
+#   import_config_file git ~/.gitconfig_work work/.gitconfig
+#
+# <dest-name> is the path relative to the config dir (defaults to basename of
+# <source-file>). Use it when you want the file stored under a subdirectory
+# or with a different name than the original.
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+tool=${1:?Tool name is required (e.g. claude)}
+source_file=${2:?Source file path is required (e.g. ~/.claude/keybindings.json)}
+dest_name=${3:-$(basename "${source_file}")}
+
+# Resolve ~ in source_file
+source_file="${source_file/#\~/$HOME}"
+
+dotfiles_root="$(cd "${PWD}/.." && pwd)"
+config_dir="${dotfiles_root}/configs/${tool}"
+symlink_script="${config_dir}/symlink_${tool}"
+dest="${config_dir}/${dest_name}"
+
+if [[ ! -d "${config_dir}" ]]; then
+  log_error "Config directory ${config_dir} does not exist. Use import_config to set up a new tool."
+  exit 1
+fi
+
+if [[ ! -f "${symlink_script}" ]]; then
+  log_error "Symlink script ${symlink_script} not found. Use import_config to set up a new tool."
+  exit 1
+fi
+
+if [[ ! -e "${source_file}" ]] && [[ ! -L "${source_file}" ]]; then
+  log_error "${source_file} not found"
+  exit 1
+fi
+
+if [[ -e "${dest}" ]] || [[ -L "${dest}" ]]; then
+  log_attention "${dest} already exists in dotfiles; skipping (file may already be managed)"
+  exit 0
+fi
+
+# Create parent dir inside config_dir if dest_name has subdirectory components
+dest_parent="$(dirname "${dest_name}")"
+if [[ "${dest_parent}" != "." ]]; then
+  mkdir -p "${config_dir}/${dest_parent}"
+fi
+
+log_info "Moving ${source_file} → ${dest}"
+mv "${source_file}" "${dest}"
+
+# Add dest_name to the configs=() array in the symlink script, if present
+if ! grep -q "^configs=(" "${symlink_script}"; then
+  log_attention "${symlink_script} does not use the standard configs=() format"
+  log_attention "Add the following line manually to ${symlink_script}:"
+  log_attention "  symlink_config \"\${PWD}/${dest_name}\" \"\${TARGET}/${dest_name}\""
+elif grep -qF "\"${dest_name}\"" "${symlink_script}"; then
+  log_attention "${dest_name} is already listed in ${symlink_script}; skipping update"
+else
+  log_info "Adding ${dest_name} to ${symlink_script}"
+  awk -v entry="  \"${dest_name}\"" '
+    /^configs=\(/ { in_configs=1 }
+    in_configs && /^\)/ { print entry; in_configs=0 }
+    { print }
+  ' "${symlink_script}" > "${symlink_script}.tmp"
+  mv "${symlink_script}.tmp" "${symlink_script}"
+  chmod +x "${symlink_script}"
+fi
+
+log_info "Running symlink script"
+"${symlink_script}"
+
+log_success "Done! ${dest_name} is now managed in ${config_dir}"
