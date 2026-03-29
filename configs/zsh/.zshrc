@@ -118,7 +118,7 @@ export LC_ALL="${LC_ALL:-en_US.UTF-8}"
 export LANG="${LANG:-en_US.UTF-8}"
 
 # Preferred editor for local and remote sessions
-_DEFAULT_EDITOR=vim
+_DEFAULT_EDITOR=micro
 if [[ -z $SSH_CONNECTION ]]; then
   if [[ -n $(command -v cursor 2>/dev/null) ]]; then
     _DEFAULT_EDITOR=cursor
@@ -153,3 +153,9 @@ test -e "${HOME}/.stripe-completion.zsh" && source "${HOME}/.stripe-completion.z
 
 
 if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
+# Auto-attach to (or create) a default tmux session when opening a terminal.
+# Comment out if sharing the same session across Warp tabs feels wrong.
+if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
+  tmux attach -t main 2>/dev/null || tmux new -s main
+fi

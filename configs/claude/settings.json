@@ -3,6 +3,7 @@
     "allow": [
       "## Dev tools",
       "Bash(bundle:*)",
+      "Bash(USE_SPRING=false bundle:*)",
       "Bash(node:*)",
       "Bash(npm:*)",
       "Bash(python3:*)",
@@ -220,5 +221,14 @@
       "autoUpdate": true
     }
   },
-  "promptSuggestionEnabled": false
+  "promptSuggestionEnabled": false,
+  "hooks": {
+    "Stop": [{
+      "matcher": "",
+      "hooks": [{
+        "type": "command",
+        "command": "terminal-notifier -title 'Claude' -message 'Waiting for input' -sound default -group claude-$CLAUDE_SESSION_ID"
+      }]
+    }]
+  }
 }

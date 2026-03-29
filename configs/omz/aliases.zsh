@@ -111,6 +111,7 @@ alias git-bin='git-branch-incoming'   # Lists commits in the <source> that are n
 alias git-bout='git-branch-outgoing'  # Lists commits in the current working branch that are not in the <target>
 alias git-mb='git-make-branch'        # Create a new branch from the current branch with a name based on the supplied arguments
 alias gpom='git pom'                  # Short for `git pull origin [default_branch]`, typically `main` or `master`
+alias lg='lazygit'
 git-make-branch () {
   if [[ "$#" -gt 0 ]]; then
     branch=$(ruby -e 'puts ARGV.join(" ").strip.gsub(/[\W\s_]+/, " ").downcase.split(" ").join("_")' "$@")
@@ -163,4 +164,12 @@ git-branch-outgoing () {
 function git_recent() # Courtesy of Jay McGavren at Huntress
 {
   git switch $(git for-each-ref --sort=-committerdate refs/heads/ --format='%(refname:short)' --color | head -n 8 | fzf --height 20%)
+}
+
+# Worktrunk (wt) aliases and functions
+wt-merged () {
+  wt list --format=json | jq -r '.[] | select(.main_state == "integrated" or .main_state == "empty") | .branch'
+}
+wt-clean () {
+  wt-merged | xargs wt remove --force
 }
