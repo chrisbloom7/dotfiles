@@ -1,55 +1,179 @@
 #!/usr/bin/env bash
-# Adds a single file to an existing tool config directory in the dotfiles repo,
-# updates the symlink_<tool> script, and runs it to create the symlink.
+# Adds a single file to a tool config directory in the dotfiles repo,
+# updates (or creates) the symlink_<tool> script, and runs it to create the symlink.
 #
 # Usage:
 #   import_config_file <tool-name> <source-file> [<dest-name>]
+#   import_config_file <source-file> [<dest-name>]   # interactive tool selection
 #
-# Examples:
-#   import_config_file claude ~/.claude/keybindings.json
-#   import_config_file git ~/.gitconfig_work work/.gitconfig
+# If <tool-name> refers to a config folder that does not yet exist, you will be
+# prompted to create it. If <tool-name> is omitted entirely (i.e. the first
+# argument looks like a file path), you will be shown a list of existing folders
+# to choose from, plus an option to create a new one.
 #
 # <dest-name> is the path relative to the config dir (defaults to basename of
 # <source-file>). Use it when you want the file stored under a subdirectory
 # or with a different name than the original.
+#
+# Examples:
+#   import_config_file claude ~/.claude/keybindings.json
+#   import_config_file git ~/.gitconfig_work work/.gitconfig
+#   import_config_file ~/.claude/keybindings.json    # prompts for folder
 set -euo pipefail
 cd "$(dirname "$0")"
 source "${PWD}/helpers/trap_and_trace.sh"
 PATH="${PWD}:${PATH}"
 
-tool=${1:?Tool name is required (e.g. claude)}
-source_file=${2:?Source file path is required (e.g. ~/.claude/keybindings.json)}
-dest_name=${3:-$(basename "${source_file}")}
-
-# Resolve ~ in source_file
-source_file="${source_file/#\~/$HOME}"
-
 dotfiles_root="$(cd "${PWD}/.." && pwd)"
-config_dir="${dotfiles_root}/configs/${tool}"
-symlink_script="${config_dir}/symlink_${tool}"
-dest="${config_dir}/${dest_name}"
 
-if [[ ! -d "${config_dir}" ]]; then
-  log_error "Config directory ${config_dir} does not exist. Use import_config to set up a new tool."
+# ---------------------------------------------------------------------------
+# Argument parsing
+# If the first argument contains "/" or starts with "~" it is a file path,
+# meaning no tool name was given. Tool names are plain directory names with
+# no path separators.
+# ---------------------------------------------------------------------------
+if [[ -z "${1:-}" ]]; then
+  log_error "Source file path is required"
   exit 1
+elif [[ "${1}" == *"/"* ]] || [[ "${1}" == "~"* ]]; then
+  tool=""
+  source_file="$1"
+  dest_name="${2:-}"
+else
+  tool="$1"
+  source_file="${2:?Source file path is required}"
+  dest_name="${3:-}"
 fi
 
-if [[ ! -f "${symlink_script}" ]]; then
-  log_error "Symlink script ${symlink_script} not found. Use import_config to set up a new tool."
-  exit 1
+# Resolve ~ and set default dest_name before any interactive prompts
+source_file="${source_file/#\~/$HOME}"
+if [[ -z "${dest_name}" ]]; then
+  dest_name="$(basename "${source_file}")"
 fi
 
+# Validate source file early so we fail fast before any interactive prompts
 if [[ ! -e "${source_file}" ]] && [[ ! -L "${source_file}" ]]; then
   log_error "${source_file} not found"
   exit 1
 fi
 
+# ---------------------------------------------------------------------------
+# Interactive tool selection (when no tool name was given)
+# ---------------------------------------------------------------------------
+if [[ -z "${tool}" ]]; then
+  if ! command -v fzf &>/dev/null; then
+    log_error "fzf is required for interactive folder selection (brew install fzf)"
+    exit 1
+  fi
+
+  existing_tools=()
+  while IFS= read -r dir; do
+    existing_tools+=("$(basename "${dir}")")
+  done < <(find "${dotfiles_root}/configs" -mindepth 1 -maxdepth 1 -type d | sort)
+
+  NEW_FOLDER_OPTION="[New config folder]"
+  choice=$(printf '%s\n' "${existing_tools[@]}" "${NEW_FOLDER_OPTION}" | \
+    fzf --prompt="Config folder for $(basename "${source_file}"): " \
+        --height=40% \
+        --layout=reverse) || true
+
+  if [[ -z "${choice}" ]]; then
+    log_error "No config folder selected"
+    exit 1
+  fi
+
+  if [[ "${choice}" == "${NEW_FOLDER_OPTION}" ]]; then
+    read -rp "New tool name: " tool
+    if [[ -d "${dotfiles_root}/configs/${tool}" ]]; then
+      log_info "${tool} already exists; using existing folder"
+    fi
+  else
+    tool="${choice}"
+  fi
+
+  if [[ -z "${tool}" ]]; then
+    log_error "No config folder selected"
+    exit 1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Derive paths now that tool is known
+# ---------------------------------------------------------------------------
+config_dir="${dotfiles_root}/configs/${tool}"
+symlink_script="${config_dir}/symlink_${tool}"
+dest="${config_dir}/${dest_name}"
+
+# ---------------------------------------------------------------------------
+# If config dir does not exist, confirm before creating it
+# ---------------------------------------------------------------------------
+new_script_generated=false
+if [[ ! -d "${config_dir}" ]]; then
+  read -rp "Config folder '${config_dir}' does not exist. Create it? [y/N] " confirm
+  if [[ "${confirm}" != [yY]* ]]; then
+    log_info "Aborted."
+    exit 0
+  fi
+
+  mkdir -p "${config_dir}"
+  log_info "Generating ${symlink_script}"
+
+  # Derive TARGET from the source file's parent directory, relative to $HOME
+  source_dir="$(dirname "${source_file}")"
+  home_rel="${source_dir/#$HOME/}"
+  if [[ -z "${home_rel}" ]] || [[ "${home_rel}" == "/" ]]; then
+    target_expr='"${HOME}"'
+    use_subdir=false
+  else
+    home_rel="${home_rel#/}"
+    target_expr='"${HOME}/'"${home_rel}"'"'
+    use_subdir=true
+  fi
+
+  mkdir_line=""
+  if [[ "${use_subdir}" == true ]]; then
+    mkdir_line='mkdir -p "${TARGET}"'$'\n'"clean_broken_symlinks \"\${TARGET}\""$'\n'
+  fi
+
+  cat > "${symlink_script}" <<SCRIPT
+#!/usr/bin/env bash
+cd "\$(dirname "\$0")"
+source ../../scripts/helpers/runtime.sh
+source ../../bin/helpers/trap_and_trace.sh
+
+log_info "Symlinking ${tool} configs"
+
+TARGET=${target_expr}
+${mkdir_line}configs=(
+  "${dest_name}"
+)
+for config in "\${configs[@]}"; do
+  mkdir -p "\$(dirname "\${TARGET}/\${config}")"
+  symlink_config "\${PWD}/\${config}" "\${TARGET}/\${config}"
+done
+SCRIPT
+  chmod +x "${symlink_script}"
+  log_success "Generated ${symlink_script}"
+  new_script_generated=true
+fi
+
+# ---------------------------------------------------------------------------
+# Symlink script must exist at this point
+# ---------------------------------------------------------------------------
+if [[ ! -f "${symlink_script}" ]]; then
+  log_error "Symlink script ${symlink_script} not found. Use import_config to set up a new tool."
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Skip if dest is already managed
+# ---------------------------------------------------------------------------
 if [[ -e "${dest}" ]] || [[ -L "${dest}" ]]; then
   log_attention "${dest} already exists in dotfiles; skipping (file may already be managed)"
   exit 0
 fi
 
-# Create parent dir inside config_dir if dest_name has subdirectory components
+# Create parent subdirs inside config_dir if dest_name has path components
 dest_parent="$(dirname "${dest_name}")"
 if [[ "${dest_parent}" != "." ]]; then
   mkdir -p "${config_dir}/${dest_parent}"
@@ -58,24 +182,32 @@ fi
 log_info "Moving ${source_file} → ${dest}"
 mv "${source_file}" "${dest}"
 
-# Add dest_name to the configs=() array in the symlink script, if present
-if ! grep -q "^configs=(" "${symlink_script}"; then
-  log_attention "${symlink_script} does not use the standard configs=() format"
-  log_attention "Add the following line manually to ${symlink_script}:"
-  log_attention "  symlink_config \"\${PWD}/${dest_name}\" \"\${TARGET}/${dest_name}\""
-elif grep -qF "\"${dest_name}\"" "${symlink_script}"; then
-  log_attention "${dest_name} is already listed in ${symlink_script}; skipping update"
-else
-  log_info "Adding ${dest_name} to ${symlink_script}"
-  awk -v entry="  \"${dest_name}\"" '
-    /^configs=\(/ { in_configs=1 }
-    in_configs && /^\)/ { print entry; in_configs=0 }
-    { print }
-  ' "${symlink_script}" > "${symlink_script}.tmp"
-  mv "${symlink_script}.tmp" "${symlink_script}"
-  chmod +x "${symlink_script}"
+# ---------------------------------------------------------------------------
+# Update the configs=() array in the symlink script
+# (skipped when we just generated the script, since the file is already listed)
+# ---------------------------------------------------------------------------
+if [[ "${new_script_generated}" != true ]]; then
+  if ! grep -q "^configs=(" "${symlink_script}"; then
+    log_attention "${symlink_script} does not use the standard configs=() format"
+    log_attention "Add the following line manually to ${symlink_script}:"
+    log_attention "  symlink_config \"\${PWD}/${dest_name}\" \"\${TARGET}/${dest_name}\""
+  elif grep -qF "\"${dest_name}\"" "${symlink_script}"; then
+    log_attention "${dest_name} is already listed in ${symlink_script}; skipping update"
+  else
+    log_info "Adding ${dest_name} to ${symlink_script}"
+    awk -v entry="  \"${dest_name}\"" '
+      /^configs=\(/ { in_configs=1 }
+      in_configs && /^\)/ { print entry; in_configs=0 }
+      { print }
+    ' "${symlink_script}" > "${symlink_script}.tmp"
+    mv "${symlink_script}.tmp" "${symlink_script}"
+    chmod +x "${symlink_script}"
+  fi
 fi
 
+# ---------------------------------------------------------------------------
+# Run the symlink script
+# ---------------------------------------------------------------------------
 log_info "Running symlink script"
 "${symlink_script}"
 

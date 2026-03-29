@@ -3,6 +3,7 @@ bats_require_minimum_version 1.5.0
 load "../test_helper"
 
 TOOL_NAME="_bats_import_file_test"
+NEW_TOOL_NAME="_bats_import_file_new"
 
 setup() {
   _setup_common
@@ -15,11 +16,25 @@ setup() {
   # Seed a pre-existing file and a standard-format symlink script
   echo "existing content" > "${CONFIG_DIR}/existing.conf"
   _write_symlink_script "${SYMLINK_SCRIPT}" "${TOOL_NAME}" "existing.conf"
+
+  # Mock fzf: reads its input list from stdin, outputs the line that exactly
+  # matches FZF_MOCK_SELECTION, then exits 0. If no match (or the env var is
+  # unset), exits 1 — simulating the user pressing Escape to cancel.
+  cat > "${TEST_TMPDIR}/mock_bin/fzf" <<'EOF'
+#!/usr/bin/env bash
+while IFS= read -r line; do
+  [[ "${line}" == "${FZF_MOCK_SELECTION:-}" ]] && { echo "${line}"; exit 0; }
+done
+exit 1
+EOF
+  chmod +x "${TEST_TMPDIR}/mock_bin/fzf"
 }
 
 teardown() {
   rm -rf "${DOTFILES_ROOT}/configs/${TOOL_NAME}"
+  rm -rf "${DOTFILES_ROOT}/configs/${NEW_TOOL_NAME}"
   rm -rf "${HOME}/.${TOOL_NAME}"
+  rm -rf "${HOME}/.${NEW_TOOL_NAME}"
   _teardown_common
 }
 
@@ -29,11 +44,6 @@ _write_symlink_script() {
   local script_path="$1" tool="$2"
   shift 2
   local files=("$@")
-
-  local entries=""
-  for f in "${files[@]}"; do
-    entries+="  \"${f}\"\n"
-  done
 
   cat > "${script_path}" <<SCRIPT
 #!/usr/bin/env bash
@@ -62,24 +72,29 @@ SCRIPT
 # Argument validation
 # ---------------------------------------------------------------------------
 
-@test "import_config_file: fails when tool name is missing" {
+@test "import_config_file: fails when no arguments given" {
   run "${DOTFILES_BIN}/import_config_file"
   [ "${status}" -ne 0 ]
 }
 
-@test "import_config_file: fails when source file is missing" {
+@test "import_config_file: fails when tool given but source file is missing" {
   run "${DOTFILES_BIN}/import_config_file" "${TOOL_NAME}"
   [ "${status}" -ne 0 ]
 }
 
-# ---------------------------------------------------------------------------
-# Config dir / symlink script must already exist
-# ---------------------------------------------------------------------------
-
-@test "import_config_file: fails when config dir does not exist" {
-  run "${DOTFILES_BIN}/import_config_file" "nonexistent_tool" "${SOURCE_DIR}/file.conf"
+@test "import_config_file: fails when source file does not exist (tool + path form)" {
+  run "${DOTFILES_BIN}/import_config_file" "${TOOL_NAME}" "${SOURCE_DIR}/nonexistent.conf"
   [ "${status}" -ne 0 ]
 }
+
+@test "import_config_file: fails when source file does not exist (path-only form)" {
+  run "${DOTFILES_BIN}/import_config_file" "${SOURCE_DIR}/nonexistent.conf"
+  [ "${status}" -ne 0 ]
+}
+
+# ---------------------------------------------------------------------------
+# Symlink script must exist (config dir exists but script is missing)
+# ---------------------------------------------------------------------------
 
 @test "import_config_file: fails when symlink script does not exist" {
   rm "${SYMLINK_SCRIPT}"
@@ -89,16 +104,128 @@ SCRIPT
 }
 
 # ---------------------------------------------------------------------------
-# Source file not found
+# New config folder — confirmation prompt
 # ---------------------------------------------------------------------------
 
-@test "import_config_file: fails when source file does not exist" {
-  run "${DOTFILES_BIN}/import_config_file" "${TOOL_NAME}" "${SOURCE_DIR}/nonexistent.conf"
+@test "import_config_file: aborts without creating dir when user declines" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  run bash -c "printf 'n\n' | '${DOTFILES_BIN}/import_config_file' '${NEW_TOOL_NAME}' '${SOURCE_DIR}/new.conf'"
+  [ "${status}" -eq 0 ]
+  [ ! -d "${DOTFILES_ROOT}/configs/${NEW_TOOL_NAME}" ] || {
+    echo "Expected no config dir to be created after declining"
+    return 1
+  }
+}
+
+@test "import_config_file: creates config dir when user confirms" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  run bash -c "printf 'y\n' | '${DOTFILES_BIN}/import_config_file' '${NEW_TOOL_NAME}' '${SOURCE_DIR}/new.conf'"
+  [ "${status}" -eq 0 ]
+  [ -d "${DOTFILES_ROOT}/configs/${NEW_TOOL_NAME}" ] || {
+    echo "Expected config dir to be created after confirming"
+    return 1
+  }
+}
+
+@test "import_config_file: generates executable symlink script for new config dir" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  run bash -c "printf 'y\n' | '${DOTFILES_BIN}/import_config_file' '${NEW_TOOL_NAME}' '${SOURCE_DIR}/new.conf'"
+  [ "${status}" -eq 0 ]
+  [ -x "${DOTFILES_ROOT}/configs/${NEW_TOOL_NAME}/symlink_${NEW_TOOL_NAME}" ] || {
+    echo "Expected executable symlink script to be generated"
+    return 1
+  }
+}
+
+@test "import_config_file: generated script uses \${HOME} not a hardcoded path" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  run bash -c "printf 'y\n' | '${DOTFILES_BIN}/import_config_file' '${NEW_TOOL_NAME}' '${SOURCE_DIR}/new.conf'"
+  [ "${status}" -eq 0 ]
+  local script="${DOTFILES_ROOT}/configs/${NEW_TOOL_NAME}/symlink_${NEW_TOOL_NAME}"
+  grep -q '${HOME}' "${script}" || {
+    echo "Expected \${HOME} in generated script"
+    return 1
+  }
+  ! grep -qF "${HOME}" "${script}" || {
+    echo "Expected generated script NOT to contain hardcoded path ${HOME}"
+    return 1
+  }
+}
+
+@test "import_config_file: moves file and creates symlink when confirming new dir" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  run bash -c "printf 'y\n' | '${DOTFILES_BIN}/import_config_file' '${NEW_TOOL_NAME}' '${SOURCE_DIR}/new.conf'"
+  [ "${status}" -eq 0 ]
+  [ -f "${DOTFILES_ROOT}/configs/${NEW_TOOL_NAME}/new.conf" ] || {
+    echo "Expected file in new config dir"
+    return 1
+  }
+  [ -L "${SOURCE_DIR}/new.conf" ] || {
+    echo "Expected symlink created at original source location"
+    return 1
+  }
+}
+
+# ---------------------------------------------------------------------------
+# Interactive tool selection via fzf (source file as first argument)
+# Tests use a mock fzf (in mock_bin) controlled by FZF_MOCK_SELECTION.
+# ---------------------------------------------------------------------------
+
+@test "import_config_file: selects an existing folder via fzf" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  FZF_MOCK_SELECTION="${TOOL_NAME}" \
+    run "${DOTFILES_BIN}/import_config_file" "${SOURCE_DIR}/new.conf"
+  [ "${status}" -eq 0 ]
+  [ -f "${CONFIG_DIR}/new.conf" ] || {
+    echo "Expected file in ${CONFIG_DIR} after fzf selection"
+    return 1
+  }
+}
+
+@test "import_config_file: creates symlink after interactive fzf selection" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  FZF_MOCK_SELECTION="${TOOL_NAME}" \
+    run "${DOTFILES_BIN}/import_config_file" "${SOURCE_DIR}/new.conf"
+  [ "${status}" -eq 0 ]
+  [ -L "${SOURCE_DIR}/new.conf" ] || {
+    echo "Expected symlink at source location after fzf selection"
+    return 1
+  }
+}
+
+@test "import_config_file: choosing new folder then an existing name uses that existing folder" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  # fzf selects "[New config folder]"; stdin provides the conflicting tool name
+  FZF_MOCK_SELECTION="[New config folder]" \
+    run bash -c "printf '%s\n' '${TOOL_NAME}' | '${DOTFILES_BIN}/import_config_file' '${SOURCE_DIR}/new.conf'"
+  [ "${status}" -eq 0 ]
+  [ -f "${CONFIG_DIR}/new.conf" ] || {
+    echo "Expected file in ${CONFIG_DIR} (existing folder) when a conflicting name is entered"
+    return 1
+  }
+}
+
+@test "import_config_file: choosing new folder and a fresh name creates that folder" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  # fzf selects "[New config folder]"; stdin provides new name then confirm "y"
+  FZF_MOCK_SELECTION="[New config folder]" \
+    run bash -c "printf '%s\ny\n' '${NEW_TOOL_NAME}' | '${DOTFILES_BIN}/import_config_file' '${SOURCE_DIR}/new.conf'"
+  [ "${status}" -eq 0 ]
+  [ -d "${DOTFILES_ROOT}/configs/${NEW_TOOL_NAME}" ] || {
+    echo "Expected new config dir to be created via interactive fzf menu"
+    return 1
+  }
+}
+
+@test "import_config_file: fails when fzf is cancelled with no selection" {
+  echo "content" > "${SOURCE_DIR}/new.conf"
+  # FZF_MOCK_SELECTION unset → mock fzf exits 1 (simulates Escape)
+  run "${DOTFILES_BIN}/import_config_file" "${SOURCE_DIR}/new.conf"
   [ "${status}" -ne 0 ]
 }
 
 # ---------------------------------------------------------------------------
-# Happy path
+# Happy path — tool and symlink script already exist
 # ---------------------------------------------------------------------------
 
 @test "import_config_file: moves file from source into config dir" {
@@ -202,13 +329,11 @@ SCRIPT
 
 @test "import_config_file: skips array update when file already listed in script" {
   echo "content" > "${SOURCE_DIR}/existing.conf"
-  # existing.conf is already in the script from setup
+  # existing.conf is already in the script from setup; dest also already exists in config dir
 
   run "${DOTFILES_BIN}/import_config_file" "${TOOL_NAME}" "${SOURCE_DIR}/existing.conf"
-  # exits 0 because dest already exists in config dir (set up in setup())
   [ "${status}" -eq 0 ]
 
-  # Script should not have duplicate entries
   count=$(grep -c '"existing.conf"' "${SYMLINK_SCRIPT}" || true)
   [ "${count}" -eq 1 ] || {
     echo "Expected exactly one 'existing.conf' entry in script; found ${count}"
