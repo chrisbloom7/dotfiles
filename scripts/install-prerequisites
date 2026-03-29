@@ -36,45 +36,37 @@ if ! is_quiet_mode; then
   brew_args+=(--display-times)
 fi
 
-log_debug "Checking for coreutils formulae"
 if [ -z "$(brew ls coreutils 2>/dev/null)" ]; then
   log_info "Installing coreutils formulae"
   brew install "${brew_args[@]}" coreutils
 fi
 
-log_debug "Checking for git formulae"
 if [ -z "$(brew ls git 2>/dev/null)" ]; then
   log_info "Installing git formulae"
   brew install "${brew_args[@]}" git
 fi
 
-log_debug "Checking for gpg-suite formulae"
 if [ -z "$(brew ls gpg-suite 2>/dev/null)" ]; then
   log_info "Installing gpg-suite formulae"
   brew install "${brew_args[@]}" gpg-suite
 fi
 
-log_debug "Checking for zsh formulae"
 if [ -z "$(brew ls zsh 2>/dev/null)" ]; then
   log_info "Installing zsh formulae"
   brew install "${brew_args[@]}" zsh
 fi
 
-# Check for bats-core
-log_debug "Checking for bats-core formulae"
 if [ -z "$(brew ls bats-core 2>/dev/null)" ]; then
   log_info "Installing bats-core formulae"
   brew install "${brew_args[@]}" bats-core
 fi
 
 if [[ "$(is_macos)" == "true" ]]; then
-  log_debug "Checking for mas formulae"
   if [ -z "$(brew ls mas 2>/dev/null)" ]; then
     log_info "Installing mas formulae"
     brew install "${brew_args[@]}" mas
   fi
 
-  log_debug "Checking for xcode-select"
   if [[ -z $(command -v xcode-select 2>/dev/null) ]]; then
     # Install Xcode via mas
     # https://github.com/mas-cli/mas
@@ -83,7 +75,6 @@ if [[ "$(is_macos)" == "true" ]]; then
   fi
 
   # Install Xcode Command Line Tools
-  log_debug "Checking for Xcode Command Line Tools"
   if [[ -z "$(xcode-select --print-path 2>/dev/null)" ]]; then
     log_info "Installing Xcode Command Line Tools"
     xcode-select --install

@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 source "${PWD}/helpers/color_codes.sh"
 
-if [[ -n "${DEBUG:-}" ]]; then
+if [[ "${VERBOSE_MODE:-}" == true ]]; then
   echo -e "${ANSI_GRAY}$@${ANSI_RESET}"
   sleep "${LOG_SLEEP_DURATION:-0}"
 fi

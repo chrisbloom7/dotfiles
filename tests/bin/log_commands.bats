@@ -99,12 +99,12 @@ teardown() {
 }
 
 # ---------------------------------------------------------------------------
-# log_debug
+# log_verbose
 # ---------------------------------------------------------------------------
 
-@test "log_debug: produces no output without VERBOSE_MODE" {
+@test "log_verbose: produces no output without VERBOSE_MODE" {
   unset VERBOSE_MODE
-  run "${DOTFILES_BIN}/log_debug" "should be silent"
+  run "${DOTFILES_BIN}/log_verbose" "should be silent"
   [ "${status}" -eq 0 ]
   [ -z "${output}" ] || {
     echo "Expected no output when VERBOSE_MODE is unset; got: ${output}"
@@ -112,11 +112,44 @@ teardown() {
   }
 }
 
-@test "log_debug: outputs message when VERBOSE_MODE=true" {
-  VERBOSE_MODE=true run "${DOTFILES_BIN}/log_debug" "hello from log_debug"
+@test "log_verbose: outputs message when VERBOSE_MODE=true" {
+  VERBOSE_MODE=true run "${DOTFILES_BIN}/log_verbose" "hello from log_verbose"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"hello from log_verbose"* ]] || {
+    echo "Expected message in output when VERBOSE_MODE=true; got: ${output}"
+    return 1
+  }
+}
+
+# ---------------------------------------------------------------------------
+# log_debug
+# ---------------------------------------------------------------------------
+
+@test "log_debug: produces no output without DEBUG" {
+  unset DEBUG
+  run "${DOTFILES_BIN}/log_debug" "should be silent"
+  [ "${status}" -eq 0 ]
+  [ -z "${output}" ] || {
+    echo "Expected no output when DEBUG is unset; got: ${output}"
+    return 1
+  }
+}
+
+@test "log_debug: produces no output when only VERBOSE_MODE=true" {
+  unset DEBUG
+  VERBOSE_MODE=true run "${DOTFILES_BIN}/log_debug" "should be silent"
+  [ "${status}" -eq 0 ]
+  [ -z "${output}" ] || {
+    echo "Expected no output when only VERBOSE_MODE=true; got: ${output}"
+    return 1
+  }
+}
+
+@test "log_debug: outputs message when DEBUG is set" {
+  DEBUG=1 run "${DOTFILES_BIN}/log_debug" "hello from log_debug"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"hello from log_debug"* ]] || {
-    echo "Expected message in output when VERBOSE_MODE=true; got: ${output}"
+    echo "Expected message in output when DEBUG is set; got: ${output}"
     return 1
   }
 }

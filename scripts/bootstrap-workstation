@@ -12,10 +12,8 @@ if [[ "$(is_macos)" != "true" && "$(is_linux)" != "true" ]]; then
 fi
 
 # Run setup steps that apply both locally and in devcontainers
-log_debug "Running setup steps that apply both locally and in devcontainers"
 ./bootstrap-common
 
-log_debug "Sourcing homebrew script"
 source ./helpers/source_homebrew.sh
 
 log_info "Adding Homebrew evals to shell profiles"
@@ -28,7 +26,7 @@ add_eval_to_dotfile "[[ -f \"${HOMEBREW_PREFIX}/bin/brew\" ]]" "\"${HOMEBREW_PRE
 # #   add_eval_to_dotfile "" "export HOMEBREW_CASK_OPTS=\"--require-sha\"" "${HOME}/.bash_profile" "${HOME}/.zprofile"
 # fi
 
-log_debug "Updating Homebrew"
+log_info "Updating Homebrew"
 if is_verbose_mode; then
   brew_args=(--verbose)
 elif is_quiet_mode; then
@@ -86,14 +84,14 @@ if ! is_minimal_mode && ! is_update_mode; then
       brew bundle --file "${brewfile}" "${bundle_args[@]}" || true
     done
   else
-    log_debug "SKIP_LOCAL_MODE is enabled; skipping search for Brewfile*.local files"
+    log_verbose "SKIP_LOCAL_MODE is enabled; skipping search for Brewfile*.local files"
   fi
 fi
 
-log_info "Cleaning up Homebrew services"
+log_verbose "Cleaning up Homebrew services"
 brew services cleanup "${brew_args[@]}"
 
-log_info "Cleaning up stale lock files and outdated downloads for Homebrew"
+log_verbose "Cleaning up stale lock files and outdated downloads for Homebrew"
 brew_cleanup_args=("${brew_args[@]}" --prune=all)
 if ! is_verbose_mode; then
   # This command is particularly noisy; only show output in verbose mode
@@ -103,7 +101,6 @@ brew cleanup "${brew_cleanup_args[@]}"
 
 if ! is_minimal_mode && ! is_update_mode; then
   # Uninstall default Mac apps
-  log_debug "Checking for mas CLI"
   if [[ -n "$(command -v mas 2>/dev/null)" ]]; then
     log_info "Uninstalling default Mac apps"
     mas uninstall 408981434 || true # iMovie
@@ -113,9 +110,8 @@ if ! is_minimal_mode && ! is_update_mode; then
   fi
 
   # Set default MySQL root password and auth type
-  log_debug "Checking for MySQL"
   if [[ -n "$(command -v mysql 2>/dev/null)" ]]; then
-    log_info Setting a blank root password for MySQL...
+    log_info "Setting a blank root password for MySQL..."
     brew services start mysql
     mysql -u root -e "ALTER USER root@localhost IDENTIFIED BY ''; FLUSH PRIVILEGES;"
     brew services stop mysql
@@ -165,7 +161,6 @@ fi
 
 # Clone project repositories
 if ! is_minimal_mode && ! is_update_mode; then
-  log_debug "calling clone-projects script"
   ./clone-projects
 fi
 
@@ -181,12 +176,10 @@ fi
 
 # Set macOS preferences - we run this last because this will reload the shell
 if ! is_minimal_mode && ! is_update_mode; then
-  log_debug "calling configure-macos script"
   ./configure-macos
 fi
 
 # Re-symlink Mackup config files to the home directory after setup
-log_debug "calling config symlink script"
 ./symlink-config-files
 
 log_attention "Some changes may require a logout/restart to take effect"

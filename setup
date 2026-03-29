@@ -15,28 +15,22 @@ source ./bin/helpers/trap_and_trace.sh
 
 log_info "Beginning setup"
 
-log_debug "Prompting for sudo password"
 prompt_password
 
 if [[ "$(is_codespace)" != "true" ]]; then
-  log_debug "calling prerequisites script"
   scripts/install-prerequisites
 else
   log_attention "Prerequisites mode not supported in Codespaces; skipping $0"
 fi
 
 if ! is_bootstrap_mode; then
-  log_debug "Checking runtime environment"
   if [[ "$(is_codespace)" == "true" ]]; then
-    log_debug "calling bootstrap-codespaces script"
     scripts/bootstrap-codespaces
   elif [[ "$(is_macos)" == "true" || "$(is_linux)" == "true" ]]; then
-    log_debug "calling bootstrap-workstation script"
     scripts/bootstrap-workstation
   else
     log_attention "Unrecognized environment; skipping $0"
   fi
 fi
 
-log_debug "Finished running \`$0 ${original_args}\`"
 log_success "Setup complete!"

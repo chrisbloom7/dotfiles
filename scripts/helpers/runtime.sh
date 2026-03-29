@@ -34,12 +34,10 @@ fi
 #    declare -- my_string="one|two three|four"
 #
 function serialize_array() {
-  log_debug "Serializing ${1:?Must specify source array variable} into ${2:?Must specify target string variable}"
 	declare -n _array="${1}" _str="${2}" # _array, _str => local reference vars
 	local IFS="${3:-$'\x01'}"
 	# shellcheck disable=SC2034 # Reference vars assumed used by caller
 	_str="${_array[*]}" # * => join on IFS
-  log_debug "Serialized: ${_str}"
 }
 
 # https://gist.github.com/TekWizely/c0259f25e18f2368c4a577495cd566cd
@@ -60,9 +58,7 @@ function serialize_array() {
 #    declare -a my_array=([0]="one" [1]="two three" [2]="four")
 #
 function deserialize_array() {
-  log_debug "Deserializing ${1:?Must specify source string variable} into ${2:?Must specify target array variable}"
 	IFS="${3:-$'\x01'}" read -r -a "${2}" <<<"${!1}" # -a => split on IFS
-  log_debug "Deserialized: ${2}"
 }
 
 # Load helpers script if it's not already loaded
@@ -177,17 +173,16 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
 
     serialize_array ADDITIONAL_DEPENDENCIES ADDITIONAL_DEPENDENCIES_SERIALIZED '|'
 
-    log_debug "Options processed successfully"
   }
 
   _parse_setup_options "$@"
 
   # Mark helpers script as loaded
-  log_debug "Helpers loaded"
+  log_verbose "Helpers loaded"
   readonly HELPERS_LOADED=true
   export HELPERS_LOADED
 else
-  log_debug "Helpers script is already loaded; skipping"
+  log_verbose "Helpers script is already loaded; skipping"
 fi
 
 # Debugging output
