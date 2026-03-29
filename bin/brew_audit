@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+# Audits installed Homebrew packages against tracked Brewfiles.
+# Packages installed but not tracked are marked "+"; tracked but not installed are "-".
+#
+# Usage:
+#   brew_audit [options]
+#
+# Options:
+#   -a, --all                     Include all package types (default)
+#   -f, --formula, --formulae     Include formulae only
+#   -c, --casks                   Include casks only
+#   -g, --go                      Include Go packages only
+#   -m, --mas                     Include Mac App Store packages only
+#   -t, --tap, --taps             Include taps only
+#   -s, --vscode                  Include VS Code extensions only
+#   -o, --file=<filepath>         Write results to file (plain text); stats to stdout
+#   -h, --help                    Show this help message
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-"$(cd "${PWD}/.." && pwd)"}"
+
+# ---------------------------------------------------------------------------
+# Defaults
+# ---------------------------------------------------------------------------
+OPT_ALL=false
+OPT_FORMULAE=false
+OPT_CASKS=false
+OPT_GO=false
+OPT_MAS=false
+OPT_TAPS=false
+OPT_VSCODE=false
+OUTPUT_FILE=""
+OUTPUT_FILE_SET=false
+SELECTIVE_FLAGS=()
+
+# ---------------------------------------------------------------------------
+# Usage
+# ---------------------------------------------------------------------------
+usage() {
+  grep '^#' "$0" | grep -v '^#!/' | sed 's/^# \{0,1\}//'
+}
+
+# ---------------------------------------------------------------------------
+# Option parsing
+# ---------------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      usage; exit 0 ;;
+    -a|--all)
+      OPT_ALL=true ;;
+    -f|--formula|--formulae)
+      OPT_FORMULAE=true; SELECTIVE_FLAGS+=(--formulae) ;;
+    -c|--casks)
+      OPT_CASKS=true; SELECTIVE_FLAGS+=(--casks) ;;
+    -g|--go)
+      OPT_GO=true; SELECTIVE_FLAGS+=(--brews) ;;  # brew bundle dump uses --brews for go
+    -m|--mas)
+      OPT_MAS=true; SELECTIVE_FLAGS+=(--mas) ;;
+    -t|--tap|--taps)
+      OPT_TAPS=true; SELECTIVE_FLAGS+=(--taps) ;;
+    -s|--vscode)
+      OPT_VSCODE=true; SELECTIVE_FLAGS+=(--vscode) ;;
+    -o|--file)
+      shift; OUTPUT_FILE="${1:?--file requires a filepath argument}"; OUTPUT_FILE_SET=true ;;
+    --file=*)
+      OUTPUT_FILE="${1#*=}"; OUTPUT_FILE_SET=true ;;
+    -*)
+      log_error "Unknown option: $1"; exit 1 ;;
+    *)
+      log_error "Unexpected argument: $1"; exit 1 ;;
+  esac
+  shift
+done
+
+# ---------------------------------------------------------------------------
+# Early exits
+# ---------------------------------------------------------------------------
+if [[ "${OUTPUT_FILE_SET}" == true && -z "${OUTPUT_FILE}" ]]; then
+  log_error "--file requires a non-empty filepath"
+  exit 1
+fi
+
+if [[ "${OPT_ALL}" == true && ${#SELECTIVE_FLAGS[@]} -gt 0 ]]; then
+  log_error "--all is incompatible with type-specific flags"
+  exit 1
+fi
+
+mapfile -t BREWFILES < <(find "${DOTFILES_ROOT}" -maxdepth 1 -name 'Brewfile.*' | sort)
+if [[ ${#BREWFILES[@]} -eq 0 ]]; then
+  log_error "No Brewfile.* files found in ${DOTFILES_ROOT}"
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Temp files
+# ---------------------------------------------------------------------------
+TMPDIR_WORK="$(mktemp -d)"
+trap 'rm -rf "${TMPDIR_WORK}"' EXIT
+DUMP_FILE="${TMPDIR_WORK}/installed.txt"
+RESULTS_FILE="${TMPDIR_WORK}/results.json"
+
+# ---------------------------------------------------------------------------
+# Build type filter list for Ruby helper
+# ---------------------------------------------------------------------------
+TYPE_FILTER=""
+if [[ ${#SELECTIVE_FLAGS[@]} -gt 0 ]]; then
+  types=()
+  [[ "${OPT_FORMULAE}" == true ]] && types+=(brew)
+  [[ "${OPT_CASKS}"    == true ]] && types+=(cask)
+  [[ "${OPT_GO}"       == true ]] && types+=(go)
+  [[ "${OPT_MAS}"      == true ]] && types+=(mas)
+  [[ "${OPT_TAPS}"     == true ]] && types+=(tap)
+  [[ "${OPT_VSCODE}"   == true ]] && types+=(vscode)
+  TYPE_FILTER=$(IFS=,; echo "${types[*]}")
+fi
+
+# ---------------------------------------------------------------------------
+# Dump installed packages
+# ---------------------------------------------------------------------------
+log_info "Gathering installed packages..."
+DUMP_ARGS=(--quiet --describe --no-restart "--file=${DUMP_FILE}")
+if [[ ${#SELECTIVE_FLAGS[@]} -gt 0 ]]; then
+  DUMP_ARGS+=("${SELECTIVE_FLAGS[@]}")
+else
+  DUMP_ARGS+=(--all)
+fi
+
+HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_ENV_HINTS=1 \
+  brew bundle dump "${DUMP_ARGS[@]}" || {
+  log_error "brew bundle dump failed"
+  exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Compute diff via Ruby helper
+# ---------------------------------------------------------------------------
+BREWFILE_LIST=$(IFS=,; echo "${BREWFILES[*]}")
+ruby "${PWD}/helpers/brew_audit_helper.rb" \
+  "--installed=${DUMP_FILE}" \
+  "--brewfiles=${BREWFILE_LIST}" \
+  ${TYPE_FILTER:+"--types=${TYPE_FILTER}"} \
+  > "${RESULTS_FILE}" || {
+  log_error "Audit comparison failed"
+  exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Format and output results
+# ---------------------------------------------------------------------------
+
+# use_color=true only when writing to stdout (no --file)
+use_color="false"
+[[ -z "${OUTPUT_FILE}" ]] && use_color="true"
+
+FORMATTED=$(ruby -e '
+  require "json"
+
+  results   = JSON.parse(File.read(ARGV[0]))
+  use_color = ARGV[1] == "true"
+
+  all = results.sort_by {|r| [r["status"], r["type"], r["name"]]}
+  exit 0 if all.empty?
+
+  tokens  = all.map {|r| "#{r["status"]} #{r["type"]} \"#{r["name"]}\""}
+  max_len = tokens.map(&:length).max
+
+  all.each_with_index do |r, i|
+    token = tokens[i]
+    desc  = r["description"]
+    line  = if desc && !desc.strip.empty?
+      spaces = (max_len - token.length) + 1
+      "#{token} #{" " * (spaces - 1)}# #{desc.strip}"
+    else
+      token
+    end
+    if use_color
+      color = r["status"] == "+" ? "\033[1;32m" : "\033[1;31m"
+      puts "#{color}#{line}\033[0m"
+    else
+      puts line
+    end
+  end
+' "${RESULTS_FILE}" "${use_color}")
+
+# Stats
+PLUS_COUNT=$(ruby -e 'require "json"; puts JSON.parse(File.read(ARGV[0])).count{|r| r["status"]=="+"} ' "${RESULTS_FILE}")
+MINUS_COUNT=$(ruby -e 'require "json"; puts JSON.parse(File.read(ARGV[0])).count{|r| r["status"]=="-"} ' "${RESULTS_FILE}")
+TOTAL=$((PLUS_COUNT + MINUS_COUNT))
+
+if [[ -n "${OUTPUT_FILE}" ]]; then
+  echo "${FORMATTED}" > "${OUTPUT_FILE}"
+  echo "Packages installed but not tracked: ${PLUS_COUNT}"
+  echo "Packages tracked but not installed: ${MINUS_COUNT}"
+  echo "Total discrepancies:                ${TOTAL}"
+  echo ""
+  log_success "Results saved to ${OUTPUT_FILE}"
+else
+  echo "Packages installed but not tracked: ${PLUS_COUNT}"
+  echo "Packages tracked but not installed: ${MINUS_COUNT}"
+  echo "Total discrepancies:                ${TOTAL}"
+  if [[ ${TOTAL} -gt 0 ]]; then
+    echo ""
+    echo "---"
+    echo ""
+    echo -e "${FORMATTED}"
+  fi
+fi

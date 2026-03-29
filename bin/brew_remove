@@ -1,0 +1,239 @@
+#!/usr/bin/env bash
+# Removes one or more Homebrew packages from a Brewfile and optionally uninstalls them.
+#
+# Usage:
+#   brew_remove [options] <package> [<package> ...]
+#
+# Options:
+#   -b, --brewfile, --brewfile-suffix=<suffix>  Target Brewfile suffix (e.g. "common")
+#   -a, --all-brewfiles                         Remove from all Brewfiles
+#   -S, --skip-commit, --no-commit              Skip git commit after changes
+#   -U, --skip-uninstall, --no-uninstall        Skip running brew uninstall
+#   -h, --help                                  Show this help message
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-"$(cd "${PWD}/.." && pwd)"}"
+
+# ---------------------------------------------------------------------------
+# Defaults
+# ---------------------------------------------------------------------------
+BREWFILE_SUFFIX=""
+ALL_BREWFILES=false
+SKIP_COMMIT=false
+SKIP_UNINSTALL=false
+PACKAGES=()
+
+# ---------------------------------------------------------------------------
+# Usage
+# ---------------------------------------------------------------------------
+usage() {
+  grep '^#' "$0" | grep -v '^#!/' | sed 's/^# \{0,1\}//'
+}
+
+# ---------------------------------------------------------------------------
+# Option parsing
+# ---------------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      usage; exit 0 ;;
+    -b|--brewfile)
+      shift; BREWFILE_SUFFIX="${1:?--brewfile requires a suffix argument}" ;;
+    --brewfile-suffix=*|--brewfile=*)
+      BREWFILE_SUFFIX="${1#*=}" ;;
+    -a|--all-brewfiles)
+      ALL_BREWFILES=true ;;
+    -S|--skip-commit|--no-commit)
+      SKIP_COMMIT=true ;;
+    -U|--skip-uninstall|--no-uninstall)
+      SKIP_UNINSTALL=true ;;
+    -*)
+      log_error "Unknown option: $1"; exit 1 ;;
+    *)
+      PACKAGES+=("$1") ;;
+  esac
+  shift
+done
+
+# ---------------------------------------------------------------------------
+# Early exits
+# ---------------------------------------------------------------------------
+if [[ ${#PACKAGES[@]} -eq 0 ]]; then
+  log_error "No packages specified"
+  usage >&2
+  exit 1
+fi
+
+if [[ -n "${BREWFILE_SUFFIX}" && "${ALL_BREWFILES}" == true ]]; then
+  log_error "--brewfile-suffix and --all-brewfiles are incompatible"
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Brewfile selection / validation
+# ---------------------------------------------------------------------------
+declare -a TARGET_BREWFILES=()
+
+if [[ "${ALL_BREWFILES}" == true ]]; then
+  mapfile -t TARGET_BREWFILES < <(find "${DOTFILES_ROOT}" -maxdepth 1 -name 'Brewfile.*' | sort)
+  if [[ ${#TARGET_BREWFILES[@]} -eq 0 ]]; then
+    log_error "No Brewfile.* files found in ${DOTFILES_ROOT}"
+    exit 1
+  fi
+elif [[ -n "${BREWFILE_SUFFIX}" ]]; then
+  BREWFILE="${DOTFILES_ROOT}/Brewfile.${BREWFILE_SUFFIX}"
+  if [[ ! -f "${BREWFILE}" ]]; then
+    log_error "Brewfile.${BREWFILE_SUFFIX} not found in ${DOTFILES_ROOT}"
+    exit 1
+  fi
+  TARGET_BREWFILES=("${BREWFILE}")
+else
+  mapfile -t BREWFILES < <(find "${DOTFILES_ROOT}" -maxdepth 1 -name 'Brewfile.*' | sort)
+  if [[ ${#BREWFILES[@]} -eq 0 ]]; then
+    log_error "No Brewfile.* files found in ${DOTFILES_ROOT}"
+    exit 1
+  fi
+  BREWFILE_LABELS=("ALL")
+  for f in "${BREWFILES[@]}"; do
+    BREWFILE_LABELS+=("$(basename "${f}")")
+  done
+  selected=$(printf '%s\n' "${BREWFILE_LABELS[@]}" \
+    | fzf --prompt="Select Brewfile (ALL to target every file): " --height=40% --border) || {
+    log_error "No Brewfile selected"
+    exit 1
+  }
+  if [[ "${selected}" == "ALL" ]]; then
+    read -r -p "Remove from ALL Brewfiles? [y/N] " confirm
+    if [[ ! "${confirm}" =~ ^[Yy]$ ]]; then
+      log_error "Aborted"
+      exit 1
+    fi
+    TARGET_BREWFILES=("${BREWFILES[@]}")
+    ALL_BREWFILES=true
+  else
+    BREWFILE_SUFFIX="${selected#Brewfile.}"
+    TARGET_BREWFILES=("${DOTFILES_ROOT}/${selected}")
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Uncommitted changes check (skipped if --skip-commit)
+# ---------------------------------------------------------------------------
+if [[ "${SKIP_COMMIT}" == false ]]; then
+  for bf in "${TARGET_BREWFILES[@]}"; do
+    bf_name="$(basename "${bf}")"
+    if ! git -C "${DOTFILES_ROOT}" diff --quiet -- "${bf}" 2>/dev/null || \
+       ! git -C "${DOTFILES_ROOT}" diff --cached --quiet -- "${bf}" 2>/dev/null; then
+      log_error "${bf_name} has uncommitted changes. Commit or stash them first, or pass --skip-commit."
+      exit 1
+    fi
+  done
+fi
+
+# ---------------------------------------------------------------------------
+# Temp files
+# ---------------------------------------------------------------------------
+TMPDIR_WORK="$(mktemp -d)"
+trap 'rm -rf "${TMPDIR_WORK}"' EXIT
+INFO_FILE="${TMPDIR_WORK}/brew_info.json"
+RESULTS_FILE="${TMPDIR_WORK}/results.json"
+
+# ---------------------------------------------------------------------------
+# Look up package info
+# ---------------------------------------------------------------------------
+log_info "Looking up package info for: ${PACKAGES[*]}"
+HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_ENV_HINTS=1 \
+  brew info --quiet --json=v2 "${PACKAGES[@]}" > "${INFO_FILE}" || {
+  log_error "brew info failed for: ${PACKAGES[*]}"
+  exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Modify Brewfile(s) via Ruby helper
+# ---------------------------------------------------------------------------
+ruby "${PWD}/helpers/brew_remove_helper.rb" "${TARGET_BREWFILES[@]}" \
+  < "${INFO_FILE}" > "${RESULTS_FILE}" || {
+  log_error "Failed to update Brewfile(s)"
+  exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Uninstall packages
+# ---------------------------------------------------------------------------
+declare -a UNINSTALL_ERRORS=()
+declare -a UNINSTALL_MESSAGES=()
+
+if [[ "${SKIP_UNINSTALL}" == false ]]; then
+  for pkg in "${PACKAGES[@]}"; do
+    log_info "Uninstalling ${pkg}..."
+    set +e
+    uninstall_out=$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_ENV_HINTS=1 \
+      brew uninstall --quiet "${pkg}" 2>&1)
+    uninstall_exit=$?
+    set -e
+    if [[ ${uninstall_exit} -ne 0 ]]; then
+      UNINSTALL_ERRORS+=("${pkg}: ${uninstall_out}")
+    elif [[ -n "${uninstall_out}" ]]; then
+      UNINSTALL_MESSAGES+=("${pkg}: ${uninstall_out}")
+    fi
+  done
+fi
+
+# ---------------------------------------------------------------------------
+# Git commit
+# ---------------------------------------------------------------------------
+if [[ "${SKIP_COMMIT}" == false ]]; then
+  declare -a CHANGED_BREWFILES=()
+  for bf in "${TARGET_BREWFILES[@]}"; do
+    if ! git -C "${DOTFILES_ROOT}" diff --quiet -- "${bf}" 2>/dev/null; then
+      CHANGED_BREWFILES+=("${bf}")
+    fi
+  done
+
+  if [[ ${#CHANGED_BREWFILES[@]} -gt 0 ]]; then
+    removed_names=$(ruby -e '
+      require "json"
+      r = JSON.parse(File.read(ARGV[0]))
+      puts r.select{|x| x["status"]=="removed"}.map{|x| x["name"]}.uniq.join(", ")
+    ' "${RESULTS_FILE}")
+    brewfile_names=$(printf '%s\n' "${CHANGED_BREWFILES[@]}" | xargs -I{} basename {} | paste -sd ', ')
+    commit_msg="brew_remove: remove ${removed_names} from ${brewfile_names}"
+    git -C "${DOTFILES_ROOT}" add -- "${CHANGED_BREWFILES[@]}"
+    git -C "${DOTFILES_ROOT}" commit -m "${commit_msg}" || {
+      log_error "git commit failed"
+      exit 1
+    }
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Output
+# ---------------------------------------------------------------------------
+ruby -e '
+  require "json"
+  results = JSON.parse(File.read(ARGV[0]))
+
+  removed = results.select {|r| r["status"] == "removed"}
+  not_found = results.select {|r| r["status"] == "not_found"}
+
+  removed.each do |r|
+    puts "Removed #{r["type"]} \"#{r["name"]}\" from #{r["brewfile"]}"
+  end
+
+  not_found.map{|r| r["name"]}.uniq.each do |name|
+    puts "Skipped \"#{name}\" — not found in any targeted Brewfile"
+  end
+' "${RESULTS_FILE}"
+
+for msg in "${UNINSTALL_MESSAGES[@]:-}"; do
+  [[ -n "${msg}" ]] && echo "Post-uninstall: ${msg}"
+done
+
+for err in "${UNINSTALL_ERRORS[@]:-}"; do
+  [[ -n "${err}" ]] && echo "Uninstall error: ${err}" >&2
+done
+
+[[ ${#UNINSTALL_ERRORS[@]} -eq 0 ]] || exit 1

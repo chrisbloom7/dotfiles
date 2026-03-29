@@ -1,0 +1,200 @@
+#!/usr/bin/env bash
+# Adds one or more Homebrew packages to a Brewfile and optionally installs them.
+#
+# Usage:
+#   brew_add [options] <package> [<package> ...]
+#
+# Options:
+#   -b, --brewfile, --brewfile-suffix=<suffix>  Target Brewfile suffix (e.g. "common")
+#   -S, --skip-commit, --no-commit              Skip git commit after changes
+#   -I, --skip-install, --no-install            Skip running brew install
+#   -h, --help                                  Show this help message
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-"$(cd "${PWD}/.." && pwd)"}"
+
+# ---------------------------------------------------------------------------
+# Defaults
+# ---------------------------------------------------------------------------
+BREWFILE_SUFFIX=""
+SKIP_COMMIT=false
+SKIP_INSTALL=false
+PACKAGES=()
+
+# ---------------------------------------------------------------------------
+# Usage
+# ---------------------------------------------------------------------------
+usage() {
+  grep '^#' "$0" | grep -v '^#!/' | sed 's/^# \{0,1\}//'
+}
+
+# ---------------------------------------------------------------------------
+# Option parsing
+# ---------------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      usage; exit 0 ;;
+    -b|--brewfile)
+      shift; BREWFILE_SUFFIX="${1:?--brewfile requires a suffix argument}" ;;
+    --brewfile-suffix=*|--brewfile=*)
+      BREWFILE_SUFFIX="${1#*=}" ;;
+    -S|--skip-commit|--no-commit)
+      SKIP_COMMIT=true ;;
+    -I|--skip-install|--no-install)
+      SKIP_INSTALL=true ;;
+    -*)
+      log_error "Unknown option: $1"; exit 1 ;;
+    *)
+      PACKAGES+=("$1") ;;
+  esac
+  shift
+done
+
+# ---------------------------------------------------------------------------
+# Early exits
+# ---------------------------------------------------------------------------
+if [[ ${#PACKAGES[@]} -eq 0 ]]; then
+  log_error "No packages specified"
+  usage >&2
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Brewfile selection / validation
+# ---------------------------------------------------------------------------
+if [[ -n "${BREWFILE_SUFFIX}" ]]; then
+  BREWFILE="${DOTFILES_ROOT}/Brewfile.${BREWFILE_SUFFIX}"
+  if [[ ! -f "${BREWFILE}" ]]; then
+    log_error "Brewfile.${BREWFILE_SUFFIX} not found in ${DOTFILES_ROOT}"
+    exit 1
+  fi
+else
+  mapfile -t BREWFILES < <(find "${DOTFILES_ROOT}" -maxdepth 1 -name 'Brewfile.*' | sort)
+  if [[ ${#BREWFILES[@]} -eq 0 ]]; then
+    log_error "No Brewfile.* files found in ${DOTFILES_ROOT}"
+    exit 1
+  fi
+  BREWFILE_LABELS=()
+  for f in "${BREWFILES[@]}"; do
+    BREWFILE_LABELS+=("$(basename "${f}")")
+  done
+  selected=$(printf '%s\n' "${BREWFILE_LABELS[@]}" \
+    | fzf --prompt="Select Brewfile: " --height=40% --border) || {
+    log_error "No Brewfile selected"
+    exit 1
+  }
+  BREWFILE_SUFFIX="${selected#Brewfile.}"
+  BREWFILE="${DOTFILES_ROOT}/${selected}"
+fi
+
+# ---------------------------------------------------------------------------
+# Uncommitted changes check (skipped if --skip-commit)
+# ---------------------------------------------------------------------------
+if [[ "${SKIP_COMMIT}" == false ]]; then
+  if ! git -C "${DOTFILES_ROOT}" diff --quiet -- "${BREWFILE}" 2>/dev/null || \
+     ! git -C "${DOTFILES_ROOT}" diff --cached --quiet -- "${BREWFILE}" 2>/dev/null; then
+    log_error "Brewfile.${BREWFILE_SUFFIX} has uncommitted changes. Commit or stash them first, or pass --skip-commit."
+    exit 1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Temp file for inter-process data passing
+# ---------------------------------------------------------------------------
+TMPDIR_WORK="$(mktemp -d)"
+trap 'rm -rf "${TMPDIR_WORK}"' EXIT
+INFO_FILE="${TMPDIR_WORK}/brew_info.json"
+RESULTS_FILE="${TMPDIR_WORK}/results.json"
+
+# ---------------------------------------------------------------------------
+# Look up package info
+# ---------------------------------------------------------------------------
+log_info "Looking up package info for: ${PACKAGES[*]}"
+HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_ENV_HINTS=1 \
+  brew info --quiet --json=v2 "${PACKAGES[@]}" > "${INFO_FILE}" || {
+  log_error "brew info failed for: ${PACKAGES[*]}"
+  exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Modify Brewfile via Ruby helper
+# ---------------------------------------------------------------------------
+ruby "${PWD}/helpers/brew_add_helper.rb" "${BREWFILE}" \
+  < "${INFO_FILE}" > "${RESULTS_FILE}" || {
+  log_error "Failed to update Brewfile.${BREWFILE_SUFFIX}"
+  exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Install packages
+# ---------------------------------------------------------------------------
+declare -a INSTALL_ERRORS=()
+declare -a INSTALL_MESSAGES=()
+
+if [[ "${SKIP_INSTALL}" == false ]]; then
+  for pkg in "${PACKAGES[@]}"; do
+    log_info "Installing ${pkg}..."
+    set +e
+    install_out=$(HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_ENV_HINTS=1 \
+      brew install --quiet "${pkg}" 2>&1)
+    install_exit=$?
+    set -e
+    if [[ ${install_exit} -ne 0 ]]; then
+      INSTALL_ERRORS+=("${pkg}: ${install_out}")
+    elif [[ -n "${install_out}" ]]; then
+      INSTALL_MESSAGES+=("${pkg}: ${install_out}")
+    fi
+  done
+fi
+
+# ---------------------------------------------------------------------------
+# Git commit
+# ---------------------------------------------------------------------------
+if [[ "${SKIP_COMMIT}" == false ]]; then
+  if ! git -C "${DOTFILES_ROOT}" diff --quiet -- "${BREWFILE}" 2>/dev/null; then
+    added_names=$(ruby -e '
+      require "json"
+      r = JSON.parse(File.read(ARGV[0]))
+      puts r.reject{|x| x["status"]=="already_present"}.map{|x| x["name"]}.join(", ")
+    ' "${RESULTS_FILE}")
+    commit_msg="brew_add: add ${added_names} to Brewfile.${BREWFILE_SUFFIX}"
+    git -C "${DOTFILES_ROOT}" add -- "${BREWFILE}"
+    git -C "${DOTFILES_ROOT}" commit -m "${commit_msg}" || {
+      log_error "git commit failed"
+      exit 1
+    }
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Output
+# ---------------------------------------------------------------------------
+ruby -e '
+  require "json"
+  results = JSON.parse(File.read(ARGV[0]))
+  suffix  = ARGV[1]
+  results.each do |r|
+    case r["status"]
+    when "added"
+      puts "Added #{r["type"]} \"#{r["name"]}\" to Brewfile.#{suffix}"
+    when "uncommented"
+      puts "Uncommented #{r["type"]} \"#{r["name"]}\" in Brewfile.#{suffix}"
+    when "already_present"
+      puts "Skipped #{r["type"]} \"#{r["name"]}\" — already present in Brewfile.#{suffix}"
+    end
+  end
+' "${RESULTS_FILE}" "${BREWFILE_SUFFIX}"
+
+for msg in "${INSTALL_MESSAGES[@]:-}"; do
+  [[ -n "${msg}" ]] && echo "Post-install:  ${msg}"
+done
+
+for err in "${INSTALL_ERRORS[@]:-}"; do
+  [[ -n "${err}" ]] && echo "Install error: ${err}" >&2
+done
+
+[[ ${#INSTALL_ERRORS[@]} -eq 0 ]] || exit 1
