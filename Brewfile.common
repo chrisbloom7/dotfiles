@@ -14,30 +14,31 @@ brew "docker-compose"           # Isolated development environments using Docker
 brew "docker-credential-helper" # Platform keystore credential helper for Docker
 
 ## Formulae
-brew "awscli"            # Official Amazon AWS command-line interface
-brew "bat"               # Clone of cat(1) with syntax highlighting and Git integration
-brew "claude-cmd"        # Claude Code Commands Manager
+brew "awscli"                # Official Amazon AWS command-line interface
+brew "bat"                   # Clone of cat(1) with syntax highlighting and Git integration
+brew "claude-cmd"            # Claude Code Commands Manager
 brew "claude-code-templates" # CLI tool for configuring and monitoring Claude Code
-brew "devcontainer"      # Reference implementation for the Development Containers specification
-brew "difftastic"        # Diff that understands s˛yntax
-brew "direnv"            # Load/unload environment variables based on $PWD
-brew "dockutil"          # Command-line utility to manage applications in the macOS Dock
-brew "gmailctl"          # Declarative configuration for Gmail filters
-brew "httpie"            # User-friendly cURL replacement (command-line HTTP client)
-brew "imagemagick"       # Tools and libraries to manipulate images in many formats
-brew "jq"                # Lightweight and flexible command-line JSON processor
-brew "lazygit"           # Simple terminal UI for git commands
-brew "mackup"            # Keep your Mac's application settings in sync
-brew "markdownlint-cli"  # CLI for Node.js style checker and lint tool for Markdown files
-brew "notify"            # Stream the output of any CLI and publish it to a variety of supported platforms
-brew "pandoc"            # Swiss-army knife of markup format conversion
-brew "pgcli"             # CLI for Postgres with auto-completion and syntax highlighting
-brew "rubyfmt"           # Ruby autoformatter
-brew "shfmt"             # Autoformat shell script source code
-brew "terminal-notifier" # Send macOS User Notifications from the command-line
-brew "watch"             # Executes a program periodically, showing output fullscreen
-brew "watchman"          # Watches files and records when they change
-brew "worktrunk"         # CLI for Git worktree management, designed for parallel AI agent workflows
+brew "devcontainer"          # Reference implementation for the Development Containers specification
+brew "difftastic"            # Diff that understands s˛yntax
+brew "direnv"                # Load/unload environment variables based on $PWD
+brew "dockutil"              # Command-line utility to manage applications in the macOS Dock
+brew "fzf"                   # Fuzzy finder
+brew "gmailctl"              # Declarative configuration for Gmail filters
+brew "httpie"                # User-friendly cURL replacement (command-line HTTP client)
+brew "imagemagick"           # Tools and libraries to manipulate images in many formats
+brew "jq"                    # Lightweight and flexible command-line JSON processor
+brew "lazygit"               # Simple terminal UI for git commands
+brew "mackup"                # Keep your Mac's application settings in sync
+brew "markdownlint-cli"      # CLI for Node.js style checker and lint tool for Markdown files
+brew "notify"                # Stream the output of any CLI and publish it to a variety of supported platforms
+brew "pandoc"                # Swiss-army knife of markup format conversion
+brew "pgcli"                 # CLI for Postgres with auto-completion and syntax highlighting
+brew "rubyfmt"               # Ruby autoformatter
+brew "shfmt"                 # Autoformat shell script source code
+brew "terminal-notifier"     # Send macOS User Notifications from the command-line
+brew "watch"                 # Executes a program periodically, showing output fullscreen
+brew "watchman"              # Watches files and records when they change
+brew "worktrunk"             # CLI for Git worktree management, designed for parallel AI agent workflows
 
 ## Casks
 cask "1password"            # Password manager that keeps all passwords secure behind one password
@@ -70,3 +71,4 @@ cask "font-bungee"            # Bungee font
 
 ## Apps from the Mac App Store
 # mas "Window Focus", id: 1142625137 # License purchased directly from developer. Download from https://fiplab.com/
+
