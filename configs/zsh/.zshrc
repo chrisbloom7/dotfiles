@@ -84,16 +84,15 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=(
   # Runtimes and auto-completions
   brew
-  docker
-  iterm2
-  ngrok
+  # iterm2
+  # ngrok
   zsh-autosuggestions
   zsh-completions
 
   common-aliases               # creates helpful shortcut aliases for many commonly used commands
-  encode64                     # encode64/e64; encodefile64/ef64; decode64/d64
+  # encode64                     # encode64/e64; encodefile64/ef64; decode64/d64
   history                      # h (history); hl (less); hs (grep); hsi (grep -i)
-  jsontools                    # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
+  # jsontools                    # <json data> | <tool>: pp_json; is_json; urlencode_json; urldecode_json
   zbell                        # prints a bell character when a command finishes if it has been running for longer than a specified duration
   zsh-history-substring-search # type in part of prev entered command and cycle with UP/DOWN arrow keys
 )
@@ -154,8 +153,11 @@ test -e "${HOME}/.stripe-completion.zsh" && source "${HOME}/.stripe-completion.z
 
 if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
 
+# Mark this as an interactive shell session for Claude Code hooks (e.g. stop notifications).
+export CLAUDE_NOTIFY=1
+
 # Auto-attach to (or create) a default tmux session when opening a terminal.
 # Comment out if sharing the same session across Warp tabs feels wrong.
-if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
-  tmux attach -t main 2>/dev/null || tmux new -s main
-fi
+# if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
+#   tmux new-session -A -s main
+# fi

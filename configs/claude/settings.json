@@ -192,18 +192,27 @@
       "Bash(git reset:*)",
       "Bash(git rm:*)"
     ],
-    "defaultMode": "default",
-    "additionalDirectories": [
-      "/tmp",
-      "~/.claude/"
-    ]
+    "defaultMode": "default"
   },
   "enabledPlugins": {
-    "figma@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "ruby-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "slack@claude-plugins-official": true
+    "worktrunk@worktrunk": true,
+    "superpowers@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "atlassian@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "playground@claude-plugins-official": true,
+    "remember@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -220,15 +229,5 @@
       },
       "autoUpdate": true
     }
-  },
-  "promptSuggestionEnabled": false,
-  "hooks": {
-    "Stop": [{
-      "matcher": "",
-      "hooks": [{
-        "type": "command",
-        "command": "terminal-notifier -title 'Claude' -message 'Waiting for input' -sound default -group claude-$CLAUDE_SESSION_ID"
-      }]
-    }]
   }
 }

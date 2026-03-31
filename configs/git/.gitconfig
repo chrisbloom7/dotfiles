@@ -90,3 +90,5 @@
 	email = chrisbloom7@gmail.com
 	signingkey = 7D1983282132E721
 	useConfigOnly = true
+[init]
+	defaultBranch = main
