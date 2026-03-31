@@ -4,14 +4,11 @@ source ../../scripts/helpers/runtime.sh
 source ../../bin/helpers/trap_and_trace.sh
 
 log_info "Symlinking claude configs"
-
-TARGET="${HOME}/.claude"
+TARGET="${HOME}/"
 mkdir -p "${TARGET}"
-clean_broken_symlinks "${TARGET}"
 
 configs=(
   "CLAUDE.md"
-  "settings.json"
 )
 for config in "${configs[@]}"; do
   symlink_config "${PWD}/${config}" "${TARGET}/${config}"
