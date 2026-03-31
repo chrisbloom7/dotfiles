@@ -133,7 +133,8 @@ ruby "${PWD}/helpers/brew_add_helper.rb" "${BREWFILE}" \
 # Install packages
 # ---------------------------------------------------------------------------
 declare -a INSTALL_ERRORS=()
-declare -a INSTALL_MESSAGES=()
+declare -a CAVEAT_PKGS=()
+declare -a CAVEAT_TEXTS=()
 
 if [[ "${SKIP_INSTALL}" == false ]]; then
   for pkg in "${PACKAGES[@]}"; do
@@ -145,8 +146,27 @@ if [[ "${SKIP_INSTALL}" == false ]]; then
     set -e
     if [[ ${install_exit} -ne 0 ]]; then
       INSTALL_ERRORS+=("${pkg}: ${install_out}")
-    elif [[ -n "${install_out}" ]]; then
-      INSTALL_MESSAGES+=("${pkg}: ${install_out}")
+    else
+      # Extract package-level caveats (==> Caveats before ==> Summary)
+      pkg_caveat=$(awk '
+        /^==> Summary/{exit}
+        /^==> Caveats/{c=1;b="";next}
+        c&&/^==>/{if(b!="")print b;c=0;b="";next}
+        c{b=(b=="")?$0:b"\n"$0}
+        END{if(c&&b!="")print b}
+      ' <<< "${install_out}")
+      [[ -n "${pkg_caveat}" ]] && { CAVEAT_PKGS+=("${pkg}"); CAVEAT_TEXTS+=("${pkg_caveat}"); }
+
+      # Extract brew-level caveats (==> Caveats after ==> Summary)
+      brew_caveat=$(awk '
+        /^==> Summary/{past=1;next}
+        !past{next}
+        /^==> Caveats/{c=1;b="";next}
+        c&&/^==>/{if(b!="")print b;c=0;b="";next}
+        c{b=(b=="")?$0:b"\n"$0}
+        END{if(c&&b!="")print b}
+      ' <<< "${install_out}")
+      [[ -n "${brew_caveat}" ]] && { CAVEAT_PKGS+=("homebrew"); CAVEAT_TEXTS+=("${brew_caveat}"); }
     fi
   done
 fi
@@ -189,8 +209,8 @@ ruby -e '
   end
 ' "${RESULTS_FILE}" "${BREWFILE_SUFFIX}"
 
-for msg in "${INSTALL_MESSAGES[@]:-}"; do
-  [[ -n "${msg}" ]] && echo "Post-install:  ${msg}"
+for i in "${!CAVEAT_PKGS[@]}"; do
+  printf '\nPost-install caveat (%s):\n%s\n' "${CAVEAT_PKGS[$i]}" "${CAVEAT_TEXTS[$i]}"
 done
 
 for err in "${INSTALL_ERRORS[@]:-}"; do
