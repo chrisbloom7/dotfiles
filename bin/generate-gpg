@@ -57,7 +57,6 @@ log_info "Configuring git for GPG"
 git config unset --global --all gpg.format || [[ $? -eq 5 ]]
 git config set --global --all user.signingkey "${sec_key}"
 git config set --global --all commit.gpgsign true # sign all commits
-git config set --global --all push.gpgsign "if-asked" # sign pushes if asked
 git config set --global --all tag.gpgsign true # sign all tags
 git config set --global --all gpg.program "$(command -v gpg 2>/dev/null)"
 

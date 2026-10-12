@@ -82,7 +82,6 @@ git_global() {
   [ "$(git_global user.signingkey)" = "${NEW_FPR}" ]
   [ "$(git_global commit.gpgsign)" = "true" ]
   [ "$(git_global tag.gpgsign)" = "true" ]
-  [ "$(git_global push.gpgsign)" = "if-asked" ]
   [ "$(git_global gpg.program)" = "${TEST_TMPDIR}/mock_bin/gpg" ]
 }
 
