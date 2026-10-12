@@ -40,6 +40,7 @@ brew "pipx"                  # Execute binaries from Python packages in isolated
 brew "rubyfmt"               # Ruby autoformatter
 brew "shfmt"                 # Autoformat shell script source code
 brew "terminal-notifier"     # Send macOS User Notifications from the command-line
+brew "tmux"                  # Terminal multiplexer
 brew "watch"                 # Executes a program periodically, showing output fullscreen
 brew "watchman"              # Watches files and records when they change
 brew "worktrunk"             # CLI for Git worktree management, designed for parallel AI agent workflows
