@@ -75,6 +75,7 @@
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 [push]
 	default = simple
+	gpgsign = if-asked
 [pull]
 	rebase = true
 [remote "origin"]
@@ -88,7 +89,7 @@
 [user]
 	name = Chris Bloom
 	email = chrisbloom7@gmail.com
-	signingkey = 7D1983282132E721
+	signingkey = 87B590D5CEF081B8BDBCF1541BE50E91398AA30C
 	useConfigOnly = true
 [init]
 	defaultBranch = main
