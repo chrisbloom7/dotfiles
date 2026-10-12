@@ -129,7 +129,7 @@ fi
 # Dump installed packages
 # ---------------------------------------------------------------------------
 log_info "Gathering installed packages..."
-DUMP_ARGS=(--quiet --describe --no-restart "--file=${DUMP_FILE}")
+DUMP_ARGS=(--quiet --no-restart "--file=${DUMP_FILE}")
 if [[ ${#SELECTIVE_FLAGS[@]} -gt 0 ]]; then
   DUMP_ARGS+=("${SELECTIVE_FLAGS[@]}")
 else

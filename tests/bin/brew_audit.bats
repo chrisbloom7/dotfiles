@@ -19,23 +19,31 @@ brew "git" # Distributed revision control system
 brew "wget" # Internet file retriever
 EOF
 
-  # Mock brew bundle dump: reports git and fzf installed (not wget)
-  cat > "${TEST_TMPDIR}/mock_bin/brew" <<'EOF'
-#!/usr/bin/env bash
-if [[ "$1" == "bundle" && "$2" == "dump" ]]; then
-  # Find the --file= argument and write to it
-  for arg in "$@"; do
-    if [[ "$arg" == "--file="* ]]; then
-      outfile="${arg#--file=}"
-      cat > "${outfile}" <<DUMP
+  # Default dump fixture: git and fzf installed (not wget)
+  cat > "${TEST_TMPDIR}/dump_fixture" <<'EOF'
 # Distributed revision control system
 brew "git"
 # Fuzzy finder
 brew "fzf"
-DUMP
-      exit 0
-    fi
+EOF
+
+  # Mock brew bundle dump: writes dump_fixture to --file= and records its args
+  # in bundle_args. Rejects flags the real `brew bundle dump` doesn't accept,
+  # so the tests catch upstream flag removals (e.g. --describe in Homebrew 7).
+  cat > "${TEST_TMPDIR}/mock_bin/brew" <<EOF
+#!/usr/bin/env bash
+if [[ "\$1" == "bundle" && "\$2" == "dump" ]]; then
+  echo "\$@" > "${TEST_TMPDIR}/bundle_args"
+  outfile=""
+  for arg in "\${@:3}"; do
+    case "\$arg" in
+      --file=*) outfile="\${arg#--file=}" ;;
+      --quiet|--no-restart|--formulae|--casks|--taps|--mas|--vscode|--npm) ;;
+      *) echo "Error: invalid option: \$arg" >&2; exit 1 ;;
+    esac
   done
+  [[ -n "\${outfile}" ]] || exit 1
+  cp "${TEST_TMPDIR}/dump_fixture" "\${outfile}"
 fi
 exit 0
 EOF
@@ -168,21 +176,9 @@ invoke() {
 
 @test "brew_audit: --formulae limits output to brew entries" {
   # Add a cask discrepancy to the dump
-  cat > "${TEST_TMPDIR}/mock_bin/brew" <<'EOF'
-#!/usr/bin/env bash
-if [[ "$1" == "bundle" && "$2" == "dump" ]]; then
-  for arg in "$@"; do
-    if [[ "$arg" == "--file="* ]]; then
-      outfile="${arg#--file=}"
-      cat > "${outfile}" <<DUMP
+  cat > "${TEST_TMPDIR}/dump_fixture" <<'EOF'
 brew "fzf"
 cask "extra-cask"
-DUMP
-      exit 0
-    fi
-  done
-fi
-exit 0
 EOF
   invoke --formulae
   [ "${status}" -eq 0 ]
@@ -193,21 +189,9 @@ EOF
 }
 
 @test "brew_audit: --npm limits output to npm entries" {
-  cat > "${TEST_TMPDIR}/mock_bin/brew" <<'EOF'
-#!/usr/bin/env bash
-if [[ "$1" == "bundle" && "$2" == "dump" ]]; then
-  for arg in "$@"; do
-    if [[ "$arg" == "--file="* ]]; then
-      outfile="${arg#--file=}"
-      cat > "${outfile}" <<DUMP
+  cat > "${TEST_TMPDIR}/dump_fixture" <<'EOF'
 brew "fzf"
 npm "eslint"
-DUMP
-      exit 0
-    fi
-  done
-fi
-exit 0
 EOF
   invoke --npm
   [ "${status}" -eq 0 ]
@@ -221,22 +205,6 @@ EOF
 }
 
 @test "brew_audit: default --all expands to tracked-type flags, not --all" {
-  # Mock records the args passed to brew bundle dump
-  cat > "${TEST_TMPDIR}/mock_bin/brew" <<EOF
-#!/usr/bin/env bash
-if [[ "\$1" == "bundle" && "\$2" == "dump" ]]; then
-  echo "\$@" > "${TEST_TMPDIR}/bundle_args"
-  for arg in "\$@"; do
-    if [[ "\$arg" == "--file="* ]]; then
-      outfile="\${arg#--file=}"
-      : > "\${outfile}"
-      exit 0
-    fi
-  done
-fi
-exit 0
-EOF
-  chmod +x "${TEST_TMPDIR}/mock_bin/brew"
   invoke
   [ "${status}" -eq 0 ]
   args=$(cat "${TEST_TMPDIR}/bundle_args")
