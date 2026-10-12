@@ -78,7 +78,8 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
   # Options defaults
   export ADDITIONAL_DEPENDENCIES_SERIALIZED=${ADDITIONAL_DEPENDENCIES_SERIALIZED:-"common|common.vscode"}
   export BOOTSTRAP_MODE=${BOOTSTRAP_MODE:-false}
-  export DRY_RUN_MODE=${DRY_RUN_MODE:-false} # TODO: Implement this
+  # Dry run mode is not implemented yet; see TODO.md
+  export DRY_RUN_MODE=${DRY_RUN_MODE:-false}
   export FORCE_MODE=${FORCE_MODE:-false}
   export MINIMAL_MODE=${MINIMAL_MODE:-false}
   export QUIET_MODE=${QUIET_MODE:-false}

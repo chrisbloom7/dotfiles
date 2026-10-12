@@ -1,4 +1,4 @@
-# TODO: Skipping for now until I can refine some things
+# Disabled for now; see TODO.md
 exit 0
 
 #!/usr/bin/env bash

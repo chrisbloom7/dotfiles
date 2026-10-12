@@ -43,7 +43,7 @@ if is_force_mode; then
   brew_args+=(--force)
 fi
 
-# TODO: --display-times is not supported on brew bundle
+# --display-times is not supported on brew bundle; see TODO.md
 # if ! is_quiet_mode; then
 #   brew_args="${brew_args} --display-times"
 # fi
