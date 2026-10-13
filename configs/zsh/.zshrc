@@ -122,10 +122,10 @@ if [[ -n $(command -v ox 2>/dev/null) ]]; then
   _DEFAULT_EDITOR=ox
 fi
 if [[ -z $SSH_CONNECTION ]]; then
-  if [[ -n $(command -v cursor 2>/dev/null) ]]; then
-    _DEFAULT_EDITOR=cursor
-  elif [[ -n $(command -v code 2>/dev/null) ]]; then
+  if [[ -n $(command -v code 2>/dev/null) ]]; then
     _DEFAULT_EDITOR=code
+  elif [[ -n $(command -v cursor 2>/dev/null) ]]; then
+    _DEFAULT_EDITOR=cursor
   fi
 fi
 export EDITOR="${EDITOR:-${_DEFAULT_EDITOR}}"
@@ -145,7 +145,6 @@ export BUILDKIT_PROGRESS=plain
 test -e "${HOME}/.aliases" && source "${HOME}/.aliases"
 
 # Other completions added by installed tools
-test -e "${HOME}/.hunt-cli/autocomplete_zsh" && source "${HOME}/.hunt-cli/autocomplete_zsh"
 if test -e "${HOME}/.config/op/plugins.sh"; then
   source "${HOME}/.config/op/plugins.sh"
   unalias gh 2>/dev/null || true  # gh uses its own auth via `gh auth login`
