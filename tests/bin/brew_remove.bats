@@ -101,6 +101,13 @@ invoke() {
   }
 }
 
+@test "brew_remove: --help works when invoked by a relative path" {
+  cd "${DOTFILES_ROOT}"
+  run bin/brew_remove --help
+  [ "${status}" -eq 0 ] || { echo "status ${status}: ${output}"; return 1; }
+  [[ "${output}" == *"Usage:"* ]] || { echo "Expected usage text; got: ${output}"; return 1; }
+}
+
 # ---------------------------------------------------------------------------
 # Successful remove from a single Brewfile
 # ---------------------------------------------------------------------------

@@ -93,6 +93,13 @@ invoke() {
   }
 }
 
+@test "brew_add: --help works when invoked by a relative path" {
+  cd "${DOTFILES_ROOT}"
+  run bin/brew_add --help
+  [ "${status}" -eq 0 ] || { echo "status ${status}: ${output}"; return 1; }
+  [[ "${output}" == *"Usage:"* ]] || { echo "Expected usage text; got: ${output}"; return 1; }
+}
+
 @test "brew_add: fails on unknown option" {
   invoke --brewfile-suffix=test --skip-commit --skip-install --invalid-flag fzf
   [ "${status}" -ne 0 ]

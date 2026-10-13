@@ -139,6 +139,13 @@ invoke_no() {
   [[ "${output}" == *"--delete-branch"* ]] || return 1
 }
 
+@test "wt_cleanup: --help works when invoked by a relative path" {
+  cd "${DOTFILES_ROOT}"
+  run bin/wt_cleanup --help
+  [ "${status}" -eq 0 ] || { echo "status ${status}: ${output}"; return 1; }
+  [[ "${output}" == *"Usage:"* ]] || { echo "Expected usage text; got: ${output}"; return 1; }
+}
+
 @test "wt_cleanup: unknown option exits non-zero" {
   invoke --bogus
   [ "${status}" -ne 0 ]
