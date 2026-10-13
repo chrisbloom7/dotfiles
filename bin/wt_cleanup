@@ -54,7 +54,8 @@ WT_PASSTHROUGH=()
 # Usage
 # ---------------------------------------------------------------------------
 usage() {
-  grep '^#' "${PWD}/$(basename "$0")" | grep -v '^#!/' | sed 's/^# \{0,1\}//'
+  # Print the header comment block, stopping at the first non-comment line
+  awk 'NR == 1 && /^#!/ { next } !/^#/ { exit } { sub(/^# ?/, ""); print }' "${PWD}/$(basename "$0")"
 }
 
 # ---------------------------------------------------------------------------

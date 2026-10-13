@@ -108,6 +108,17 @@ invoke() {
   [[ "${output}" == *"Usage:"* ]] || { echo "Expected usage text; got: ${output}"; return 1; }
 }
 
+@test "brew_remove: --help prints only the header comment block" {
+  run "${DOTFILES_BIN}/brew_remove" --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"-----"* ]] || { echo "Expected no section dividers in help; got: ${output}"; return 1; }
+  last_line="$(printf '%s\n' "${output}" | tail -1)"
+  header_last="$(sed -n '/^set -euo pipefail/{x;p;q;};h' "${DOTFILES_BIN}/brew_remove" | sed 's/^# \{0,1\}//')"
+  [ "${last_line}" = "${header_last}" ] || {
+    echo "Expected help to end with the header's last line '${header_last}'; got '${last_line}'"; return 1
+  }
+}
+
 # ---------------------------------------------------------------------------
 # Successful remove from a single Brewfile
 # ---------------------------------------------------------------------------

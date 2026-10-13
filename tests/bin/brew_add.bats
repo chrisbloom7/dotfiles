@@ -100,6 +100,17 @@ invoke() {
   [[ "${output}" == *"Usage:"* ]] || { echo "Expected usage text; got: ${output}"; return 1; }
 }
 
+@test "brew_add: --help prints only the header comment block" {
+  run "${DOTFILES_BIN}/brew_add" --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" != *"-----"* ]] || { echo "Expected no section dividers in help; got: ${output}"; return 1; }
+  last_line="$(printf '%s\n' "${output}" | tail -1)"
+  header_last="$(sed -n '/^set -euo pipefail/{x;p;q;};h' "${DOTFILES_BIN}/brew_add" | sed 's/^# \{0,1\}//')"
+  [ "${last_line}" = "${header_last}" ] || {
+    echo "Expected help to end with the header's last line '${header_last}'; got '${last_line}'"; return 1
+  }
+}
+
 @test "brew_add: fails on unknown option" {
   invoke --brewfile-suffix=test --skip-commit --skip-install --invalid-flag fzf
   [ "${status}" -ne 0 ]
