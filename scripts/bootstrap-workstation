@@ -179,9 +179,6 @@ if ! is_minimal_mode && ! is_update_mode; then
   ./configure-macos
 fi
 
-# Re-symlink Mackup config files to the home directory after setup
-./symlink-config-files
-
 log_attention "Some changes may require a logout/restart to take effect"
 log_attention "You may need to manually set fonts in your terminal profiles"
 

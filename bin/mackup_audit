@@ -1,0 +1,177 @@
+#!/usr/bin/env bash
+# Checks the Mackup link and copy configs against each other, macOS symlink
+# limits, and the files linked from this repo.
+#
+# Usage:
+#   mackup_audit [--links | --storage-only]
+#
+# Options:
+#   --links         Also report files of link-mode apps that are not symlinked
+#                   from the Mackup folder, e.g. because the app replaced its link
+#   --storage-only  Only check the storage folder
+#   -h, --help      Show this help message
+#
+# Checks:
+#   - Both configs use the same storage folder, and it exists
+#   - Every app named in either config exists in Mackup's app database
+#   - No app is in both link mode and copy mode
+#   - No link-mode app has files where macOS 14+ doesn't support symlinks
+#     (~/Library/Preferences, ~/Library/Containers, ~/Library/Group Containers)
+#   - No synced app covers a file linked from configs/
+#
+# Environment:
+#   MACKUP_LINK_CFG  Link-mode config (default: ~/.mackup.cfg)
+#   MACKUP_COPY_CFG  Copy-mode config (default: ~/.mackup-copy.cfg)
+#   MACKUP_PYTHON    Python with the mackup package (default: from mackup's shebang)
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+usage() {
+  # Print the header comment block, stopping at the first non-comment line
+  awk 'NR == 1 && /^#!/ { next } !/^#/ { exit } { sub(/^# ?/, ""); print }' "${PWD}/$(basename "$0")"
+}
+
+check_links=false
+storage_only=false
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --links) check_links=true ;;
+    --storage-only) storage_only=true ;;
+    -h | --help) usage; exit 0 ;;
+    *) log_error "Unknown option: $1"; usage >&2; exit 1 ;;
+  esac
+  shift
+done
+
+if [[ -z "${MACKUP_PYTHON:-}" ]]; then
+  if ! mackup_bin="$(command -v mackup)"; then
+    log_error "mackup is not installed"
+    exit 1
+  fi
+  MACKUP_PYTHON="$(head -1 "${mackup_bin}" | sed -n 's/^#!//p')"
+fi
+
+export MACKUP_LINK_CFG="${MACKUP_LINK_CFG:-${HOME}/.mackup.cfg}"
+export MACKUP_COPY_CFG="${MACKUP_COPY_CFG:-${HOME}/.mackup-copy.cfg}"
+export DOTFILES_CONFIGS="${DOTFILES_CONFIGS:-$(cd "${PWD}/../configs" && pwd)}"
+export CHECK_LINKS="${check_links}"
+export STORAGE_ONLY="${storage_only}"
+
+for cfg in "${MACKUP_LINK_CFG}" "${MACKUP_COPY_CFG}"; do
+  if [[ ! -f "${cfg}" ]]; then
+    log_error "${cfg} not found"
+    exit 1
+  fi
+done
+
+problems=0
+while IFS= read -r line; do
+  log_error "${line}"
+  problems=$((problems + 1))
+done < <("${MACKUP_PYTHON}" - <<'PY'
+import os
+from mackup.appsdb import ApplicationsDatabase
+from mackup.config import Config
+
+PROTECTED = ("Library/Preferences/", "Library/Containers/", "Library/Group Containers/")
+home = os.environ["HOME"]
+link_cfg = Config(os.environ["MACKUP_LINK_CFG"])
+copy_cfg = Config(os.environ["MACKUP_COPY_CFG"])
+
+storage = link_cfg.fullpath
+if copy_cfg.fullpath != storage:
+    print(f"Configs use different storage folders: {storage} and {copy_cfg.fullpath}")
+if not os.path.isdir(storage):
+    print(f"Mackup folder {storage} not found")
+    raise SystemExit
+if os.environ["STORAGE_ONLY"] == "true":
+    raise SystemExit
+
+db = ApplicationsDatabase()
+names = db.get_app_names()
+
+
+def synced(cfg):
+    return (set(cfg.apps_to_sync) or set(names)) - set(cfg.apps_to_ignore)
+
+
+for cfg_path, cfg in ((os.environ["MACKUP_LINK_CFG"], link_cfg), (os.environ["MACKUP_COPY_CFG"], copy_cfg)):
+    for app in sorted((cfg.apps_to_sync | cfg.apps_to_ignore) - names):
+        print(f"{cfg_path} names unknown app '{app}'")
+
+link_apps = synced(link_cfg)
+copy_apps = synced(copy_cfg)
+for app in sorted(link_apps & copy_apps):
+    print(f"'{app}' is in both link and copy mode; ignore it in {os.environ['MACKUP_LINK_CFG']}")
+
+
+def present(files):
+    return any(os.path.lexists(os.path.join(home, f)) or os.path.lexists(os.path.join(storage, f)) for f in files)
+
+
+# Files linked from configs/, as paths relative to $HOME
+managed = set()
+configs = os.environ["DOTFILES_CONFIGS"]
+for tool in os.listdir(configs):
+    tool_dir = os.path.join(configs, tool)
+    if not os.path.isdir(tool_dir):
+        continue
+    for root, _, files in os.walk(tool_dir):
+        for name in files:
+            rel = os.path.relpath(os.path.join(root, name), tool_dir)
+            if rel == "README.md" or rel.startswith("hooks/") or name == ".DS_Store":
+                continue
+            managed.add(rel.removesuffix(".template"))
+
+for app in sorted(link_apps | copy_apps):
+    files = db.get_files(app)
+    if not present(files):
+        continue
+    covered = sorted(m for m in managed for f in files if m == f or m.startswith(f + "/"))
+    if covered:
+        print(f"'{app}' covers {', '.join('~/' + c for c in covered)}, linked from configs/; ignore it in both configs")
+
+def broken_links(path):
+    if os.path.islink(path) and not os.path.exists(path):
+        yield path
+    elif os.path.isdir(path) and not os.path.islink(path):
+        for root, dirs, files in os.walk(path):
+            for name in dirs + files:
+                candidate = os.path.join(root, name)
+                if os.path.islink(candidate) and not os.path.exists(candidate):
+                    yield candidate
+
+
+# A broken link in $HOME would replace the good copy in the Mackup folder
+for app in sorted(link_apps | copy_apps):
+    for f in sorted(db.get_files(app)):
+        for link in broken_links(os.path.join(home, f)):
+            print(f"'{app}': {link} is a broken symlink; fix or remove it before syncing")
+
+for app in sorted(link_apps):
+    files = db.get_files(app)
+    if not present(files):
+        continue
+    protected = sorted(f for f in files if f.startswith(PROTECTED))
+    if protected:
+        print(f"'{app}' can't be linked on macOS 14+ ({', '.join('~/' + p for p in protected)}); move it to copy mode")
+
+if os.environ["CHECK_LINKS"] == "true":
+    for app in sorted(link_apps):
+        for f in sorted(db.get_files(app)):
+            home_path = os.path.join(home, f)
+            mackup_path = os.path.join(storage, f)
+            if not os.path.lexists(home_path) and not os.path.lexists(mackup_path):
+                continue
+            if not (os.path.islink(home_path) and os.path.exists(home_path)
+                    and os.path.exists(mackup_path) and os.path.samefile(home_path, mackup_path)):
+                print(f"'{app}': ~/{f} is not linked from {mackup_path}")
+PY
+)
+
+if [[ ${problems} -gt 0 ]]; then
+  exit 1
+fi
+log_success "Mackup configs look good"

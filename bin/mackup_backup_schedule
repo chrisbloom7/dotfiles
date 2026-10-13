@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+# Adds, removes, or shows a launchd job that runs `mackup_sync backup --force`
+# on a weekly schedule. Output is logged to ~/Library/Logs/mackup_backup.log.
+#
+# Usage:
+#   mackup_backup_schedule add [--weekday <0-7>] [--hour <0-23>] [--minute <0-59>]
+#   mackup_backup_schedule remove
+#   mackup_backup_schedule status
+#
+# Options:
+#   --weekday <0-7>   Day to run; 0 and 7 are Sunday (default: 0)
+#   --hour <0-23>     Hour to run (default: 12)
+#   --minute <0-59>   Minute to run (default: 0)
+#   -h, --help        Show this help message
+#
+# If the Mac is asleep at the scheduled time, launchd runs the job when it wakes.
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+usage() {
+  # Print the header comment block, stopping at the first non-comment line
+  awk 'NR == 1 && /^#!/ { next } !/^#/ { exit } { sub(/^# ?/, ""); print }' "${PWD}/$(basename "$0")"
+}
+
+LABEL="local.dotfiles.mackup-backup"
+PLIST="${HOME}/Library/LaunchAgents/${LABEL}.plist"
+LOG_FILE="${HOME}/Library/Logs/mackup_backup.log"
+DOMAIN="gui/$(id -u)"
+
+command=""
+weekday=0
+hour=12
+minute=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    add | remove | status)
+      if [[ -n "${command}" ]]; then
+        log_error "Only one command may be given"; usage >&2; exit 1
+      fi
+      command="$1" ;;
+    --weekday) weekday="${2:-}"; shift ;;
+    --hour) hour="${2:-}"; shift ;;
+    --minute) minute="${2:-}"; shift ;;
+    -h | --help) usage; exit 0 ;;
+    *) log_error "Unknown argument: $1"; usage >&2; exit 1 ;;
+  esac
+  shift
+done
+
+if [[ -z "${command}" ]]; then
+  log_error "A command is required"
+  usage >&2
+  exit 1
+fi
+
+# Validates that $2 is an integer from $3 to $4
+check_range() {
+  local name="$1" value="$2" min="$3" max="$4"
+  if [[ ! "${value}" =~ ^[0-9]+$ ]] || (( value < min || value > max )); then
+    log_error "--${name} must be a number from ${min} to ${max}"
+    exit 1
+  fi
+}
+
+unload() {
+  launchctl bootout "${DOMAIN}/${LABEL}" &>/dev/null || true
+}
+
+case "${command}" in
+  add)
+    check_range weekday "${weekday}" 0 7
+    check_range hour "${hour}" 0 23
+    check_range minute "${minute}" 0 59
+
+    if ! mackup_bin="$(command -v mackup)"; then
+      log_error "mackup is not installed"
+      exit 1
+    fi
+
+    # launchd starts jobs with a minimal PATH; include mackup and the bash
+    # that mackup_sync's shebang resolves to
+    job_path="$(dirname "${mackup_bin}"):$(dirname "$(command -v bash)"):/usr/bin:/bin:/usr/sbin:/sbin"
+
+    mkdir -p "$(dirname "${PLIST}")" "$(dirname "${LOG_FILE}")"
+    cat > "${PLIST}" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>${LABEL}</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>${PWD}/mackup_sync</string>
+    <string>backup</string>
+    <string>--force</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>${job_path}</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>${weekday}</integer>
+    <key>Hour</key>
+    <integer>${hour}</integer>
+    <key>Minute</key>
+    <integer>${minute}</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>${LOG_FILE}</string>
+  <key>StandardErrorPath</key>
+  <string>${LOG_FILE}</string>
+</dict>
+</plist>
+PLIST
+    plutil -lint -s "${PLIST}"
+
+    unload
+    launchctl bootstrap "${DOMAIN}" "${PLIST}"
+    log_success "Scheduled weekly Mackup backup (weekday ${weekday}, $(printf '%02d:%02d' "${hour}" "${minute}"))"
+    log_info "Logs: ${LOG_FILE}"
+    ;;
+  remove)
+    if [[ ! -f "${PLIST}" ]]; then
+      log_attention "No scheduled Mackup backup found"
+      exit 0
+    fi
+    unload
+    rm "${PLIST}"
+    log_success "Removed scheduled Mackup backup"
+    ;;
+  status)
+    if [[ ! -f "${PLIST}" ]]; then
+      log_info "No scheduled Mackup backup"
+      exit 0
+    fi
+    schedule() { plutil -extract "StartCalendarInterval.$1" raw "${PLIST}"; }
+    log_info "Weekly Mackup backup: weekday $(schedule Weekday), $(printf '%02d:%02d' "$(schedule Hour)" "$(schedule Minute)")"
+    if launchctl print "${DOMAIN}/${LABEL}" &>/dev/null; then
+      log_info "Loaded in launchd"
+    else
+      log_attention "${PLIST} exists but is not loaded; run \`$(basename "$0") add\` to reload it"
+    fi
+    log_info "Logs: ${LOG_FILE}"
+    ;;
+esac

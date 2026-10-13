@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# Runs Mackup in link mode where macOS allows it, and copy mode elsewhere.
+# Link-mode apps are configured in ~/.mackup.cfg; copy-mode apps in
+# ~/.mackup-copy.cfg. Commands other than `backup` run mackup_audit first.
+#
+# Usage:
+#   mackup_sync [options] <command>
+#
+# Commands:
+#   install   Move local link-mode files into the Mackup folder and link them,
+#             then back up copy-mode files. Run on the first machine, or after
+#             adding an app.
+#   restore   Restore copy-mode files, then link link-mode files from the
+#             Mackup folder. Run on a new machine after setup and once the
+#             Mackup folder has synced.
+#   backup    Back up copy-mode files. Link-mode files never need backing up.
+#             Only checks that the Mackup folder exists, so a new app needing
+#             config changes doesn't block scheduled backups.
+#   check     Run mackup_audit, including files that should be linked but aren't.
+#
+# Options:
+#   -n, --dry-run   Show what mackup would do without making changes
+#   -f, --force     Answer yes to every mackup prompt
+#   -h, --help      Show this help message
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+usage() {
+  # Print the header comment block, stopping at the first non-comment line
+  awk 'NR == 1 && /^#!/ { next } !/^#/ { exit } { sub(/^# ?/, ""); print }' "${PWD}/$(basename "$0")"
+}
+
+command=""
+mackup_opts=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -n | --dry-run) mackup_opts+=(--dry-run) ;;
+    -f | --force) mackup_opts+=(--force) ;;
+    -h | --help) usage; exit 0 ;;
+    install | restore | backup | check)
+      if [[ -n "${command}" ]]; then
+        log_error "Only one command may be given"; usage >&2; exit 1
+      fi
+      command="$1" ;;
+    *) log_error "Unknown argument: $1"; usage >&2; exit 1 ;;
+  esac
+  shift
+done
+
+if [[ -z "${command}" ]]; then
+  log_error "A command is required"
+  usage >&2
+  exit 1
+fi
+
+export MACKUP_LINK_CFG="${MACKUP_LINK_CFG:-${HOME}/.mackup.cfg}"
+export MACKUP_COPY_CFG="${MACKUP_COPY_CFG:-${HOME}/.mackup-copy.cfg}"
+
+link_mode() { mackup --config-file="${MACKUP_LINK_CFG}" "${mackup_opts[@]}" "$@"; }
+copy_mode() { mackup --config-file="${MACKUP_COPY_CFG}" "${mackup_opts[@]}" "$@"; }
+
+case "${command}" in
+  check)
+    mackup_audit --links
+    ;;
+  install)
+    mackup_audit
+    log_info "Linking link-mode apps"
+    link_mode link install
+    log_info "Backing up copy-mode apps"
+    copy_mode backup
+    ;;
+  restore)
+    mackup_audit
+    log_info "Restoring copy-mode apps"
+    copy_mode restore
+    log_info "Linking link-mode apps"
+    link_mode link
+    ;;
+  backup)
+    mackup_audit --storage-only
+    log_info "Backing up copy-mode apps"
+    copy_mode backup
+    ;;
+esac
+
+log_success "mackup_sync ${command} done"
