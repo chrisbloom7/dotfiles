@@ -182,8 +182,8 @@ if [[ "${SKIP_COMMIT}" == false ]]; then
       puts r.reject{|x| x["status"]=="already_present"}.map{|x| x["name"]}.join(", ")
     ' "${RESULTS_FILE}")
     commit_msg="brew_add: add ${added_names} to Brewfile.${BREWFILE_SUFFIX}"
-    git -C "${DOTFILES_ROOT}" add -- "${BREWFILE}"
-    git -C "${DOTFILES_ROOT}" commit -m "${commit_msg}" || {
+    # Commit only the Brewfile, leaving anything else in the index staged
+    git -C "${DOTFILES_ROOT}" commit -m "${commit_msg}" -- "${BREWFILE}" || {
       log_error "git commit failed"
       exit 1
     }

@@ -51,6 +51,18 @@ teardown() {
   _teardown_common
 }
 
+# Replaces the git mock with a real repo in BREWFILE_DIR, isolated from the
+# user's git config (e.g. commit signing), with the fixtures committed.
+_init_real_repo() {
+  rm "${TEST_TMPDIR}/mock_bin/git"
+  export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+  export GIT_AUTHOR_NAME=Test GIT_AUTHOR_EMAIL=test@example.com
+  export GIT_COMMITTER_NAME=Test GIT_COMMITTER_EMAIL=test@example.com
+  git -C "${BREWFILE_DIR}" init -q
+  git -C "${BREWFILE_DIR}" add -A
+  git -C "${BREWFILE_DIR}" commit -q -m initial
+}
+
 # Convenience wrapper: runs brew_add with the fixture DOTFILES_ROOT
 invoke() {
   run env \
@@ -195,6 +207,23 @@ EOF
   invoke --brewfile-suffix=test --skip-commit --skip-install fzf
   [ ! -f "${commit_log}" ] || {
     echo "git commit was called despite --skip-commit"; return 1
+  }
+}
+
+@test "brew_add: commits only the Brewfile, leaving other staged changes staged" {
+  _init_real_repo
+  echo "unrelated" > "${BREWFILE_DIR}/unrelated.txt"
+  git -C "${BREWFILE_DIR}" add unrelated.txt
+
+  invoke --brewfile-suffix=test --skip-install fzf
+  [ "${status}" -eq 0 ]
+  committed="$(git -C "${BREWFILE_DIR}" show --name-only --format= HEAD)"
+  [ "${committed}" = "Brewfile.test" ] || {
+    echo "Expected only Brewfile.test in the commit; got: ${committed}"; return 1
+  }
+  staged="$(git -C "${BREWFILE_DIR}" diff --cached --name-only)"
+  [ "${staged}" = "unrelated.txt" ] || {
+    echo "Expected unrelated.txt to remain staged; got: ${staged}"; return 1
   }
 }
 

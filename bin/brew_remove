@@ -204,8 +204,8 @@ if [[ "${SKIP_COMMIT}" == false ]]; then
       brewfile_names+="${brewfile_names:+, }$(basename "${bf}")"
     done
     commit_msg="brew_remove: remove ${removed_names} from ${brewfile_names}"
-    git -C "${DOTFILES_ROOT}" add -- "${CHANGED_BREWFILES[@]}"
-    git -C "${DOTFILES_ROOT}" commit -m "${commit_msg}" || {
+    # Commit only the Brewfile(s), leaving anything else in the index staged
+    git -C "${DOTFILES_ROOT}" commit -m "${commit_msg}" -- "${CHANGED_BREWFILES[@]}" || {
       log_error "git commit failed"
       exit 1
     }

@@ -228,6 +228,23 @@ EOF
   }
 }
 
+@test "brew_remove: commits only the Brewfile, leaving other staged changes staged" {
+  _init_real_repo
+  echo "unrelated" > "${BREWFILE_DIR}/unrelated.txt"
+  git -C "${BREWFILE_DIR}" add unrelated.txt
+
+  invoke --brewfile-suffix=test --skip-uninstall git
+  [ "${status}" -eq 0 ]
+  committed="$(git -C "${BREWFILE_DIR}" show --name-only --format= HEAD)"
+  [ "${committed}" = "Brewfile.test" ] || {
+    echo "Expected only Brewfile.test in the commit; got: ${committed}"; return 1
+  }
+  staged="$(git -C "${BREWFILE_DIR}" diff --cached --name-only)"
+  [ "${staged}" = "unrelated.txt" ] || {
+    echo "Expected unrelated.txt to remain staged; got: ${staged}"; return 1
+  }
+}
+
 @test "brew_remove: commit message lists every changed Brewfile" {
   _init_real_repo
   invoke --all-brewfiles --skip-uninstall git
