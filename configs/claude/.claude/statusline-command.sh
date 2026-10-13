@@ -13,14 +13,11 @@ model=$(echo "$input" | jq -r '.model.display_name // ""')
 home="$HOME"
 cwd="${cwd/#$home/\~}"
 
-# Git branch (skip lock-safe flag not needed for read-only)
+# Git branch of the project directory, or short SHA when detached
 branch=""
-if git -C "${home}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  # Use the project_dir if available for git context
-  project_dir=$(echo "$input" | jq -r '.workspace.project_dir // ""')
-  if [ -n "$project_dir" ]; then
-    branch=$(git -C "$project_dir" symbolic-ref --short HEAD 2>/dev/null || git -C "$project_dir" rev-parse --short HEAD 2>/dev/null)
-  fi
+project_dir=$(echo "$input" | jq -r '.workspace.project_dir // ""')
+if [ -n "$project_dir" ]; then
+  branch=$(git -C "$project_dir" symbolic-ref --short HEAD 2>/dev/null || git -C "$project_dir" rev-parse --short HEAD 2>/dev/null)
 fi
 
 # Context window remaining

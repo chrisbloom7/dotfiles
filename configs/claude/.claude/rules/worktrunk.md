@@ -1,10 +1,6 @@
----
-name: Worktrunk CLI conventions
-description: How to create, switch, and remove git worktrees using the Worktrunk (wt) CLI — preferred over git CLI for all worktree management
-type: feedback
----
+# Worktrunk CLI conventions
 
-Always use **Worktrunk (`wt`)** to manage git worktrees, not the `git worktree` CLI. Worktrunk has event hooks (configured via `.config/wt.toml`) that orchestrate post-create and pre-remove tasks (e.g., DB setup, service registration).
+Always use **Worktrunk (`wt`)** to manage git worktrees, not the `git worktree` CLI. Never use raw `git worktree add`; when the `using-git-worktrees` skill runs, substitute `wt switch --create <branch>` for `git worktree add`. Worktrees always live as siblings to the main worktree (Worktrunk's default) — never ask the user where to put them. Worktrunk has event hooks (configured via `.config/wt.toml`) that orchestrate post-create and pre-remove tasks (e.g., DB setup, service registration).
 
 `CLAUDE.local.md` is a valid CC context file — Claude Code loads it alongside `CLAUDE.md` at session start. Instructions are incorporated silently (no startup announcement) and execute on the first user prompt. This file is typically gitignored and symlinked across worktrees by Worktrunk hooks, making it ideal for per-user, cross-worktree configuration. Missing `@`-includes (e.g., `@WORKTREE_CONTEXT.md` when the file doesn't exist) fail gracefully with no error.
 
