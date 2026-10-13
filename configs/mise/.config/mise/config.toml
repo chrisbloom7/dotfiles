@@ -2,7 +2,7 @@
 experimental = false
 legacy_version_file = true
 lockfile = false
-trusted_config_paths = ["~/.mise.local.toml"]
+trusted_config_paths = ["~/.mise.local.toml", "~/src/chrisbloom7"]
 idiomatic_version_file_enable_tools = ["node", "ruby", "ruby"]
 
 [tools]

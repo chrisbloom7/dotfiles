@@ -5,6 +5,3 @@ ruby = "latest"
 rust = "latest"
 go = "latest"
 java = "lts"
-
-[settings]
-trusted_config_paths = ["~/src/huntresslabs/portal*/mise.toml"]
