@@ -223,3 +223,24 @@ teardown() {
     return 1
   }
 }
+
+# ---------------------------------------------------------------------------
+# Target resolves to the subject through a symlinked parent directory
+# ---------------------------------------------------------------------------
+
+@test "symlink_config: leaves subject intact when target resolves to it through a symlinked parent" {
+  mkdir -p "${TEST_TMPDIR}/repo_dir"
+  echo "content" > "${TEST_TMPDIR}/repo_dir/file"
+  ln -s "${TEST_TMPDIR}/repo_dir" "${TEST_TMPDIR}/linked_dir"
+
+  run "${DOTFILES_BIN}/symlink_config" "${TEST_TMPDIR}/repo_dir/file" "${TEST_TMPDIR}/linked_dir/file"
+  [ "${status}" -eq 0 ]
+  [ -f "${TEST_TMPDIR}/repo_dir/file" ] && [ ! -L "${TEST_TMPDIR}/repo_dir/file" ] || {
+    echo "Expected subject to remain a regular file"
+    return 1
+  }
+  [ "$(cat "${TEST_TMPDIR}/repo_dir/file")" = "content" ] || {
+    echo "Expected subject content to be unchanged"
+    return 1
+  }
+}
