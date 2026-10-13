@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# Links every file under configs/<tool>/ to the same relative path under $HOME.
+#
+# Usage:
+#   link_configs [<tool> ...]   # defaults to every folder in configs/
+#
+# Conventions within each configs/<tool>/ folder:
+#   - Each file mirrors its location relative to $HOME, e.g.
+#     configs/mise/.config/mise/config.toml → ~/.config/mise/config.toml
+#   - Files ending in .template are copied (without the suffix) instead of
+#     symlinked, and only when the destination doesn't already exist. Use this
+#     for tools that can't write through a symlink.
+#   - README.md at the top of the folder documents the tool and is not linked.
+#   - hooks/post-link, if executable, runs after the folder's files are linked.
+#     Use it for destinations that depend on the environment.
+#
+# Afterward, symlinks in each destination directory that point into configs/
+# but whose source no longer exists are removed.
+set -euo pipefail
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+configs_dir="${DOTFILES_CONFIGS:-$(cd "${PWD}/../configs" && pwd)}"
+
+if [[ $# -gt 0 ]]; then
+  tools=("$@")
+else
+  tools=()
+  while IFS= read -r dir; do
+    tools+=("$(basename "${dir}")")
+  done < <(find "${configs_dir}" -mindepth 1 -maxdepth 1 -type d | sort)
+fi
+
+declare -A linked_dirs=()
+
+# Creates $HOME/<rel_dir>, replacing any directory symlink along the way that
+# points into configs/ (left over from linking whole directories), so files
+# are never linked onto themselves.
+ensure_dir() {
+  local rel_dir="$1" path="${HOME}" part
+  [[ "${rel_dir}" == "." ]] && return 0
+
+  local parts
+  IFS=/ read -ra parts <<< "${rel_dir}"
+  for part in "${parts[@]}"; do
+    path="${path}/${part}"
+    if [[ -L "${path}" ]] && [[ "$(readlink "${path}")" == "${configs_dir}/"* ]]; then
+      log_attention "Replacing directory symlink ${path} with a real directory"
+      unlink "${path}"
+    fi
+  done
+  mkdir -p "${HOME}/${rel_dir}"
+}
+
+copy_template() {
+  local subject="$1" target="$2"
+
+  if [[ -L "${target}" ]]; then
+    log_debug "Unlinking existing soft target ${target}"
+    unlink "${target}"
+  elif [[ -e "${target}" ]]; then
+    log_verbose "${target} already exists; not copying ${subject}"
+    return 0
+  fi
+
+  log_debug "Copying ${subject} to ${target}"
+  cp "${subject}" "${target}"
+}
+
+for tool in "${tools[@]}"; do
+  tool_dir="${configs_dir}/${tool}"
+  if [[ ! -d "${tool_dir}" ]]; then
+    log_error "${tool_dir} not found"
+    exit 1
+  fi
+
+  log_info "Linking ${tool} configs"
+
+  while IFS= read -r -d '' rel; do
+    rel="${rel#./}"
+    case "${rel}" in
+      README.md | hooks/* | .DS_Store | */.DS_Store) continue ;;
+    esac
+
+    rel_dir="$(dirname "${rel}")"
+    ensure_dir "${rel_dir}"
+    if [[ "${rel_dir}" == "." ]]; then
+      linked_dirs["${HOME}"]=1
+    else
+      linked_dirs["${HOME}/${rel_dir}"]=1
+    fi
+
+    if [[ "${rel}" == *.template ]]; then
+      copy_template "${tool_dir}/${rel}" "${HOME}/${rel%.template}"
+    else
+      symlink_config "${tool_dir}/${rel}" "${HOME}/${rel}"
+    fi
+  done < <(cd "${tool_dir}" && find . \( -type f -o -type l \) -print0 | sort -z)
+
+  if [[ -x "${tool_dir}/hooks/post-link" ]]; then
+    log_debug "Running ${tool} post-link hook"
+    "${tool_dir}/hooks/post-link"
+  fi
+done
+
+# Prune links we own whose source was removed or renamed in the repo
+for dir in "${!linked_dirs[@]}"; do
+  while IFS= read -r -d '' link; do
+    if [[ ! -e "${link}" ]] && [[ "$(readlink "${link}")" == "${configs_dir}/"* ]]; then
+      log_attention "Removing stale symlink ${link} → $(readlink "${link}")"
+      unlink "${link}"
+    fi
+  done < <(find "${dir}" -mindepth 1 -maxdepth 1 -type l -print0)
+done

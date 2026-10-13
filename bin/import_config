@@ -1,124 +1,123 @@
 #!/usr/bin/env bash
-# Imports files from an existing tool config directory into the dotfiles repo,
-# generates a symlink_<tool> script, and runs it to create the symlinks.
+# Moves existing config files under $HOME into configs/<tool>/ at the same
+# relative path, then links them back into place with link_configs.
 #
 # Usage:
-#   import_config <tool-name> <source-dir> <file1> [file2 ...]
+#   import_config <tool-name> <path> [<path> ...]
+#   import_config <path> [<path> ...]   # interactive tool selection (requires fzf)
+#
+# The first argument is treated as a tool name unless it contains "/" or starts
+# with "~". Each path may be a file or a directory and must be under $HOME. A
+# new configs/<tool>/ folder is created if needed.
 #
 # Examples:
-#   import_config claude ~/.claude CLAUDE.md settings.json config.json
-#   import_config aws ~/.aws config
-#   import_config mise ~/.config/mise config.toml
+#   import_config mise ~/.config/mise/config.toml
+#   import_config claude ~/.claude/keybindings.json ~/.claude/settings.json
+#   import_config ~/.gitconfig    # prompts for the tool folder
 set -euo pipefail
+caller_dir="${PWD}"
 cd "$(dirname "$0")"
 source "${PWD}/helpers/trap_and_trace.sh"
 PATH="${PWD}:${PATH}"
 
-tool=${1:?Tool name is required (e.g. claude)}
-source_dir=${2:?Source directory is required (e.g. ~/.claude)}
-shift 2
-files=("$@")
+configs_dir="${DOTFILES_CONFIGS:-$(cd "${PWD}/../configs" && pwd)}"
 
-if [[ ${#files[@]} -eq 0 ]]; then
-  log_error "At least one file to import is required"
+if [[ -z "${1:-}" ]]; then
+  log_error "At least one path to import is required"
+  exit 1
+elif [[ "${1}" == *"/"* ]] || [[ "${1}" == "~"* ]]; then
+  tool=""
+else
+  tool="$1"
+  shift
+fi
+
+if [[ $# -eq 0 ]]; then
+  log_error "At least one path to import is required"
   exit 1
 fi
 
-# Resolve source_dir (expand ~)
-source_dir="${source_dir/#\~/$HOME}"
+# ---------------------------------------------------------------------------
+# Resolve each path relative to $HOME, failing fast before any prompts
+# ---------------------------------------------------------------------------
+rel_paths=()
+for path in "$@"; do
+  path="${path/#\~/$HOME}"
+  [[ "${path}" == /* ]] || path="${caller_dir}/${path}"
+  if [[ ! -e "${path}" ]] && [[ ! -L "${path}" ]]; then
+    log_error "${path} not found"
+    exit 1
+  fi
 
-dotfiles_root="$(cd "${PWD}/.." && pwd)"
-config_dir="${dotfiles_root}/configs/${tool}"
-symlink_script="${config_dir}/symlink_${tool}"
+  # Absolute path without resolving the final component, which may be a symlink
+  path="$(cd "$(dirname "${path}")" && pwd)/$(basename "${path}")"
+  if [[ "${path}" != "${HOME}/"* ]]; then
+    log_error "${path} is not under ${HOME}"
+    exit 1
+  fi
+  rel_paths+=("${path#"${HOME}/"}")
+done
 
-log_info "Importing ${tool} configs from ${source_dir}"
+# ---------------------------------------------------------------------------
+# Interactive tool selection (when no tool name was given)
+# ---------------------------------------------------------------------------
+if [[ -z "${tool}" ]]; then
+  if ! command -v fzf &>/dev/null; then
+    log_error "fzf is required for interactive folder selection (brew install fzf)"
+    exit 1
+  fi
 
-mkdir -p "${config_dir}"
+  existing_tools=()
+  while IFS= read -r dir; do
+    existing_tools+=("$(basename "${dir}")")
+  done < <(find "${configs_dir}" -mindepth 1 -maxdepth 1 -type d | sort)
 
-# Move each file into the config dir
-for file in "${files[@]}"; do
-  src="${source_dir}/${file}"
-  dest="${config_dir}/${file}"
+  NEW_FOLDER_OPTION="[New config folder]"
+  choice=$(printf '%s\n' "${existing_tools[@]}" "${NEW_FOLDER_OPTION}" | \
+    fzf --prompt="Config folder for ${rel_paths[*]}: " \
+        --height=40% \
+        --layout=reverse) || true
 
-  if [[ ! -e "${src}" ]] && [[ ! -L "${src}" ]]; then
-    log_attention "${src} not found; skipping"
+  if [[ "${choice}" == "${NEW_FOLDER_OPTION}" ]]; then
+    read -rp "New tool name: " tool
+  else
+    tool="${choice}"
+  fi
+
+  if [[ -z "${tool}" ]]; then
+    log_error "No config folder selected"
+    exit 1
+  fi
+fi
+
+tool_dir="${configs_dir}/${tool}"
+if [[ ! -d "${tool_dir}" ]]; then
+  log_info "Creating ${tool_dir}"
+  mkdir -p "${tool_dir}"
+fi
+
+# ---------------------------------------------------------------------------
+# Move each path into the tool folder
+# ---------------------------------------------------------------------------
+for rel in "${rel_paths[@]}"; do
+  src="${HOME}/${rel}"
+  dest="${tool_dir}/${rel}"
+
+  if [[ -L "${src}" ]] && [[ "$(readlink "${src}")" == "${configs_dir}/"* ]]; then
+    log_attention "${src} is already managed by this repo; skipping"
     continue
   fi
 
   if [[ -e "${dest}" ]] || [[ -L "${dest}" ]]; then
-    log_attention "${dest} already exists in dotfiles; skipping move (file may already be managed)"
+    log_attention "${dest} already exists in dotfiles; skipping"
     continue
   fi
 
-  # Create parent dir inside config_dir if the file has subdirectory components
-  file_parent="$(dirname "${file}")"
-  if [[ "${file_parent}" != "." ]]; then
-    mkdir -p "${config_dir}/${file_parent}"
-  fi
-
+  mkdir -p "$(dirname "${dest}")"
   log_info "Moving ${src} → ${dest}"
   mv "${src}" "${dest}"
 done
 
-# Build the TARGET shell expression from source_dir
-# ~/.claude     → "${HOME}/.claude"
-# ~/.config/foo → "${HOME}/.config/foo"
-# ~/            → "${HOME}"
-home_rel="${source_dir/#$HOME/}"
-if [[ -z "${home_rel}" ]] || [[ "${home_rel}" == "/" ]]; then
-  target_expr='"${HOME}"'
-  use_subdir=false
-else
-  # Strip leading slash
-  home_rel="${home_rel#/}"
-  target_expr='"${HOME}/'"${home_rel}"'"'
-  use_subdir=true
-fi
+link_configs "${tool}"
 
-# Generate the symlink script only if it doesn't already exist
-if [[ -e "${symlink_script}" ]]; then
-  log_attention "${symlink_script} already exists; skipping generation (update it manually if needed)"
-else
-  log_info "Generating ${symlink_script}"
-
-  # Build configs array entries
-  configs_entries=""
-  for file in "${files[@]}"; do
-    configs_entries+="  \"${file}\"\n"
-  done
-
-  # Write the symlink script
-  mkdir_line=""
-  clean_line=""
-  if [[ "${use_subdir}" == true ]]; then
-    mkdir_line='mkdir -p "${TARGET}"'$'\n'"clean_broken_symlinks \"\${TARGET}\""$'\n'
-  fi
-
-  cat > "${symlink_script}" <<SCRIPT
-#!/usr/bin/env bash
-cd "\$(dirname "\$0")"
-source ../../scripts/helpers/runtime.sh
-source ../../bin/helpers/trap_and_trace.sh
-
-log_info "Symlinking ${tool} configs"
-
-TARGET=${target_expr}
-${mkdir_line}
-configs=(
-$(printf "  \"%s\"\n" "${files[@]}")
-)
-for config in "\${configs[@]}"; do
-  mkdir -p "\$(dirname "\${TARGET}/\${config}")"
-  symlink_config "\${PWD}/\${config}" "\${TARGET}/\${config}"
-done
-SCRIPT
-
-  chmod +x "${symlink_script}"
-  log_success "Generated ${symlink_script}"
-fi
-
-# Run the symlink script
-log_info "Running symlink script"
-"${symlink_script}"
-
-log_success "Done! ${tool} configs are now managed in ${config_dir}"
+log_success "Done! ${tool} configs are managed in ${tool_dir}"

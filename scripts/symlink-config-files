@@ -5,9 +5,6 @@ source ../bin/helpers/trap_and_trace.sh
 
 log_info "Creating symlinks for config files"
 
-find ../configs -depth -name "symlink*" -perm -u+x | while read link_file; do
-  log_debug "Calling $link_file"
-  ${link_file}
-done
+../bin/link_configs
 
 log_success "Symlinks created successfully!"

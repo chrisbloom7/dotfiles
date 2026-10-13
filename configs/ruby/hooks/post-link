@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# rbenv-default-gems reads default-gems from rbenv's root rather than $HOME
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+if command -v rbenv &>/dev/null; then
+  log_debug "Symlinking default-gems for rbenv"
+  symlink_config "${PWD}/.default-gems" "${RBENV_ROOT:-$(rbenv root)}/default-gems"
+fi

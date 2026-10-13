@@ -17,13 +17,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Apply all config symlinks
 ./scripts/symlink-config-files
 
-# Import a new tool's config into the repo
-bin/import_config <tool-name> <source-dir> <file1> [file2 ...]
-# e.g. bin/import_config starship ~/.config starship.toml
+# Link one tool's configs (all tools when no arguments)
+bin/link_configs [<tool> ...]
 
-# Add a single file to an existing tool's config dir
-bin/import_config_file <tool-name> <source-file> [<dest-name>]
-# e.g. bin/import_config_file claude ~/.claude/keybindings.json
+# Move files from $HOME into configs/<tool>/ and link them back
+bin/import_config [<tool-name>] <path> [<path> ...]
+# e.g. bin/import_config starship ~/.config/starship.toml
 
 # Full workstation setup
 ./setup [--bootstrap|--minimal|--help]
@@ -33,7 +32,16 @@ bin/import_config_file <tool-name> <source-file> [<dest-name>]
 
 ### How configs are managed
 
-Each tool's config lives in `configs/<tool>/` and is symlinked to its canonical home location by a `configs/<tool>/symlink_<tool>` script. `scripts/symlink-config-files` auto-discovers and runs all `symlink*` executables under `configs/`. Use `bin/import_config` to bring a new tool's config under management — it handles moving files, generating the symlink script, and running it.
+Each `configs/<tool>/` folder mirrors `$HOME`: every file in it is symlinked to the same relative path under `$HOME` by `bin/link_configs` (called from `scripts/symlink-config-files`). For example, `configs/mise/.config/mise/config.toml` links to `~/.config/mise/config.toml`. There are no per-tool scripts or file lists; adding or removing a file in a tool folder is all it takes. Use `bin/import_config` to bring an existing file under management.
+
+Conventions within a tool folder:
+
+- `*.template` files are copied (without the suffix) instead of linked, and only if the destination doesn't exist. Use for tools that can't write through a symlink (e.g. Docker).
+- `README.md` at the top of the folder is documentation and is not linked.
+- `hooks/post-link`, if executable, runs after the folder is linked. Use it for destinations that depend on the environment (e.g. `configs/ruby/hooks/post-link` for `$(rbenv root)`).
+- After linking, symlinks in the destination directories that point into `configs/` but whose source no longer exists are removed.
+
+Files that are kept in the repo but never linked (e.g. iTerm2 color schemes) live in `assets/`, not `configs/`.
 
 ### Script conventions
 
@@ -82,4 +90,4 @@ Tests use [bats-core](https://github.com/bats-core/bats-core) (`brew install bat
 - `~/.claude/config.json` is not tracked (machine-specific API key approvals)
 - `~/.aliases` is managed by Mackup (not in this repo) — may contain tokens/secrets
 - `~/.zprofile.local` is not tracked — use for machine/project-specific env vars
-- Company-specific Claude plugins belong in project-level `.claude/settings.local.json`, not in `configs/claude/settings.json`
+- Company-specific Claude plugins belong in project-level `.claude/settings.local.json`, not in user-level `~/.claude/settings.json`
