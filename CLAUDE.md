@@ -43,6 +43,10 @@ Conventions within a tool folder:
 
 Files that are kept in the repo but never linked (e.g. iTerm2 color schemes) live in `assets/`, not `configs/`.
 
+### Mackup
+
+[Mackup](https://github.com/lra/mackup) syncs settings this repo doesn't manage (non-development apps, machine-specific settings, secrets) through Dropbox. `configs/mackup/.mackup.cfg` is link mode and `configs/mackup/.mackup-copy.cfg` is copy mode, for apps macOS 14+ won't let it symlink. Run Mackup through `bin/mackup_sync`, never a plain `mackup restore`, which replaces linked files with copies. Mackup and this repo must never manage the same file: when adding files to `configs/`, run `bin/mackup_audit` and ignore any Mackup app it reports in both configs (or override the app in `configs/mackup/.mackup/` to leave the file out).
+
 ### Script conventions
 
 All `bin/` and `scripts/` executables follow the same preamble:

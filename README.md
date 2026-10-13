@@ -56,11 +56,16 @@ A brief overview of some of the most important files and directories in this rep
   - [`bin/generate-gpg`](./bin/generate-gpg) A script that generates a GPG key to use for signing commits, and walks you through the process of adding it to your GitHub account.
   - [`bin/import_config`](./bin/import_config) A utility script to import existing config files into the dotfiles repo. It moves each file from `$HOME` into `configs/<tool>/` at the same relative path, then immediately links it back into place. Usage: `bin/import_config [<tool-name>] <path> [<path> ...]`. For example: `bin/import_config claude ~/.claude/settings.json`. Omit the tool name to pick a folder interactively with `fzf`.
   - [`bin/link_configs`](./bin/link_configs) Links every file in `configs/<tool>/` to the same relative path under `$HOME`. Run automatically by the setup scripts; pass tool names to link only those.
-  - [`bin/restore_symlinks_after_mackup_uninstall`](./bin/restore_symlinks_after_mackup_uninstall) A utility script to help workaround a bug in Mackup commands on macOS Sonoma and up.[^mackup-sonoma]
+  - [`bin/mackup_sync`](./bin/mackup_sync) Runs [Mackup][mackup] in link mode where macOS allows it and copy mode elsewhere.[^mackup-modes] `install` moves local settings into the Mackup folder and links them (first machine), `restore` brings them back on a new machine, `backup` refreshes the copy-mode backups, and `check` reports anything that should be linked but isn't.
+  - [`bin/mackup_audit`](./bin/mackup_audit) Checks the Mackup configs before `mackup_sync` changes anything: the storage folder exists, no app is in both modes, no linked app has files macOS won't let it symlink, no synced app covers a file linked from `configs/`, and no synced files contain broken symlinks.
+  - [`bin/mackup_backup_schedule`](./bin/mackup_backup_schedule) Adds, removes, or shows a weekly `launchd` job that runs `mackup_sync backup`. Usage: `bin/mackup_backup_schedule add [--weekday 0-7] [--hour 0-23] [--minute 0-59]`.
 - [`run-tests`](./run-tests) A convenience script that runs the full BATS test suite (`tests/`). Requires `bats-core` to be installed (included in the prerequisites). Run with `./run-tests` or pass BATS flags directly, e.g. `./run-tests --filter symlink_config`.
 - [`configs/`](./configs) A directory containing program specific configuration files that will be symlinked to your home directory as necessary. Because they are symlinked, they can be treated like any other config file and changes will be reflected here in this repo to commit. If you find that you are frequently discarding these changes without commiting them, that's likely a sign that config file shouldn't be managed by this repo. A few notable config files are:
   - Each `configs/<tool>/` folder mirrors your home directory: `configs/mise/.config/mise/config.toml` is linked to `~/.config/mise/config.toml`, and so on. Add a file to a folder and it will be linked the next time the setup scripts (or [`bin/link_configs`](./bin/link_configs)) run; remove it and its stale link is cleaned up. Files ending in `.template` are copied instead of linked, a top-level `README.md` is not linked, and an executable `hooks/post-link` runs after the folder is linked for any special cases.
-  - [`configs/mackup/.mackup.cfg`](./configs/mackup/.mackup.cfg) A configuration file for [Mackup][mackup], the program used to backup configuration settings on macOS and Linux. The file specifies the storage provider where settings will be backed up to and restored from, as well as a list of applications to ignore when backing up. You can adjust this file to your liking, but at a minimum it must include an entry for `mackup` under the `[applications_to_ignore]` section.
+  - [`configs/mackup/`](./configs/mackup) Configuration for [Mackup][mackup], which syncs settings that don't belong in this repo through Dropbox (or another [storage provider][storages]). This repo manages config files shared by every development environment, including Codespaces and containers, and ones worth tracking changes to over time. Mackup manages everything else: non-development apps, apps without a simple config file, machine-specific settings, and secrets that can't go in a public repo (e.g. `~/.aliases`, `~/.netrc`, `~/.aws`). The two must never manage the same file; [`bin/mackup_audit`](./bin/mackup_audit) enforces this.
+    - [`.mackup.cfg`](./configs/mackup/.mackup.cfg) Link mode, used for every app that isn't ignored. Ignores apps managed by this repo, apps that are never synced, and copy-mode apps.
+    - [`.mackup-copy.cfg`](./configs/mackup/.mackup-copy.cfg) Copy mode, for apps with files where macOS 14+ doesn't support symlinks (`~/Library/Preferences`, `~/Library/Containers`, `~/Library/Group Containers`), or that replace or corrupt linked files. Every app here must also be ignored in `.mackup.cfg`.
+    - [`.mackup/`](./configs/mackup/.mackup) Custom app definitions. A file named after one of Mackup's built-in apps replaces it; `bash.cfg`, `ruby.cfg`, and `claude-code.cfg` do this to leave out files linked from this repo.
   - [`configs/omz/.oh-my-zsh/custom/aliases.zsh`](./configs/omz/.oh-my-zsh/custom/aliases.zsh) A list of aliases that will be loaded into zsh by Oh My Zsh.
   - [`configs/omz/.oh-my-zsh/custom/paths.zsh`](./configs/omz/.oh-my-zsh/custom/paths.zsh) A list of directories that will be added to the zsh `$PATH` by Oh My Zsh.
   - [`configs/zsh/.zshenv`](./configs/zsh/.zshenv) Sourced for *all* zsh invocations (interactive, non-interactive, login, and non-login). Kept intentionally minimal — currently only adds the mise shims directory to `$PATH` so that mise-managed tools are available in scripts and cron jobs that don't source `.zprofile` or `.zshrc`.
@@ -93,7 +98,7 @@ These steps will guide you through setting up a new Mac or Linux workstation wit
 If you're migrating from an existing Mac or Linux workstation, you should first make sure to backup all of your existing data. Go through the checklist below to make sure you didn't forget anything before you migrate.
 
 > [!CAUTION]
-> While Mackup isn't required, if you do choose to use it then I would strongly recommend using a [storage provider][storages] that supports versioning, i.e. *not iCloud*, in case you need to recover from a bad backup or restore operation. Also take notice of this footnote[^mackup-sonoma] regarding a bug in Mackup that affects macOS 14 (Sonoma) and later versions.
+> While Mackup isn't required, if you do choose to use it then I would strongly recommend using a [storage provider][storages] that supports versioning, i.e. *not iCloud*, in case you need to recover from a bad backup or restore operation. Never run a plain `mackup restore` with these configs; it replaces every linked file with a copy. Use [`bin/mackup_sync`](./bin/mackup_sync) instead.[^mackup-modes]
 
 Did you...
 
@@ -104,7 +109,7 @@ Did you...
 - [ ] export important data from locally running databases and other services that you might need on the new workstation?
 - [ ] install or update to the latest version of [Mackup][mackup]?
 - [ ] configure Mackup to use your preferred storage provider and exclude `mackup` from backing up itself?
-- [ ] run `mackup backup --force && mackup uninstall --force`?[^mackup-sonoma]
+- [ ] run `bin/mackup_sync check`, fix anything it reports, then run `bin/mackup_sync backup`?[^mackup-modes]
 
 ### 2. Setting Up Your New Workstation
 
@@ -162,9 +167,9 @@ After backing up your old workstation you may now follow these install instructi
       ```
 
 5. If you use a password manager like 1Password, set it up now and sync your passwords.
-6. Setup the sync utility for whatever cloud storage provider you use with Mackup (iCloud, Dropbox, Google Drive, etc.). Be sure your Mackup backup folder is available locally.
-7. Run `mackup restore --dry-run | sort` to verify your setup. You should see a list of files to be restored matching the files you backed up in the previous section.
-8. Once your Mackup cloud storage provider is ready, restore preferences by running `mackup restore --force && mackup uninstall --force && bin/restore_symlinks_after_mackup_uninstall`.[^mackup-sonoma]
+6. Setup the sync utility for whatever cloud storage provider you use with Mackup (Dropbox, Google Drive, etc.). Wait for the Mackup folder to finish syncing, and mark it as available offline so linked files are never online-only. Mackup must only run after `./setup`, which links the Mackup configs that keep it away from files managed by this repo.
+7. Run `bin/mackup_sync --dry-run restore` to verify your setup. You should see the copy-mode files to be restored, then the link-mode files to be linked.
+8. Restore your settings by running `bin/mackup_sync restore`.[^mackup-modes] Optionally, schedule weekly copy-mode backups with `bin/mackup_backup_schedule add`.
 9. Restart your workstation to ensure all changes take effect.
 10. Open any applications that you expect to run on startup like 1Password, Dropbox, etc. and make sure they're configured correctly.
 11. [Optional] Setup an SSH key.
@@ -213,14 +218,16 @@ If you want to start with your own dotfiles from this setup, it's pretty easy to
   - You can generate a Brewfile of your currently installed formulae, casks, etc., with `brew bundle dump --all --describe --file="Brewfile.${$(uname -n)%.local}.local"` then manually copy/paste the apps you want to keep into the appropriate `Brewfile.*` file.
   - Files named `Brewfile*.local` are ignored by git so your local Brewfile packages will remain private and separate from the repo.
   - Packages listed in any `Brewfile*.local` files in the root of the dotfiles directory **will** be installed by the `setup` script by default. This allows you to use these files to install packages that are specific to your local machine, such as those that you don't want to share with others or that are not available on other platforms. You can suppress this feature by specifying the `--skip-local` option, which is also implied with the `--bootstrap` or `--minimal` options.
-- Go through the subfolders in [`configs`](./configs) to add your own config files. Don't forget to update the accompanying `symlink*` scripts as you add and remove files.
+- Go through the subfolders in [`configs`](./configs) to add your own config files. Each folder mirrors your home directory, so a file's path in the folder is where it will be linked.
 - You can adjust the [`zsh` config files](./configs/zsh) to your liking to tweak your Oh My Zsh setup. More info about how to customize Oh My Zsh can be found [here](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization). Make sure your `~/.zshrc` file is symlinked *from* your dotfiles repo *to* your home directory first so you can commit any changes to it.
 
-When installing these dotfiles for the first time you'll need to backup all of your settings with Mackup.[^mackup-sonoma] Install Mackup and backup your settings with the commands below. Your settings will be synced to iCloud so you can use them to sync between computers and reinstall them when reinstalling your Mac. If you want to save your settings to a different directory or different storage than iCloud, [checkout the documentation](https://github.com/lra/mackup/blob/master/doc/README.md#storage).
+When installing these dotfiles for the first time you'll need to move your settings into Mackup.[^mackup-modes] Your settings will be synced to Dropbox so you can use them to sync between computers and reinstall them when reinstalling your Mac. If you want to save your settings to a different directory or different storage than Dropbox, update the `[storage]` section in both [Mackup configs](./configs/mackup) ([documentation](https://github.com/lra/mackup/blob/master/doc/README.md#storage)). Then check the configs and move your settings with the commands below:
 
 ```zsh
 brew install mackup
-mackup backup --force && mackup uninstall --force
+bin/mackup_sync check
+bin/mackup_sync --dry-run install
+bin/mackup_sync install
 ```
 
 You can tweak the shell theme, the Oh My Zsh settings and much more. Go through the files in this repo and tweak everything to your liking.
@@ -235,7 +242,7 @@ In addition to [Vints' own sentiments](https://github.com/driesvints/dotfiles?ta
 
 <!-- Footnotes -->
 [^codespaces]: I tend to use [devcontainers][devcontainers] such as [GitHub Codespaces][codespaces] for most of my development these days, so having a local development environment where I install "[all the things!](https://web.archive.org/web/20240807175656if_/https://www.simplybusiness.co.uk/wp-content/uploads/sites/3/2024/05/things.webp)" is much less important than it used to be. As a result, the local setup scrips are focused on daily use and productivity tools. The more intensive development tools like databases, caches, servers, compilers, etc, are offloaded to containers.
-[^mackup-sonoma]: As of this writing, `mackup backup` and `mackup restore` commands [have a bug][mackup-sonoma] that affects macOS 14 (Sonoma) and later versions due to changes in the way macOS handles file permissions. **The [workaround][mackup-sonoma-workaround] is to run `mackup backup --force` or `mackup restore --force` and then immediately run `mackup uninstall --force`.** Normally, when Mackup runs `backup` or `restore` it places symlinks for tracked config files in their original location and keeps the real file in whatever storage provider you've configered. In macOS 14+ the symlinking part fails so it looks like all your configs have been lost. The workaround works by forcing Mackup to complete the `backup` or `restore` operations, overwriting anything in the destination and ignoring failed symlinks. Then the `uninstall` command undoes the symlinking that Mackup thought it performed and replaces the symlinks with copies of the real files. Note however that the workaround does not comes without a little risk so be sure you are using a backup storage provider that supports rolling back changes. You can always skip the Mackup steps if you're not comfortable assuming that risk.
+[^mackup-modes]: Before macOS 14 (Sonoma), Mackup always moved settings into its storage folder and replaced them with symlinks, so every machine shared one live copy. macOS 14+ [doesn't support symlinked preferences][mackup-link-mode], so Mackup 0.9 made `backup` and `restore` copy files instead and moved symlinking to `mackup link install`, `mackup link`, and `mackup link uninstall`. `mackup uninstall` no longer exists. These dotfiles use link mode wherever macOS allows it and copy mode for the rest; [`bin/mackup_sync`](./bin/mackup_sync) runs both with the right config. Copy-mode settings are only as current as the last `mackup_sync backup`, so consider scheduling it with [`bin/mackup_backup_schedule`](./bin/mackup_backup_schedule).
 [^target-envs]: The setup scripts in this repo have been tested on macOS and Ubuntu systems. YMMV on other platforms.
 
 <!-- Anchors -->
@@ -246,7 +253,6 @@ In addition to [Vints' own sentiments](https://github.com/driesvints/dotfiles?ta
 [devcontainers]: https://containers.dev/
 [dotfiles]: https://dotfiles.github.io/
 [mackup]: https://github.com/lra/mackup
-[mackup-sonoma]: https://github.com/lra/mackup/issues/1924
-[mackup-sonoma-workaround]: https://github.com/lra/mackup/issues/1924#issuecomment-1756330534
+[mackup-link-mode]: https://github.com/lra/mackup/issues/2035
 [shallow-clone]: https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/#user-content-shallow-clones
 [storages]: https://github.com/lra/mackup?tab=readme-ov-file#supported-storages
