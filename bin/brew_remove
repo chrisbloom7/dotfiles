@@ -199,7 +199,10 @@ if [[ "${SKIP_COMMIT}" == false ]]; then
       r = JSON.parse(File.read(ARGV[0]))
       puts r.select{|x| x["status"]=="removed"}.map{|x| x["name"]}.uniq.join(", ")
     ' "${RESULTS_FILE}")
-    brewfile_names=$(printf '%s\n' "${CHANGED_BREWFILES[@]}" | xargs -I{} basename {} | paste -sd ', ')
+    brewfile_names=""
+    for bf in "${CHANGED_BREWFILES[@]}"; do
+      brewfile_names+="${brewfile_names:+, }$(basename "${bf}")"
+    done
     commit_msg="brew_remove: remove ${removed_names} from ${brewfile_names}"
     git -C "${DOTFILES_ROOT}" add -- "${CHANGED_BREWFILES[@]}"
     git -C "${DOTFILES_ROOT}" commit -m "${commit_msg}" || {

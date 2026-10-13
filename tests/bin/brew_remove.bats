@@ -55,6 +55,18 @@ teardown() {
   _teardown_common
 }
 
+# Replaces the git mock with a real repo in BREWFILE_DIR, isolated from the
+# user's git config (e.g. commit signing), with the fixtures committed.
+_init_real_repo() {
+  rm "${TEST_TMPDIR}/mock_bin/git"
+  export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+  export GIT_AUTHOR_NAME=Test GIT_AUTHOR_EMAIL=test@example.com
+  export GIT_COMMITTER_NAME=Test GIT_COMMITTER_EMAIL=test@example.com
+  git -C "${BREWFILE_DIR}" init -q
+  git -C "${BREWFILE_DIR}" add -A
+  git -C "${BREWFILE_DIR}" commit -q -m initial
+}
+
 invoke() {
   run env \
     PATH="${TEST_TMPDIR}/mock_bin:${DOTFILES_BIN}:${PATH}" \
@@ -213,6 +225,16 @@ EOF
   invoke --brewfile-suffix=test --skip-commit --skip-uninstall git
   [ ! -f "${commit_log}" ] || {
     echo "git commit was called despite --skip-commit"; return 1
+  }
+}
+
+@test "brew_remove: commit message lists every changed Brewfile" {
+  _init_real_repo
+  invoke --all-brewfiles --skip-uninstall git
+  [ "${status}" -eq 0 ]
+  subject="$(git -C "${BREWFILE_DIR}" log -1 --format=%s)"
+  [ "${subject}" = "brew_remove: remove git from Brewfile.other, Brewfile.test" ] || {
+    echo "Unexpected commit subject: ${subject}"; return 1
   }
 }
 
