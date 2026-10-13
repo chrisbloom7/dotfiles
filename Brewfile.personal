@@ -1,23 +1,14 @@
 # Personal bundle
 # Tooling specific to my personal workstations
-
 # Set arguments for installing casks
 # https://github.com/homebrew/homebrew-cask/blob/master/USAGE.md#options
 # Tip: Use `force: true` to override `require_sha: true` on individual casks
 cask_args require_sha: true, no_quarantine: true
-
 ## Formulae
 brew "railway"            # Develop and deploy code with zero configuration
 # brew "rbenv-default-gems" # Auto-installs gems for Ruby installs ! Prefer `mise`
 # brew "rbenv"              # Ruby version manager ! Prefer `mise`
-
-## Services ! Prefer devcontainers
-# brew "mysql", restart_service: true      # Open source relational database management system
-# brew "postgresql", restart_service: true # Object-relational database system
-# brew "redis", restart_service: true      # Persistent key-value database, with built-in net interface
-
 ## Casks
-cask "aloha-browser"     # Web browser focused on privacy
 cask "beyond-compare"    # Compare files and folders
 cask "chatgpt"           # OpenAI's official ChatGPT desktop app
 cask "clamxav"           # Anti-virus and malware scanner
@@ -54,7 +45,6 @@ cask "warp"              # Rust-based terminal
 # cask "wavebox"                # Web browser
 # cask "yubico-yubikey-manager" # Application for configuring any YubiKey
 cask "zoom"              # Video communication and virtual meeting platform - moved here because it's a managed app on work laptops
-
 ## Apps from the Mac App Store
 mas "1Password for Safari", id: 1569813296
 mas "Bear", id: 1091189122
