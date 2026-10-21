@@ -5,9 +5,10 @@
 # Tip: Use `force: true` to override `require_sha: true` on individual casks
 cask_args require_sha: true, no_quarantine: true
 ## Formulae
-brew "railway"            # Develop and deploy code with zero configuration
+brew "railway"    # Develop and deploy code with zero configuration
 # brew "rbenv-default-gems" # Auto-installs gems for Ruby installs ! Prefer `mise`
 # brew "rbenv"              # Ruby version manager ! Prefer `mise`
+brew "stripe-cli" # Command-line tool for Stripe
 ## Casks
 cask "beyond-compare"    # Compare files and folders
 cask "chatgpt"           # OpenAI's official ChatGPT desktop app
