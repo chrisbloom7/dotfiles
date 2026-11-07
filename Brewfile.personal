@@ -22,6 +22,7 @@ cask "drivethrurpg"      # Sync DriveThruRPG libraries to compatible devices
 # cask "flotato"                # Tool to turn any web page into a desktop app
 # cask "fluid"                  # Tool to turn a website into a desktop app
 cask "focusrite-control" # Focusrite interface controller
+cask "font-museomoderno"
 cask "garmin-express"    # Update maps and software, sync with Garmin Connect and register your device
 cask "gemini"            # Disk space cleaner that finds and deletes duplicated and similar files
 cask "google-drive"      # Client for the Google Drive storage service
