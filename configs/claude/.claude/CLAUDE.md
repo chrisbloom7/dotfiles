@@ -12,9 +12,9 @@ skill.
 ## Tools (in shell commands)
 
 - Use `rg` (ripgrep) instead of `grep` - faster and respects `.gitignore`
-- Use `fd` instead of `find` for file lookups
-- Use `bat` instead of `cat` for viewing files - syntax highlighting
-- Use `jq` for JSON processing
+- Use `fd` instead of `find` for file lookups (it skips hidden and gitignored files; add `-H -I` to include them)
+- Use `jq` for JSON processing and `yq` for YAML/TOML/XML
+- Use `ast-grep` for structural (syntax-aware) code search and rewrites; use `rg` for plain text
 - Use `gh` for all GitHub operations (PRS, issues, checks)
 - Use `gdate` instead of `date` on macos for GNU-compatible date flags
 - Use `wt` instead of `git worktree` for creating worktrees
