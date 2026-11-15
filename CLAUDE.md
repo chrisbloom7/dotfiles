@@ -53,11 +53,15 @@ All `bin/` and `scripts/` executables follow the same preamble:
 ```bash
 set -euo pipefail
 cd "$(dirname "$0")"
-source "${PWD}/helpers/trap_and_trace.sh"  # or runtime.sh for setup scripts
+source "${PWD}/helpers/trap_and_trace.sh"  # bin/helpers/; scripts/ source helpers/runtime.sh instead
 PATH="${PWD}:${PATH}"
 ```
 
 `cd "$(dirname "$0")"` is critical — it ensures relative paths (to helpers, configs) resolve correctly regardless of where the script is invoked from.
+
+### Other `bin/` tools
+
+Besides the config and Mackup commands above, `bin/` holds `brew_add`, `brew_remove` and `brew_audit` (manage Brewfiles), `clone_project`, `wt_cleanup` (interactive Worktrunk cleanup), the `log_*` and `is_*` helpers, and `helpers/` (shared shell and Ruby code). Run any of them with `--help` where supported.
 
 ### Environment variables
 
@@ -80,7 +84,7 @@ setup                          # entry point; delegates to:
 - `.zprofile` — login shells only: sets `AWS_*` env vars, runs `brew shellenv`
 - `.zshrc` — interactive shells: OMZ config, activates mise, loads completions
 - `.zprofile.local` — machine-specific overrides (not tracked); sourced at end of `.zprofile`
-- `configs/omz/aliases.zsh` and `configs/omz/paths.zsh` — auto-loaded by OMZ as custom files
+- `configs/omz/.oh-my-zsh/custom/aliases.zsh` and `paths.zsh` — auto-loaded by OMZ as custom files
 
 mise activation lives in `.zshrc` (not `.zprofile`) so it runs once for all interactive shells.
 
