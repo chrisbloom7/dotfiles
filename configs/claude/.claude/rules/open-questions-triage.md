@@ -14,6 +14,12 @@ question is answered and applied.
 - If a question appears after the PR is open, convert it back with `gh pr ready --undo <pr>`.
 - Subagents never run `gh pr ready` on a PR with open questions. The top-level agent does it after
   step 2 below, and says so when it reports the PR as ready.
+- Label it `question` while questions are open. Run `gh label list --json name` first (creating a PR
+  with a missing label fails). If `question` is not there, use a similar existing label (for example
+  `needs answer` or `needs-info`); if there is none, skip the label and do not create one. Put
+  `--label <name>` in the subagent brief, or add it with `gh pr edit <pr> --add-label <name>`.
+- Remove the label (`gh pr edit <pr> --remove-label <name>`) when marking the PR ready. Add it back
+  if the PR goes back to draft.
 - This overrides any project skill that says to mark a PR ready as soon as it is finished (for
   example `studio-ui-pr`), but only while questions are open.
 
@@ -23,8 +29,8 @@ question is answered and applied.
    recommendation. Do not bundle them into a wall of text.
 2. Apply each answer to the PR it belongs to: push the change, or reply on the PR if no change is
    needed. Update the PR body so the question shows as answered, with the decision.
-3. When a PR has no remaining open questions, mark it ready (`gh pr ready <pr>`) and tell me it is
-   ready for my review.
+3. When a PR has no remaining open questions, mark it ready (`gh pr ready <pr>`), remove the label
+   and tell me it is ready for my review.
 
 ## When to prompt
 
