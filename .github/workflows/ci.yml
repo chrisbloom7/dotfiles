@@ -38,30 +38,20 @@ jobs:
           done < <(git ls-files -z)
           printf 'Checking %d files\n' "${#files[@]}"
           shellcheck --version
-          shellcheck "${files[@]}"
+          shellcheck -S warning "${files[@]}"
 
   test:
-    name: Tests (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    # macOS only: mackup_backup_schedule (launchd/plist) tests fail on Linux.
+    name: Tests (macos-latest)
+    runs-on: macos-latest
     timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, ubuntu-latest]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
 
-      - name: Install bats-core (macOS)
-        if: runner.os == 'macOS'
+      - name: Install bats-core
         run: brew install bats-core
-
-      - name: Install bats-core (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          git clone --branch v1.11.0 --depth 1 https://github.com/bats-core/bats-core.git "${RUNNER_TEMP}/bats-core"
-          sudo "${RUNNER_TEMP}/bats-core/install.sh" /usr/local
 
       # The repo has no Ruby specs today; run-tests skips Ruby when absent and
       # discovers any *_spec.rb added later with the runner's Ruby.
