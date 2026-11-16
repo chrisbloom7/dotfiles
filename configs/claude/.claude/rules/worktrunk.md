@@ -31,6 +31,9 @@ instead of `git worktree` commands.
 
 Always include `--yes` to suppress event hook approval prompts.
 
+Before creating a worktree, bring a stale base branch current with `git pull --ff-only` (ask first if
+it is behind; never a plain `git pull`). If it refuses, the branches have diverged: stop and report.
+
 ---
 
 ## Removal Checklist
