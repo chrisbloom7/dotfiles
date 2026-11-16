@@ -11,6 +11,8 @@
 #     symlinked, and only when the destination doesn't already exist. Use this
 #     for tools that can't write through a symlink.
 #   - README.md at the top of the folder documents the tool and is not linked.
+#   - .remember/ directories (runtime state of a Claude Code plugin) are not
+#     linked.
 #   - hooks/post-link, if executable, runs after the folder's files are linked.
 #     Use it for destinations that depend on the environment.
 #
@@ -81,6 +83,7 @@ for tool in "${tools[@]}"; do
     rel="${rel#./}"
     case "${rel}" in
       README.md | hooks/* | .DS_Store | */.DS_Store) continue ;;
+      .remember/* | */.remember/*) continue ;;
     esac
 
     rel_dir="$(dirname "${rel}")"
