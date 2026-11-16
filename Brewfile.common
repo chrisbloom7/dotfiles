@@ -35,6 +35,7 @@ brew "imagemagick"           # Tools and libraries to manipulate images in many 
 brew "jq"                    # Lightweight and flexible command-line JSON processor
 brew "lazygit"               # Simple terminal UI for git commands
 brew "libdrawtext"           # Library for anti-aliased text rendering in OpenGL
+brew "lychee"                # Fast, async, resource-friendly link checker
 brew "mackup"                # Keep your Mac's application settings in sync
 brew "markdownlint-cli"      # CLI for Node.js style checker and lint tool for Markdown files
 brew "micro"                 # Modern and intuitive terminal-based text editor
