@@ -1,3 +1,13 @@
+---
+paths:
+  - "config/database.yml"
+  - "config/routes.rb"
+  - "db/**"
+  - "app/models/**"
+  - "app/controllers/**"
+  - "bin/rails"
+---
+
 # Running parallel agents and test suites (Rails/Postgres projects)
 
 All worktrees on this machine share one local database server with a fixed connection limit.
@@ -11,11 +21,3 @@ timing-dependent failures that pass on rerun.
   suite once at the end, and rerun failures before calling them real.
 - Never ask agents to kill other processes (for example `pkill -f "rails test"`).
 - If it keeps recurring, raising the local Postgres `max_connections` is an option.
-
-# Subagent briefs: tool names
-
-Put this line in every subagent brief: "Tool names are case-sensitive: use `Bash`, `Read`, `Edit`
-(not `bash`)."
-
-**Why:** agents sometimes call `bash` in lowercase and get "No such tool available: bash", which
-wastes a round trip before they retry.
