@@ -39,6 +39,8 @@ fi
 log_debug "Checking if gh CLI is installed"
 if [[ -n $(command -v gh 2>/dev/null) ]]; then
   log_info "Checking gh auth status"
+  # Unquoted on purpose: word splitting collapses the status output onto one line.
+  # shellcheck disable=SC2046
   echo $(gh auth status)
 fi
 
