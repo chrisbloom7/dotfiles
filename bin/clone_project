@@ -7,7 +7,6 @@ PATH="${PWD}:${PATH}"
 subject=${1:?Subject is required}
 target=${2:?Target is required}
 
-owner=$(echo "${subject}" | cut -d '/' -f1)
 if [[ ! -d "${target}" ]]; then
   log_info "Cloning ${subject} to ${target}"
   mkdir -p "${target}/../"
