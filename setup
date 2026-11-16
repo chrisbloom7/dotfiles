@@ -5,7 +5,6 @@
 # worrying about whether your dotfiles are causing issues.
 # [[ -n "${CODESPACES:-}" ]] && exit 0
 
-original_args="$@"
 [[ -n "${DEBUG:-}" ]] && echo -e "\033[90mCDing into $(dirname "$0")\033[0m" || true
 cd "$(dirname "$0")" # SCRIPT_DIR_PATH="${0:A:h}"
 [[ -n "${DEBUG:-}" ]] && echo -e "\033[90mSourcing runtime script\033[0m" || true

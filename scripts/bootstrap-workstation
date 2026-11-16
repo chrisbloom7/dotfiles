@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit 1
 source ./helpers/runtime.sh
 source ../bin/helpers/trap_and_trace.sh
 
@@ -74,9 +74,11 @@ if ! is_minimal_mode && ! is_update_mode; then
   if ! is_skip_local_mode; then
     log_info "Looking for local Brewfiles in $(cd ../ && pwd)"
 
-    oldIFS=$IFS && IFS=$'\n'
-    local_brewfiles=($(find ../ \( -type f -or -type l \) -maxdepth 1 -name "Brewfile*.local" -print))
-    IFS=$oldIFS
+    # Read line by line (bash 3.2-safe; no mapfile) instead of word-splitting find output.
+    local_brewfiles=()
+    while IFS= read -r local_brewfile; do
+      local_brewfiles+=("${local_brewfile}")
+    done < <(find ../ \( -type f -or -type l \) -maxdepth 1 -name "Brewfile*.local" -print)
 
     for brewfile in "${local_brewfiles[@]}"; do
       log_info "Installing additional Homebrew packages from ${brewfile}"

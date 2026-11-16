@@ -28,7 +28,7 @@ function brake {
   then
     bin/rake "$@"
   else
-    if [ `rails_mv` -lt 3 ]; then
+    if [ "`rails_mv`" -lt 3 ]; then
       rake "$@"
     else
       bexec rake "$@"
@@ -52,35 +52,35 @@ function bspec {
   fi
 }
 function cons {
-  if [ `rails_mv` -lt 3 ]; then
+  if [ "`rails_mv`" -lt 3 ]; then
     ./script/console "$@"
   else
     brails c "$@"
   fi
 }
 function dbcons {
-  if [ `rails_mv` -lt 3 ]; then
+  if [ "`rails_mv`" -lt 3 ]; then
     echo "Not supported in this version of Rails (`rails -v`)"
   else
     brails db "$@"
   fi
 }
 function gen {
-  if [ `rails_mv` -lt 3 ]; then
+  if [ "`rails_mv`" -lt 3 ]; then
     ./script/generate "$@"
   else
     brails g "$@"
   fi
 }
 function srv {
-  if [ `rails_mv` -lt 3 ]; then
+  if [ "`rails_mv`" -lt 3 ]; then
     ./script/server "$@"
   else
     brails s "$@"
   fi
 }
 function run {
-  if [ `rails_mv` -lt 3 ]; then
+  if [ "`rails_mv`" -lt 3 ]; then
     ./script/runner "$@"
   else
     brails r "$@"
@@ -89,6 +89,8 @@ function run {
 alias sandbox='cons --sandbox'
 alias epoch="ruby -e 'puts Time.now.to_i'"
 alias timestamp='epoch'
+# fname is assigned by the 'read' inside the single-quoted alias body (false positive).
+# shellcheck disable=SC2154
 alias truncate_logs='find ./log -size +1c -type f -name "*.log" | while IFS= read -r fname ; do > "$fname" ; done'
 
 # TEXTMATE SHORTUTS
@@ -123,13 +125,13 @@ function parse_git_branch {
 }
 
 function git-branch-incoming {
-    echo branch \($1\) has these commits and \($(parse_git_branch)\) does not
+    echo branch \($1\) has these commits and \("$(parse_git_branch)"\) does not
     git log ..$1 --format='%h | Author:%an | Date:%ad | %s' --date=local --no-merges
 }
 alias git-bin='git-branch-incoming'
 
 function git-branch-outgoing {
-    echo branch \($(parse_git_branch)\) has these commits and \($1\) does not
+    echo branch \("$(parse_git_branch)"\) has these commits and \($1\) does not
     git log $1.. --format='%h | Author:%an | Date:%ad | %s' --date=local --no-merges
 }
 alias git-bout='git-branch-outgoing'

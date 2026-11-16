@@ -38,7 +38,7 @@ jobs:
           done < <(git ls-files -z)
           printf 'Checking %d files\n' "${#files[@]}"
           shellcheck --version
-          shellcheck -S error "${files[@]}"
+          shellcheck -S warning "${files[@]}"
 
   test:
     # macOS only: mackup_backup_schedule (launchd/plist) tests fail on Linux.

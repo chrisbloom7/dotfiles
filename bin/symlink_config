@@ -44,7 +44,7 @@ if [[ -e "${target}" ]] || [[ -L "${target}" ]]; then
       else
         suffix="symlink_config_backup"
         log_debug "Checking for existing backups of $(basename "${target}").${suffix}*"
-        last_index="$(find $(dirname "${target}") -maxdepth 1 -name "$(basename "${target}").${suffix}*" | sort -V | tail -n1 | sed -E 's/^.+\.'"${suffix}"'(\.0*([1-9]+))?/\2/')"
+        last_index="$(find "$(dirname "${target}")" -maxdepth 1 -name "$(basename "${target}").${suffix}*" | sort -V | tail -n1 | sed -E 's/^.+\.'"${suffix}"'(\.0*([1-9]+))?/\2/')"
         if [[ -n "${last_index}" ]]; then
           next_index=$((last_index + 1))
           suffix="${suffix}.$(printf %5s "${next_index}" | tr ' ' 0)"
