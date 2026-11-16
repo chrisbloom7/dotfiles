@@ -18,3 +18,4 @@ skill.
 - Use `gh` for GitHub operations: PRs, issues, checks, releases and API reads. Plain git operations on a remote stay `git` (for example `git push origin --delete <branch>` in post-merge cleanup)
 - Use `gdate` instead of `date` on macos for GNU-compatible date flags
 - Use `wt` instead of `git worktree` for creating worktrees
+- `cp`, `mv` and `rm` are interactive aliases on this machine and silently skip when there is no TTY (for example `mv` stops at "overwrite? (y/n)" and does nothing): in shell commands use `command cp -f`, `command mv -f` and `command rm -f`
