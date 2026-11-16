@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=bash
 
 # GENERAL COMMANDS
 alias beep="say -v Fred \"My liege, the task is complete\""
@@ -99,9 +100,9 @@ alias mate_hosts='mate /etc/hosts'
 
 # GIT COMMANDS
 function git-make-branch {
-  echo "\$@ = '$@'"
+  echo "\$@ = '$*'"
   typeset branch
-  if [[ "$@" != "" ]]; then
+  if [[ "$*" != "" ]]; then
     branch=$(ruby -e 'puts ARGV.join(" ").strip.gsub(/[\W\s_]+/, " ").downcase.split(" ").join("_")' "$@")
     # echo "branch = '$branch'"
     if [[ "$branch" = "" ]]; then
