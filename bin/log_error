@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 source "${PWD}/helpers/color_codes.sh"
 
-echo -e "${ANSI_BOLD_RED}Error:${ANSI_RESET} $@" >&2
+echo -e "${ANSI_BOLD_RED}Error:${ANSI_RESET} $*" >&2
 sleep "${LOG_SLEEP_DURATION:-0}"
 
 # #######################################

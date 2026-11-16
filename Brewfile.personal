@@ -10,6 +10,7 @@ brew "railway"    # Develop and deploy code with zero configuration
 # brew "rbenv-default-gems" # Auto-installs gems for Ruby installs ! Prefer `mise`
 # brew "rbenv"              # Ruby version manager ! Prefer `mise`
 brew "stripe-cli" # Command-line tool for Stripe
+brew "uv"         # Extremely fast Python package installer and resolver, written in Rust
 brew "vhs"        # Your CLI home video recorder
 ## Casks
 cask "beyond-compare"    # Compare files and folders
