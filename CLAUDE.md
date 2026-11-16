@@ -50,6 +50,14 @@ Files that are kept in the repo but never linked (e.g. iTerm2 color schemes) liv
 
 [Mackup](https://github.com/lra/mackup) syncs settings this repo doesn't manage (non-development apps, machine-specific settings, secrets) through Dropbox. `configs/mackup/.mackup.cfg` is link mode and `configs/mackup/.mackup-copy.cfg` is copy mode, for apps macOS 14+ won't let it symlink. Run Mackup through `bin/mackup_sync`, never a plain `mackup restore`, which replaces linked files with copies. Mackup and this repo must never manage the same file: when adding files to `configs/`, run `bin/mackup_audit` and ignore any Mackup app it reports in both configs (or override the app in `configs/mackup/.mackup/` to leave the file out).
 
+### Claude Code config
+
+`configs/claude/.claude/` (`CLAUDE.md`, `rules/`, `hooks/`, `skills/`, `statusline-command.sh`) is linked into `~/.claude` file by file like any other tool folder. Edit the files here, and never replace those links with copies. Machine-local state under `~/.claude` (history, caches, the Remember plugin's `.remember/`) is not tracked.
+
+`~/.claude/settings.json` is not linked. `assets/claude/settings.json` is a sanitized snapshot of it, not a link: the live file stays managed by Mackup and keeps its private entries (permission rules, hooks and settings that name private tools or hosts). Refresh the snapshot with `bin/export_claude_settings` and commit the result; never edit it by hand. The script uses an allowlist (known keys, generic permission rules, public plugin marketplaces, portable hook commands) so anything new and unrecognized is dropped by default; widen the lists in the script only for entries that are safe to publish. `~/.claude/settings.local.json` is not a user-level scope and `autoMode` is only read from user or managed settings, so there is no tracked-file-plus-local-override setup for it.
+
+`/shell-script <description>` (`.claude/commands/shell-script.md`, project-level) plans a new `bin/` or `scripts/` script that follows the conventions below.
+
 ### Script conventions
 
 All `bin/` and `scripts/` executables follow the same preamble:
@@ -60,11 +68,15 @@ source "${PWD}/helpers/trap_and_trace.sh"  # bin/helpers/; scripts/ source helpe
 PATH="${PWD}:${PATH}"
 ```
 
+`scripts/` executables differ: they use `cd "$(dirname "$0")" || exit 1`, then `source ./helpers/runtime.sh` (mode flags and logging) and `source ../bin/helpers/trap_and_trace.sh`. Copy the preamble of a neighboring script rather than mixing the two.
+
 `cd "$(dirname "$0")"` is critical — it ensures relative paths (to helpers, configs) resolve correctly regardless of where the script is invoked from.
 
 ### Other `bin/` tools
 
-Besides the config and Mackup commands above, `bin/` holds `clone_project`, the `log_*` and `is_*` helpers, and `helpers/` (shared shell and Ruby code). Run any of them with `--help` where supported.
+Besides the config and Mackup commands above, `bin/` holds `clone_project`, `symlink_config` (links a single file; `bin/link_configs` calls it, and `tests/bin/symlink_config.bats` covers it), the `log_*` and `is_*` helpers, and `helpers/` (shared shell code). Run any of them with `--help` where supported.
+
+`scripts/` also holds `clone-projects` (clones the personal project set into `~/src`) and the Codespaces lifecycle scripts `codespaces-post-create` and `codespaces-post-attach`, which are not run by `setup`: wire them into a devcontainer's `postCreateCommand` / `postAttachCommand` by hand.
 
 Interactive Worktrunk cleanup lives outside this repo: `wt-cleanup`, installed from the `chrisbloom7/tap` Homebrew tap (source: `github.com/chrisbloom7/wt-cleanup`).
 
@@ -105,5 +117,5 @@ Tests use [bats-core](https://github.com/bats-core/bats-core) (`brew install bat
 - `~/.claude/config.json` is not tracked (machine-specific API key approvals)
 - `~/.aliases` is managed by Mackup (not in this repo) — may contain tokens/secrets
 - `~/.zprofile.local` is not tracked — use for machine/project-specific env vars
-- `assets/claude/settings.json` is a sanitized snapshot of `~/.claude/settings.json`, not a link: the live file stays managed by Mackup and keeps its private entries (permission rules, hooks and settings that name private tools or hosts). Refresh the snapshot with `bin/export_claude_settings` and commit the result; never edit it by hand. The script uses an allowlist (known keys, generic permission rules, public plugin marketplaces, portable hook commands) so anything new and unrecognized is dropped by default; widen the lists in the script only for entries that are safe to publish. `~/.claude/settings.local.json` is not a user-level scope and `autoMode` is only read from user or managed settings, so there is no tracked-file-plus-local-override setup for it
+- `~/.claude/settings.json` is not tracked either: see "Claude Code config" for the sanitized snapshot
 - Company-specific Claude plugins belong in project-level `.claude/settings.local.json`, not in user-level `~/.claude/settings.json`
