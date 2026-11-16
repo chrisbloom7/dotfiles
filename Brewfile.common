@@ -46,6 +46,7 @@ brew "pgcli"                 # CLI for Postgres with auto-completion and syntax 
 brew "pipx"                  # Execute binaries from Python packages in isolated environments
 brew "ripgrep"               # Search tool like grep and The Silver Searcher
 brew "rubyfmt"               # Ruby autoformatter
+brew "shellcheck"            # Static analysis and lint tool, for (ba)sh scripts
 brew "shfmt"                 # Autoformat shell script source code
 brew "terminal-notifier"     # Send macOS User Notifications from the command-line
 brew "tmux"                  # Terminal multiplexer
