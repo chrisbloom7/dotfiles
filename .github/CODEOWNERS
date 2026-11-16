@@ -1,0 +1,6 @@
+# Changes here run on the owner's machine or hold repo permissions; review them first.
+/.github/ @chrisbloom7
+/configs/claude/ @chrisbloom7
+/assets/claude/ @chrisbloom7
+/bin/ @chrisbloom7
+/.github/CODEOWNERS @chrisbloom7
