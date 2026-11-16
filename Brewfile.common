@@ -48,6 +48,7 @@ brew "watch"                 # Executes a program periodically, showing output f
 brew "watchman"              # Watches files and records when they change
 brew "wget"                  # Internet file retriever
 brew "worktrunk"             # CLI for Git worktree management, designed for parallel AI agent workflows
+brew "wt-cleanup"            # Interactive fzf cleanup for Worktrunk worktrees and branches
 brew "yq"                    # Process YAML, JSON, XML, CSV and properties documents from the CLI
 
 ## Casks
