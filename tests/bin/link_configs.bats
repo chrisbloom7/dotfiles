@@ -69,6 +69,20 @@ teardown() {
   done
 }
 
+@test "link_configs: does not link files inside a .remember directory" {
+  mkdir -p "${DOTFILES_CONFIGS}/tool/.tooldir/.remember/logs" "${DOTFILES_CONFIGS}/tool/.remember"
+  echo "state" > "${DOTFILES_CONFIGS}/tool/.tooldir/.remember/state.json"
+  echo "state" > "${DOTFILES_CONFIGS}/tool/.tooldir/.remember/logs/a.log"
+  echo "state" > "${DOTFILES_CONFIGS}/tool/.remember/top.json"
+  echo "content" > "${DOTFILES_CONFIGS}/tool/.tooldir/settings.json"
+
+  run "${DOTFILES_BIN}/link_configs"
+  [ "${status}" -eq 0 ]
+  [ -L "${HOME}/.tooldir/settings.json" ] || { echo "Expected the sibling file to be linked"; return 1; }
+  [ ! -e "${HOME}/.tooldir/.remember" ] || { echo "Expected .tooldir/.remember not to be created"; return 1; }
+  [ ! -e "${HOME}/.remember" ] || { echo "Expected .remember not to be created"; return 1; }
+}
+
 # ---------------------------------------------------------------------------
 # Templates
 # ---------------------------------------------------------------------------
