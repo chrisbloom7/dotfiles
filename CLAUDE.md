@@ -24,6 +24,9 @@ bin/link_configs [<tool> ...]
 bin/import_config [<tool-name>] <path> [<path> ...]
 # e.g. bin/import_config starship ~/.config/starship.toml
 
+# Refresh the sanitized Claude Code settings snapshot (assets/claude/settings.json)
+bin/export_claude_settings [<source> [<output>]]
+
 # Full workstation setup
 ./setup [--bootstrap|--minimal|--help]
 ```
@@ -102,4 +105,5 @@ Tests use [bats-core](https://github.com/bats-core/bats-core) (`brew install bat
 - `~/.claude/config.json` is not tracked (machine-specific API key approvals)
 - `~/.aliases` is managed by Mackup (not in this repo) — may contain tokens/secrets
 - `~/.zprofile.local` is not tracked — use for machine/project-specific env vars
+- `assets/claude/settings.json` is a sanitized snapshot of `~/.claude/settings.json`, not a link: the live file stays managed by Mackup and keeps its private entries (permission rules, hooks and settings that name private tools or hosts). Refresh the snapshot with `bin/export_claude_settings` and commit the result; never edit it by hand. The script uses an allowlist (known keys, generic permission rules, public plugin marketplaces, portable hook commands) so anything new and unrecognized is dropped by default; widen the lists in the script only for entries that are safe to publish. `~/.claude/settings.local.json` is not a user-level scope and `autoMode` is only read from user or managed settings, so there is no tracked-file-plus-local-override setup for it
 - Company-specific Claude plugins belong in project-level `.claude/settings.local.json`, not in user-level `~/.claude/settings.json`
