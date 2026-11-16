@@ -15,6 +15,6 @@ skill.
 - Use `fd` instead of `find` for file lookups (it skips hidden and gitignored files; add `-H -I` to include them)
 - Use `jq` for JSON processing and `yq` for YAML/TOML/XML
 - Use `ast-grep` for structural (syntax-aware) code search and rewrites; use `rg` for plain text
-- Use `gh` for all GitHub operations (PRS, issues, checks)
+- Use `gh` for GitHub operations: PRs, issues, checks, releases and API reads. Plain git operations on a remote stay `git` (for example `git push origin --delete <branch>` in post-merge cleanup)
 - Use `gdate` instead of `date` on macos for GNU-compatible date flags
 - Use `wt` instead of `git worktree` for creating worktrees
