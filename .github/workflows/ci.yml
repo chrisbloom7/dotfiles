@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run shellcheck on tracked shell scripts
+        run: |
+          set -euo pipefail
+          # Tracked files that are *.sh/*.bash or start with a bash/sh shebang.
+          # .bats files are excluded: shellcheck cannot parse bats syntax.
+          files=()
+          while IFS= read -r -d '' f; do
+            [[ -f "${f}" && ! -L "${f}" ]] || continue
+            case "${f}" in
+              *.bats) continue ;;
+              *.sh|*.bash) files+=("${f}") ;;
+              *) head -n 1 "${f}" | grep -Eq '^#!.*[/ ](ba)?sh([[:space:]]|$)' && files+=("${f}") || true ;;
+            esac
+          done < <(git ls-files -z)
+          printf 'Checking %d files\n' "${#files[@]}"
+          shellcheck --version
+          shellcheck -S error "${files[@]}"
+
+  test:
+    # macOS only: mackup_backup_schedule (launchd/plist) tests fail on Linux.
+    name: Tests (macos-latest)
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Scripts use bash 4+ features (declare -A); macOS /bin/bash is 3.2.
+      - name: Install bats-core and bash 4+
+        run: brew install bats-core bash
+
+      # The repo has no Ruby specs today; run-tests skips Ruby when absent and
+      # discovers any *_spec.rb added later with the runner's Ruby.
+      - name: Run tests
+        run: ./run-tests
+
+  ci-gate:
+    name: ci-gate
+    if: always()
+    needs: [shellcheck, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every job to succeed
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "Job results: ${RESULTS}"
+          for r in ${RESULTS}; do
+            [[ "${r}" == "success" ]] || { echo "A required job did not succeed." >&2; exit 1; }
+          done

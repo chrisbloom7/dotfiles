@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 source "${PWD}/helpers/trap_and_trace.sh"
 PATH="${PWD}:${PATH}"
 
-if [[ $# < 2 ]]; then
+if [[ $# -lt 2 ]]; then
   log_error "You must provide at least two arguments"
   exit 1
 fi
@@ -14,9 +14,9 @@ subject="${2:?Subject is required}"
 : ${3:?You must provide at least one target file}
 targets=("${@:3}")
 
-log_debug "Checking for \`${subject}\` in ${targets[@]}"
+log_debug "Checking for \`${subject}\` in ${targets[*]}"
 new_eval="eval \"\$(${subject})\""
-for target in ${@:3}; do
+for target in "${@:3}"; do
   if [[ ! -f $target ]]; then
     log_debug "Target file ${target} does not exist yet; touching"
     mkdir -p "$(dirname "${target}")"
