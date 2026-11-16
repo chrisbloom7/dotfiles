@@ -1,0 +1,2 @@
+# Gate on warnings and errors; info/style findings are tracked as follow-ups.
+severity=warning
