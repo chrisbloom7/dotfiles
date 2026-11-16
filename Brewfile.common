@@ -21,6 +21,7 @@ brew "ast-grep"              # Code searching, linting, rewriting
 brew "awscli"                # Official Amazon AWS command-line interface
 brew "bat"                   # Clone of cat(1) with syntax highlighting and Git integration
 brew "bats-core"             # Bash Automated Testing System
+brew "brewfile-tools"        # Add, remove and audit entries in Homebrew Brewfiles
 brew "claude-cmd"            # Claude Code Commands Manager
 brew "claude-code-templates" # CLI tool for configuring and monitoring Claude Code
 brew "devcontainer"          # Reference implementation for the Development Containers specification
