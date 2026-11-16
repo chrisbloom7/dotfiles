@@ -61,9 +61,11 @@ PATH="${PWD}:${PATH}"
 
 ### Other `bin/` tools
 
-Besides the config and Mackup commands above, `bin/` holds `brew_add`, `brew_remove` and `brew_audit` (manage Brewfiles), `clone_project`, the `log_*` and `is_*` helpers, and `helpers/` (shared shell and Ruby code). Run any of them with `--help` where supported.
+Besides the config and Mackup commands above, `bin/` holds `clone_project`, the `log_*` and `is_*` helpers, and `helpers/` (shared shell and Ruby code). Run any of them with `--help` where supported.
 
 Interactive Worktrunk cleanup lives outside this repo: `wt-cleanup`, installed from the `chrisbloom7/tap` Homebrew tap (source: `github.com/chrisbloom7/wt-cleanup`).
+
+Brewfile management lives outside this repo too: `brewfile add|remove|audit`, installed from the same tap as `brewfile-tools` (source: `github.com/chrisbloom7/brewfile-tools`). `aliases.zsh` keeps `brew_add`, `brew_remove` and `brew_audit` as aliases and sets `BREWFILE_DIR` to this repo, so they work from any directory. It needs Ruby 2.7+ (the Homebrew install brings its own).
 
 ### Environment variables
 

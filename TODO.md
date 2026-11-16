@@ -18,8 +18,8 @@
 - [ ] **Normalize option flags**, especially `--help`
 - [ ] **Code review** for efficiency and test coverage
 
-### `brew_audit`
+### `brewfile audit` (moved to [chrisbloom7/brewfile-tools](https://github.com/chrisbloom7/brewfile-tools))
 
 - [ ] **Show which brewfile(s) a missing dep is included in**
 - [ ] **Show legend** with result stats
-- [ ] **Optionally prompt to handle discovered packages**: brew_add/brew_remove/install/uninstall
+- [ ] **Optionally prompt to handle discovered packages**: brewfile add/remove, brew install/uninstall
