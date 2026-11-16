@@ -13,6 +13,9 @@ brew "docker-clean"             # Clean Docker containers, images, networks, and
 brew "docker-compose"           # Isolated development environments using Docker
 brew "docker-credential-helper" # Platform keystore credential helper for Docker
 
+## Taps
+tap "chrisbloom7/tap"   # Homebrew tap for chrisbloom7's tools (wt-cleanup)
+
 ## Formulae
 brew "ast-grep"              # Code searching, linting, rewriting
 brew "awscli"                # Official Amazon AWS command-line interface
