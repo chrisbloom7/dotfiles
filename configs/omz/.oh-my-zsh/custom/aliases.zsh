@@ -26,6 +26,12 @@ pathsum() {
   pwd | cksum | cut -f1 -d ' '
 }
 
+# Brewfiles: https://github.com/chrisbloom7/brewfile-tools (brew install chrisbloom7/tap/brewfile-tools)
+export BREWFILE_DIR="${HOME}/.dotfiles"
+alias brew_add='brewfile add'
+alias brew_remove='brewfile remove'
+alias brew_audit='brewfile audit'
+
 # tmux
 tmj() {
   session_group=main
