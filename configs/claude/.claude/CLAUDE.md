@@ -1,3 +1,7 @@
+Detailed conventions live in `~/.claude/rules/*.md`: `about-me.md`, `commits-and-prs.md`,
+`parallel-agents.md` (Rails/Postgres repos only), `post-merge-cleanup.md`, `pr-conventions.md`,
+`subagent-briefs.md`, `worktrunk.md` and `writing-and-markdown.md`.
+
 ## Playground Skill
 
 Invoke the `/playground:playground` skill for any request for a standalone interactive tool or
