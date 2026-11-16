@@ -38,7 +38,7 @@ jobs:
           done < <(git ls-files -z)
           printf 'Checking %d files\n' "${#files[@]}"
           shellcheck --version
-          shellcheck -S warning "${files[@]}"
+          shellcheck -S error "${files[@]}"
 
   test:
     # macOS only: mackup_backup_schedule (launchd/plist) tests fail on Linux.
@@ -50,8 +50,9 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install bats-core
-        run: brew install bats-core
+      # Scripts use bash 4+ features (declare -A); macOS /bin/bash is 3.2.
+      - name: Install bats-core and bash 4+
+        run: brew install bats-core bash
 
       # The repo has no Ruby specs today; run-tests skips Ruby when absent and
       # discovers any *_spec.rb added later with the runner's Ruby.
