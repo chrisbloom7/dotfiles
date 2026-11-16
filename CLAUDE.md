@@ -60,7 +60,7 @@ Files that are kept in the repo but never linked (e.g. iTerm2 color schemes) liv
 
 ### Script conventions
 
-All `bin/` and `scripts/` executables follow the same preamble:
+Most `bin/` executables follow this preamble (the `log_*` helpers source `helpers/color_codes.sh` instead of `trap_and_trace.sh`, the `is_*` predicates have only the `set` line, and `export_claude_settings` saves `caller_dir="${PWD}"` before the `cd`):
 ```bash
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -89,19 +89,21 @@ Scripts reference `FORCE_MODE`, `VERBOSE_MODE`, and `QUIET_MODE` without default
 ### Setup script hierarchy
 
 ```
-setup                          # entry point; delegates to:
-  scripts/install-prerequisites
-  scripts/bootstrap-common     # calls bootstrap-workstation or bootstrap-codespaces
-  scripts/symlink-config-files
-  scripts/configure-macos
+setup                          # entry point; calls:
+  scripts/install-prerequisites     # skipped in Codespaces
+  scripts/bootstrap-codespaces      # in Codespaces, or:
+  scripts/bootstrap-workstation     # on macOS or Linux
+    scripts/bootstrap-common        # both bootstrap scripts call this
+      scripts/symlink-config-files
+    scripts/configure-macos         # workstation only, skipped in minimal and update modes
 ```
 
 `runtime.sh` is sourced by setup scripts and initializes all mode flags (`BOOTSTRAP_MODE`, `MINIMAL_MODE`, `FORCE_MODE`, etc.) and logging functions.
 
 ### Shell init load order
 
-- `.zprofile` — login shells only: sets `AWS_*` env vars, runs `brew shellenv`
-- `.zshrc` — interactive shells: OMZ config, activates mise, loads completions
+- `.zprofile` — login shells only: runs `brew shellenv`, then sources `.zprofile.local`
+- `.zshrc` — interactive shells: OMZ config, activates mise, loads completions, exports `AWS_DEFAULT_REGION`
 - `.zprofile.local` — machine-specific overrides (not tracked); sourced at end of `.zprofile`
 - `configs/omz/.oh-my-zsh/custom/aliases.zsh` and `paths.zsh` — auto-loaded by OMZ as custom files
 
