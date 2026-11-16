@@ -61,7 +61,9 @@ PATH="${PWD}:${PATH}"
 
 ### Other `bin/` tools
 
-Besides the config and Mackup commands above, `bin/` holds `brew_add`, `brew_remove` and `brew_audit` (manage Brewfiles), `clone_project`, `wt_cleanup` (interactive Worktrunk cleanup), the `log_*` and `is_*` helpers, and `helpers/` (shared shell and Ruby code). Run any of them with `--help` where supported.
+Besides the config and Mackup commands above, `bin/` holds `brew_add`, `brew_remove` and `brew_audit` (manage Brewfiles), `clone_project`, the `log_*` and `is_*` helpers, and `helpers/` (shared shell and Ruby code). Run any of them with `--help` where supported.
+
+Interactive Worktrunk cleanup lives outside this repo: `wt-cleanup`, installed from the `chrisbloom7/tap` Homebrew tap (source: `github.com/chrisbloom7/wt-cleanup`).
 
 ### Environment variables
 
