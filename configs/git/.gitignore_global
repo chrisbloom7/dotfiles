@@ -46,3 +46,5 @@ Thumbs.db
 *.chrisbloom7.md
 Warp.md
 WORKTREE_CONTEXT.md
+
+**/.claude/settings.local.json
