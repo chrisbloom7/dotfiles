@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+# Writes a sanitized snapshot of a Claude Code settings file, safe to commit to
+# a public repo. The source is only read, never modified.
+#
+# Usage:
+#   export_claude_settings [<source> [<output>]]
+#
+# Defaults: <source> is ~/.claude/settings.json and <output> is
+# assets/claude/settings.json in this repo.
+#
+# The filter is an ALLOWLIST: only the entries named below are copied, and
+# everything else is dropped, so a new private entry can't leak by default.
+# Review any change to the lists as carefully as a change to the snapshot.
+#   - Top-level keys: model, advisorModel, theme, the on/off booleans, and
+#     statusLine when it runs ~/.claude/statusline-command.sh
+#   - permissions.ask and permissions.allow: only rules matching the generic
+#     patterns in ALLOW_RULES and ASK_RULES
+#   - enabledPlugins and extraKnownMarketplaces: only entries from the public
+#     marketplaces in PUBLIC_MARKETPLACES and PUBLIC_REPOS
+#   - hooks: only commands matching HOOK_COMMANDS, after rewriting an absolute
+#     home directory prefix to $HOME
+set -euo pipefail
+caller_dir="${PWD}"
+cd "$(dirname "$0")"
+source "${PWD}/helpers/trap_and_trace.sh"
+PATH="${PWD}:${PATH}"
+
+source="${1:-${HOME}/.claude/settings.json}"
+output="${2:-$(cd "${PWD}/.." && pwd)/assets/claude/settings.json}"
+# Paths are relative to where the script was run, not to bin/
+[[ "${source}" == /* ]] || source="${caller_dir}/${source}"
+[[ "${output}" == /* ]] || output="${caller_dir}/${output}"
+
+if ! command -v jq > /dev/null; then
+  log_error "jq is required"
+  exit 1
+fi
+if [[ ! -f "${source}" ]]; then
+  log_error "${source} not found"
+  exit 1
+fi
+if [[ -e "${output}" && "${source}" -ef "${output}" ]]; then
+  log_error "The output must not be the source file"
+  exit 1
+fi
+
+# shellcheck disable=SC2016  # the jq program is single-quoted on purpose
+filter='
+def ALLOW_RULES: [
+  "^Bash\\(git push -u origin \\*\\)$",
+  "^Bash\\(git fetch( -q)?( --prune| origin)?\\)$",
+  "^Bash\\(git merge-base \\*\\)$",
+  "^Bash\\(gh pr create:\\*\\)$",
+  "^Bash\\(wt list( \\*)?\\)$",
+  "^Bash\\(towit (doctor|version|(list|search|show) \\*)\\)$",
+  "^Bash\\(psql (-l|-lqt|--version)\\)$",
+  "^Bash\\(docker info\\)$",
+  "^Bash\\(brew (list \\*|services list)\\)$",
+  "^mcp__claude-artifacts__(get_artifact|guide)$",
+  "^mcp__plugin_playwright_playwright__browser_take_screenshot$"
+];
+def ASK_RULES: ["^Bash\\((git|wt) [^)]*\\)$", "^Bash\\(wt merge\\)$"];
+def PUBLIC_MARKETPLACES: [
+  "builtin", "ai-tools", "claude-plugins-official", "anthropic-plugin-directory",
+  "frontend-design-audit", "to-wit", "worktrunk"
+];
+def PUBLIC_REPOS: [
+  "chrisbloom7/ai-tools", "chrisbloom7/to-wit", "max-sixty/worktrunk",
+  "mistyhx/frontend-design-audit"
+];
+def HOOK_COMMANDS: [
+  "^\\$HOME/\\.config/iterm2/cc-status$",
+  "^\"\\$HOME/\\.claude/hooks/[A-Za-z0-9_.-]+\"$"
+];
+def STATUS_LINE_COMMAND: "^~/\\.claude/statusline-command\\.sh$";
+
+def matches_any(patterns): . as $s | any(patterns[]; . as $p | $s | test($p));
+def strings_only: if type == "string" then . else empty end;
+def home_relative: sub("^/(Users|home)/[^/ ]+/"; "$HOME/");
+
+def keep_hook_entry:
+  .hooks |= map(select(.type == "command"
+    and ((.command // "") | type == "string")
+    and (.command |= home_relative | .command | matches_any(HOOK_COMMANDS)))
+    | .command |= home_relative
+    | {type, command})
+  | select(.hooks | length > 0)
+  | if (.matcher | type) == "string" then {matcher, hooks} else {hooks} end;
+
+def pick_string(k): if (.[k] | type) == "string" then {(k): .[k]} else {} end;
+def pick_bool(k): if (.[k] | type) == "boolean" then {(k): .[k]} else {} end;
+
+(pick_string("model") + pick_string("advisorModel") + pick_string("theme")
+  + pick_bool("skipWorkflowUsageWarning") + pick_bool("disableClaudeAiConnectors")
+  + pick_bool("syncClaudeAiPlugins") + pick_bool("syncClaudeAiSkills"))
++ (if (.statusLine.type == "command"
+      and ((.statusLine.command // "") | type == "string")
+      and (.statusLine.command | test(STATUS_LINE_COMMAND)))
+   then {statusLine: {type: "command", command: .statusLine.command}} else {} end)
++ {permissions: {
+    allow: [(.permissions.allow // [])[] | strings_only | select(matches_any(ALLOW_RULES))],
+    ask:   [(.permissions.ask   // [])[] | strings_only | select(matches_any(ASK_RULES))]
+  } | with_entries(select(.value | length > 0))}
++ {enabledPlugins: ((.enabledPlugins // {}) | with_entries(
+    select((.value | type) == "boolean"
+      and (.key | split("@") | length == 2)
+      and (.key | split("@")[1] | IN(PUBLIC_MARKETPLACES[]))))) }
++ {extraKnownMarketplaces: ((.extraKnownMarketplaces // {}) | with_entries(
+    select(.value.source.source == "github"
+      and (.value.source.repo | IN(PUBLIC_REPOS[]))
+      and ((.value.source.ref // "") | type == "string")
+      and ((.value.source.ref // "") | test("^[A-Za-z0-9._/-]*$")))
+    | .value = {source: ({source: "github", repo: .value.source.repo}
+        + (if .value.source.ref then {ref: .value.source.ref} else {} end))})) }
++ {hooks: ((.hooks // {}) | with_entries(
+    .value |= [(.[]? | keep_hook_entry)] | select(.value | length > 0))) }
+| with_entries(select(.value != {} and .value != []))
+'
+
+mkdir -p "$(dirname "${output}")"
+tmp="$(mktemp "${output}.XXXXXX")"
+trap 'rm -f "${tmp}"' EXIT
+jq --indent 2 "${filter}" "${source}" > "${tmp}"
+mv -f "${tmp}" "${output}"
+log_success "Wrote sanitized snapshot to ${output}"

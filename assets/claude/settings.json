@@ -1,0 +1,209 @@
+{
+  "model": "sonnet",
+  "advisorModel": "opus",
+  "theme": "auto",
+  "skipWorkflowUsageWarning": true,
+  "disableClaudeAiConnectors": true,
+  "syncClaudeAiPlugins": false,
+  "syncClaudeAiSkills": false,
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline-command.sh"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git push -u origin *)",
+      "Bash(gh pr create:*)",
+      "Bash(wt list)",
+      "Bash(wt list *)",
+      "Bash(git fetch)",
+      "Bash(git fetch -q)",
+      "Bash(git fetch --prune)",
+      "Bash(git fetch -q --prune)",
+      "Bash(git fetch origin)",
+      "Bash(git merge-base *)",
+      "Bash(towit doctor)",
+      "Bash(towit version)",
+      "Bash(towit list *)",
+      "Bash(towit search *)",
+      "Bash(towit show *)",
+      "Bash(psql -l)",
+      "Bash(psql -lqt)",
+      "Bash(psql --version)",
+      "Bash(docker info)",
+      "Bash(brew list *)",
+      "Bash(brew services list)",
+      "mcp__claude-artifacts__get_artifact",
+      "mcp__claude-artifacts__guide",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot"
+    ],
+    "ask": [
+      "Bash(git push *main*)",
+      "Bash(git push *develop*)",
+      "Bash(git push *master*)",
+      "Bash(wt merge)",
+      "Bash(wt merge *)",
+      "Bash(git worktree add *)"
+    ]
+  },
+  "enabledPlugins": {
+    "cc-plugin-you-should-know@builtin": true,
+    "remember@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "frontend-design-audit@frontend-design-audit": true,
+    "security-guidance@anthropic-plugin-directory": true,
+    "claude-code-setup@anthropic-plugin-directory": true,
+    "claude-security@anthropic-plugin-directory": true,
+    "claude-md-management@anthropic-plugin-directory": true,
+    "feature-dev@anthropic-plugin-directory": true,
+    "frontend-design@anthropic-plugin-directory": true,
+    "superpowers@anthropic-plugin-directory": true,
+    "playground@anthropic-plugin-directory": true,
+    "playwright@anthropic-plugin-directory": true,
+    "code-review-anthropics@anthropic-plugin-directory": true,
+    "ruby-lsp@anthropic-plugin-directory": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "towit@to-wit": true,
+    "chrisbloom7-development@ai-tools": true,
+    "ruby-lsp@claude-plugins-official": true,
+    "github@anthropic-plugin-directory": false
+  },
+  "extraKnownMarketplaces": {
+    "worktrunk": {
+      "source": {
+        "source": "github",
+        "repo": "max-sixty/worktrunk"
+      }
+    },
+    "frontend-design-audit": {
+      "source": {
+        "source": "github",
+        "repo": "mistyhx/frontend-design-audit"
+      }
+    },
+    "to-wit": {
+      "source": {
+        "source": "github",
+        "repo": "chrisbloom7/to-wit",
+        "ref": "v0.13.1"
+      }
+    },
+    "ai-tools": {
+      "source": {
+        "source": "github",
+        "repo": "chrisbloom7/ai-tools"
+      }
+    }
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$HOME/.claude/hooks/check-macdown-hash.sh\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.config/iterm2/cc-status"
+          }
+        ]
+      }
+    ]
+  }
+}
