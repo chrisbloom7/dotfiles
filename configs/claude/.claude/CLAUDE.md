@@ -1,7 +1,8 @@
 Detailed conventions live in `~/.claude/rules/*.md`: `about-me.md`, `commits-and-prs.md`,
 `open-questions-triage.md` (collecting and resolving open questions from agent PRs),
 `parallel-agents.md` (Rails/Postgres repos only), `post-merge-cleanup.md`, `pr-conventions.md`,
-`subagent-briefs.md`, `worktrunk.md` and `writing-and-markdown.md`.
+`subagent-briefs.md`, `subagent-driven-development.md` (when to offer it), `worktrunk.md` and
+`writing-and-markdown.md`.
 
 ## Playground Skill
 
