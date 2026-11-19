@@ -3,5 +3,17 @@
 # profile switch can detect Claude Code sessions inside a Git repository (the
 # Worktrunk cockpit layout). The `claude` shell function (aliases.zsh) calls
 # this when $PWD is inside a work tree.
+#
+# Before launching, writes /tmp/iterm-pr-redirect.html, a page that redirects
+# to the repo's GitHub pull requests (github.com if gh can't tell), for the
+# cockpit's browser pane to load.
+#
 # exec -a sets argv[0]; a plain `exec claude` would revert the name to "claude".
+PR_URL=$(gh repo view --json url -q '.url + "/pulls"' 2>/dev/null || echo "https://github.com")
+
+cat << HTML > /tmp/iterm-pr-redirect.html
+<!DOCTYPE html>
+<html><head><meta http-equiv="refresh" content="0; url=${PR_URL}"></head></html>
+HTML
+
 exec -a git-claude claude "$@"
