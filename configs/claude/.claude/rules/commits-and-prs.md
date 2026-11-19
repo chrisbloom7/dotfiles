@@ -5,12 +5,17 @@
   ask.
 - **Pushing.** You may push a branch you created without asking, as long as it doesn't auto-deploy.
   The project `CLAUDE.md` should name the auto-deploying branches (e.g. `main`, `develop`). If it
-  doesn't, check the repo's deploy config; if you still can't tell, ask before pushing. Pushing any
-  other branch needs my approval.
-- **PRs.** You may open a PR for a branch you pushed. Never merge (see `pr-conventions.md`).
+  doesn't, check the repo's deploy config; if you still can't tell, ask me for those branch names
+  and record them in `CLAUDE.md` before pushing. Pushing any other branch needs my approval.
+- **PRs.** You may open a PR on any branch where I am a contributor, otherwise ask me first. Never
+  merge (see `pr-conventions.md`).
+- **Keep a ledger.** Track every opened PR for the session. Update it as PRs are merged. When
+  reporting status, include the list of open PRs from the ledger.
 - **Attribution.** End commit messages and PR descriptions with the attribution lines the session
   gives you, if any. Don't add lines it leaves out.
 - **Follow the repo.** Check `git log` for branch naming, merge flow and commit style, and match it.
+- **Monitoring.** Do not automatically monitor PRs (e.g. CI, merge status, comments) unless I ask
+  you to. I will tell you when I merge a PR you are not monitoring.
 
 Worktrees, hooks, merging, PR body format, screenshots and post-merge cleanup are covered by the
 other files in `~/.claude/rules/`; don't restate or override them here.
