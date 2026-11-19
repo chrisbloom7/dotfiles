@@ -32,7 +32,7 @@ All scripts should:
 - be marked executable
 - be callable from any modern shell, but especially zsh
 - have an accompanying BATS test file in `~/.dotfiles/tests`, with complete coverage
-- only be executable from their parent directory (i.e. `~/.dotfiles`)
+- be runnable from any directory (`bin/` is on `PATH`): start with `cd "$(dirname "$0")"` so relative paths resolve, and save `caller_dir="${PWD}"` first if the script needs the caller's working directory
 - prefix all `brew` subcommands with `HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_ENV_HINTS=1`
 - use the `--quiet` option with all `brew` subcommands
 - understand that what homebrew lists as `formula`/`formulae` is specified as type `brew` in Brewfiles
