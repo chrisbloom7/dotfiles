@@ -17,7 +17,9 @@ question is answered and applied.
 - Label it `question` while questions are open. Run `gh label list --json name` first (creating a PR
   with a missing label fails). If `question` is not there, use a similar existing label (for example
   `needs answer` or `needs-info`); if there is none, skip the label and do not create one. Put
-  `--label <name>` in the subagent brief, or add it with `gh pr edit <pr> --add-label <name>`.
+  `--label <name>` in the subagent brief, or add it with `gh pr edit <pr> --add-label <name>`. If
+  you identify a compatible label, offer to record the answer (for example "always use the <name>
+  label here" or "not now") as a project-specific memory, so `gh label list` can be skipped.
 - Remove the label (`gh pr edit <pr> --remove-label <name>`) when marking the PR ready. Add it back
   if the PR goes back to draft.
 - This overrides any project skill that says to mark a PR ready as soon as it is finished (for
@@ -25,8 +27,8 @@ question is answered and applied.
 
 ## Prompt me, then resolve
 
-1. Ask me each open question, one at a time, with the PR it came from and the agent's
-   recommendation. Do not bundle them into a wall of text.
+1. Prompt me each open question as interactive multiple choice with at least one recommended answer,
+   grouped by the PR they came from. Do not bundle them into a wall of text.
 2. Apply each answer to the PR it belongs to: push the change, or reply on the PR if no change is
    needed. Update the PR body so the question shows as answered, with the decision.
 3. When a PR has no remaining open questions, mark it ready (`gh pr ready <pr>`), remove the label
@@ -34,8 +36,6 @@ question is answered and applied.
 
 ## When to prompt
 
-- **Parallel agents.** Hold off until every subagent that will open a PR has finished, then ask all
-  the questions in one pass.
 - **New subwork.** Before acting on a prompt of mine that starts new subwork, first ask any
   currently known open questions. Do not let them go stale behind new work.
 - Otherwise, ask as soon as the PR is opened.
