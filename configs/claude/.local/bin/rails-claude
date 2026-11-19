@@ -1,0 +1,6 @@
+#!/bin/zsh
+# Runs claude under the process name "rails-claude" so an iTerm2 trigger or
+# profile switch can detect Claude Code sessions inside a Rails app. The
+# `claude` shell function (aliases.zsh) calls this when bin/rails is found.
+# exec -a sets argv[0]; a plain `exec claude` would revert the name to "claude".
+exec -a rails-claude claude "$@"
