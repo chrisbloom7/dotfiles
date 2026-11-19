@@ -1,0 +1,7 @@
+{
+  "name": "rails",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#ff3b3b"
+  }
+}

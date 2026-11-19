@@ -1,0 +1,7 @@
+{
+  "name": "earrrl",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#ffd75f"
+  }
+}

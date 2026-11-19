@@ -1,0 +1,7 @@
+{
+  "name": "sandbox",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#b0b0b0"
+  }
+}

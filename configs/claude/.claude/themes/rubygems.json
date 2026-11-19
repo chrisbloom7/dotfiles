@@ -1,0 +1,7 @@
+{
+  "name": "rubygems",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#9ad0ff"
+  }
+}

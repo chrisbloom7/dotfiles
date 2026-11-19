@@ -1,0 +1,7 @@
+{
+  "name": "chrisbloom7",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#ff5f87"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "slack-ruby",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#e056fd"
+  }
+}

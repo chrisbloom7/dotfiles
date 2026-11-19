@@ -1,0 +1,17 @@
+# Project directory (relative to $HOME) and Claude Code theme slug, one per line.
+# Slugs match files in .claude/themes/. hooks/post-link writes each into the
+# project's gitignored .claude/settings.local.json when it has no theme yet.
+src/chrisbloom7 chrisbloom7
+src/earrrl earrrl
+src/hubspot hubspot
+src/open5e open5e
+src/ossf ossf
+src/rails rails
+src/Robinina-LLC robinina-llc
+src/ruby-grape ruby-grape
+src/rubygems rubygems
+src/samvbeckmann samvbeckmann
+src/sandbox sandbox
+src/slack-ruby slack-ruby
+src/Robinina-LLC/studio-app studio-app
+src/Robinina-LLC/studio-docs studio-docs

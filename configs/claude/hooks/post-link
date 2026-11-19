@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Claude Code themes color each project's input box border. A project picks its
+# theme through the gitignored .claude/settings.local.json, which a fresh
+# machine does not have, so write the theme key from hooks/project-themes.
+# Never overwrites an existing theme key.
+set -euo pipefail
+cd "$(dirname "$0")"
+
+if ! command -v jq &>/dev/null; then
+  log_attention "jq not found; skipping Claude project themes"
+  exit 0
+fi
+
+while read -r rel slug; do
+  [[ -z "${rel}" || "${rel}" == \#* ]] && continue
+  project="${HOME}/${rel}"
+  [[ -d "${project}" ]] || continue
+
+  settings="${project}/.claude/settings.local.json"
+  if [[ -f "${settings}" ]] && jq -e 'has("theme")' "${settings}" &>/dev/null; then
+    continue
+  fi
+
+  log_debug "Setting Claude theme ${slug} for ${project}"
+  mkdir -p "${project}/.claude"
+  [[ -f "${settings}" ]] || echo '{}' > "${settings}"
+  jq --arg theme "custom:${slug}" '. + {theme: $theme}' "${settings}" > "${settings}.tmp"
+  mv "${settings}.tmp" "${settings}"
+done < project-themes

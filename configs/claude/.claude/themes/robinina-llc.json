@@ -1,0 +1,7 @@
+{
+  "name": "robinina-llc",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#00d7d7"
+  }
+}

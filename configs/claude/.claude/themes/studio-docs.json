@@ -1,0 +1,7 @@
+{
+  "name": "studio-docs",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#d4a373"
+  }
+}

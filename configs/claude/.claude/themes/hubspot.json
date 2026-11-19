@@ -1,0 +1,7 @@
+{
+  "name": "hubspot",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#ff7a00"
+  }
+}

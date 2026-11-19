@@ -1,0 +1,7 @@
+{
+  "name": "ruby-grape",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#a3d13f"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "studio-app",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#1abc9c"
+  }
+}

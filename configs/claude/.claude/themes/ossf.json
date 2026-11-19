@@ -1,0 +1,7 @@
+{
+  "name": "ossf",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#2ecc71"
+  }
+}

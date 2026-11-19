@@ -1,0 +1,7 @@
+{
+  "name": "samvbeckmann",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "#3d6bff"
+  }
+}
