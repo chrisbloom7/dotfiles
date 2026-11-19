@@ -1,0 +1,7 @@
+#!/bin/zsh
+# Runs claude under the process name "git-claude" so an iTerm2 trigger or
+# profile switch can detect Claude Code sessions inside a Git repository (the
+# Worktrunk cockpit layout). The `claude` shell function (aliases.zsh) calls
+# this when $PWD is inside a work tree.
+# exec -a sets argv[0]; a plain `exec claude` would revert the name to "claude".
+exec -a git-claude claude "$@"

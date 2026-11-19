@@ -217,16 +217,12 @@ wt-clean () {
   wt-merged | xargs wt remove --force
 }
 
-# Claude Code: inside a Rails app (bin/rails in $PWD or a parent), launch via
-# the rails-claude wrapper so iTerm2 can detect it by process name.
+# Claude Code: inside a Git work tree, launch via the git-claude wrapper so
+# iTerm2 can detect it by process name.
 claude() {
-  local dir="$PWD"
-  while [[ "$dir" != "/" ]]; do
-    if [[ -f "$dir/bin/rails" && -x "$HOME/.local/bin/rails-claude" ]]; then
-      "$HOME/.local/bin/rails-claude" "$@"
-      return $?
-    fi
-    dir="${dir:h}"
-  done
+  if [[ -x "$HOME/.local/bin/git-claude" ]] && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    "$HOME/.local/bin/git-claude" "$@"
+    return $?
+  fi
   command claude "$@"
 }
