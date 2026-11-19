@@ -216,3 +216,13 @@ wt-merged () {
 wt-clean () {
   wt-merged | xargs wt remove --force
 }
+
+# Claude Code: inside a Git work tree, launch via the git-claude wrapper so
+# iTerm2 can detect it by process name.
+claude() {
+  if [[ -x "$HOME/.local/bin/git-claude" ]] && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    "$HOME/.local/bin/git-claude" "$@"
+    return $?
+  fi
+  command claude "$@"
+}
