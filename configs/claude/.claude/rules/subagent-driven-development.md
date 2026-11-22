@@ -8,6 +8,11 @@ choice, with subagent-driven development as the recommended option.
 If there is only a single task, or none can be safely parallelized, do not ask: do the work in the
 main agent.
 
+Also do not ask when executing an already-approved implementation plan: the
+`superpowers:writing-plans` skill's Execution Handoff has already asked me to choose subagent-driven
+or native execution, so asking again would be a duplicate prompt. This rule still applies to task
+lists that never go through a plan (for example several small PRs or cleanup items).
+
 **Why:** I want the choice when parallelism would actually help, but not a question (or subagents)
 when it would not.
 
