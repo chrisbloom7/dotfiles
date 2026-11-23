@@ -61,6 +61,11 @@ if [ -z "$(brew ls bats-core 2>/dev/null)" ]; then
   brew install "${brew_args[@]}" bats-core
 fi
 
+if [ -z "$(brew ls fzf 2>/dev/null)" ]; then
+  log_info "Installing fzf formulae"
+  brew install "${brew_args[@]}" fzf
+fi
+
 if [[ "$(is_macos)" == "true" ]]; then
   if [ -z "$(brew ls mas 2>/dev/null)" ]; then
     log_info "Installing mas formulae"

@@ -78,8 +78,8 @@ cask "font-mona-sans"                     # Mona-Sans font
 cask "font-monaspice-nerd-font"           # Monospace Nerd font
 cask "font-monaspace"                     # Monospaced font
 cask "font-open-sans"                     # Open Sans font
-cask "font-powerline-symbols"             # Powerline Symbols font
-cask "font-source-code-pro-for-powerline" # Source Code Pro for Powerline font
+cask "font-powerline-symbols", force: true             # Powerline Symbols font (agnoster); sha256 :no_check, so force past require_sha
+cask "font-source-code-pro-for-powerline", force: true # Source Code Pro for Powerline font (agnoster); sha256 :no_check, so force past require_sha
 cask "font-source-code-pro"               # Source Code Pro font
 cask "font-source-sans-3"                 # Source Sans 3 font
 cask "font-source-serif-4"                # Source Serif 4 font

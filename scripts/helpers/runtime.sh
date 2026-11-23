@@ -131,6 +131,11 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
       "                   Combine with --force to also regenerate symlinks afterward."
       "                   Can also be used with --minimal to only update the bare minimum packages."
       " -v, --verbose     Print additional status messages."
+      " -w, --work        Install additional dependencies from \`Brewfile.work\` for a work workstation."
+      "                   Only applies to \`setup\`. (ignored if --bootstrap or --minimal is set)"
+      ""
+      "With no options, \`setup\` offers an fzf menu to choose the mode, scope and other options"
+      "when fzf is installed (\`setup --bootstrap\` installs it) and the shell is interactive."
     )
 
     deserialize_array ADDITIONAL_DEPENDENCIES_SERIALIZED ADDITIONAL_DEPENDENCIES '|'
@@ -176,7 +181,77 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
 
   }
 
-  _parse_setup_options "$@"
+  # Interactively choose options with fzf when `setup` is run with no arguments.
+  # Skipped when fzf is missing (first run, before --bootstrap installs it), when
+  # not attached to a terminal, in Codespaces, or for any script but `setup`.
+  # Prints the chosen flags, one per line. Exits if the user cancels.
+  _choose_setup_options() {
+    local mode scope extras choice
+    local flags=()
+
+    mode="$(printf '%s\n' \
+      "Full setup" \
+      "Minimal setup" \
+      "Bootstrap only (prerequisites)" \
+      "Update packages" \
+      "Update minimal packages" |
+      fzf --prompt="Mode > " --height=~10 --reverse \
+        --header="Choose a setup mode (Esc to cancel)")" || { log_attention "Setup cancelled" >&2; exit 1; }
+
+    case "${mode}" in
+      "Minimal setup"          ) flags+=( --minimal ) ;;
+      "Bootstrap only"*        ) flags+=( --bootstrap ) ;;
+      "Update packages"        ) flags+=( --update ) ;;
+      "Update minimal packages") flags+=( --update --minimal ) ;;
+    esac
+
+    # Scope only matters when installing the full set of packages
+    if [[ "${mode}" == "Full setup" ]]; then
+      local scopes=( "Common packages only" "Common + personal" )
+      # Brewfile.work is private, so only offer work scopes where it exists
+      if [[ -f "${DOTFILES}/Brewfile.work" ]]; then
+        scopes+=( "Common + work" "Common + personal + work" )
+      fi
+      scope="$(printf '%s\n' "${scopes[@]}" |
+        fzf --prompt="Scope > " --height=~10 --reverse \
+          --header="Which Brewfiles to install (Esc to cancel)")" || { log_attention "Setup cancelled" >&2; exit 1; }
+
+      case "${scope}" in
+        "Common + personal"        ) flags+=( --personal ) ;;
+        "Common + work"            ) flags+=( --work ) ;;
+        "Common + personal + work" ) flags+=( --personal --work ) ;;
+      esac
+    fi
+
+    # Other options are optional, so cancelling here means "none"
+    extras="$(printf '%s\n' \
+      "--force        Replace regular files with symlinks (backs up originals)" \
+      "--dry-run      Only print status messages (limited implementation)" \
+      "--skip-local   Skip Brewfile*.local packages" \
+      "--quiet        Print fewer status messages" \
+      "--verbose      Print additional status messages" |
+      fzf --multi --prompt="Options > " --height=~12 --reverse \
+        --header="Tab to toggle, Enter to confirm (none is fine)")" || extras=""
+
+    while IFS= read -r choice; do
+      [[ -n "${choice}" ]] && flags+=( "${choice%% *}" )
+    done <<<"${extras}"
+
+    [[ ${#flags[@]} -gt 0 ]] && printf '%s\n' "${flags[@]}"
+    return 0
+  }
+
+  _setup_args=( "$@" )
+  if [[ ${#_setup_args[@]} -eq 0 && "$(basename "$0")" == "setup" && -z "${CODESPACES:-}" ]] \
+    && [[ -t 0 && -t 1 ]] && command -v fzf >/dev/null 2>&1; then
+    while IFS= read -r _flag; do
+      _setup_args+=( "${_flag}" )
+    done < <(_choose_setup_options)
+    log_info "Running with options: ${_setup_args[*]:-(defaults)}"
+  fi
+
+  _parse_setup_options ${_setup_args[@]+"${_setup_args[@]}"}
+  unset _setup_args _flag
 
   # Mark helpers script as loaded
   log_verbose "Helpers loaded"

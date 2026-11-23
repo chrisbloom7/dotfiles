@@ -75,9 +75,9 @@ A brief overview of some of the most important files and directories in this rep
 - [`scripts`](./scripts) A directory containing various scripts that are used during the setup process. They are called automatically by the `setup` script as needed, but can also be run manually if necessary. A few of the most important files are:
   - `scripts/bootstrap-*`s: (Example: [`scripts/bootstrap-common`](./scripts/bootstrap-common)) Subscripts that run common and platform specific setup steps.
   - [`scripts/configure-macos`](./scripts/configure-macos) Updates various settings on macOS to my preferred configuration. (This tends to be the most brittle of the setup scripts as it relies on specific settings and paths that may change between macOS versions.)
-  - [`scripts/install-prerequisites`](./scripts/install-prerequisites) A script that installs several prerequisite applications. These will be installed automatically by the `setup` script, but you can also run it anytime before that if necessary or if you just need a bare bones setup. (Running `./script --bootstrap` is equivalent to running this script.)
+  - [`scripts/install-prerequisites`](./scripts/install-prerequisites) A script that installs several prerequisite applications. These will be installed automatically by the `setup` script, but you can also run it anytime before that if necessary or if you just need a bare bones setup. It includes `fzf`, which powers the interactive menu in `setup`. (Running `./setup --bootstrap` is equivalent to running this script.)
 - `Brewfile*`s: a set of files that tell Homebrew what applications to install.
-- [`setup`](./setup) The main entry point for setting up development environments.
+- [`setup`](./setup) The main entry point for setting up development environments. Run it with no options to choose the mode, scope and other options from an `fzf` menu (when `fzf` is installed and the shell is interactive).
 
 > [!NOTE]
 > `~/.aws/config` is intentionally *not* tracked in this repo. It typically contains account-specific SSO profiles and role ARNs that are too environment-specific (and potentially sensitive) for a public repository. Manage it separately and back it up via your preferred secure storage.
@@ -141,6 +141,8 @@ After backing up your old workstation you may now follow these install instructi
       ./setup
       ```
 
+      When run in a terminal with no options, `setup` uses [`fzf`][fzf] to let you choose the mode (full, minimal, bootstrap only, update), the scope (which Brewfiles to install) and any other options. Passing any option skips the menu. `fzf` is installed by `./setup --bootstrap` (the first step of any setup), so the menu appears from the second run onward. On a brand new workstation the first run falls back to the defaults unless you pass options, so run `./setup --bootstrap` first, as in the phased example below.
+
    2. If you'd prefer to start with only a minimal set of applications:
 
       ```shell
@@ -169,7 +171,12 @@ After backing up your old workstation you may now follow these install instructi
       ```
 
 5. If you use a password manager like 1Password, set it up now and sync your passwords.
-6. Setup the sync utility for whatever cloud storage provider you use with Mackup (Dropbox, Google Drive, etc.). Wait for the Mackup folder to finish syncing, and mark it as available offline so linked files are never online-only. Mackup must only run after `./setup`, which links the Mackup configs that keep it away from files managed by this repo.
+6. Setup the sync utility for whatever cloud storage provider you use with Mackup (Dropbox, Google Drive, etc.).
+
+   > [!IMPORTANT]
+   > On first sign-in, limit what syncs to only the folders the setup needs, which for Mackup is just the `Mackup` folder (in Dropbox: Preferences → Sync → Selective Sync, or choose it when signing in). Otherwise you'll wait for your entire library to download before the dotfiles stored there are available. Add the other folders once the restore below is done.
+
+   Wait for the Mackup folder to finish syncing, and mark it as available offline so linked files are never online-only. Mackup must only run after `./setup`, which links the Mackup configs that keep it away from files managed by this repo.
 7. Run `bin/mackup_sync --dry-run restore` to verify your setup. You should see the copy-mode files to be restored, then the link-mode files to be linked.
 8. Restore your settings by running `bin/mackup_sync restore`.[^mackup-modes] Optionally, schedule weekly copy-mode backups with `bin/mackup_backup_schedule add`.
 9. Restart your workstation to ensure all changes take effect.
@@ -254,6 +261,7 @@ In addition to [Vints' own sentiments](https://github.com/driesvints/dotfiles?ta
 [codespaces-script-names]: https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles
 [devcontainers]: https://containers.dev/
 [dotfiles]: https://dotfiles.github.io/
+[fzf]: https://github.com/junegunn/fzf
 [mackup]: https://github.com/lra/mackup
 [mackup-link-mode]: https://github.com/lra/mackup/issues/2035
 [shallow-clone]: https://github.blog/open-source/git/get-up-to-speed-with-partial-clone-and-shallow-clone/#user-content-shallow-clones

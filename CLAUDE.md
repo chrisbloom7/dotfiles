@@ -88,6 +88,8 @@ Scripts reference `FORCE_MODE`, `VERBOSE_MODE`, and `QUIET_MODE` without default
 
 ### Setup script hierarchy
 
+`setup` with no options and an interactive terminal shows an fzf menu for mode, scope and other options (`_choose_setup_options` in `scripts/helpers/runtime.sh`). `scripts/install-prerequisites` installs fzf, so the menu is available from the second run. Casks whose sha256 is `:no_check` need `force: true` in the Brewfile because `cask_args require_sha: true` rejects them, and `brew bundle ... || true` hides the failure.
+
 ```
 setup                          # entry point; calls:
   scripts/install-prerequisites     # skipped in Codespaces
