@@ -5,7 +5,8 @@
 # fi
 # [[ -f /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)" || true
 
-[[ -f "/opt/homebrew/bin/brew" ]] && eval "$(/opt/homebrew/bin/brew shellenv)" || true
+# Homebrew prefix differs by machine: Apple silicon, Intel, Linux
+for _brew in /opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbrew/bin/brew; do [[ -x "${_brew}" ]] && { eval "$("${_brew}" shellenv)"; break; }; done; unset _brew
 
 # Machine-specific overrides (not tracked in dotfiles)
 [[ -f "${HOME}/.zprofile.local" ]] && source "${HOME}/.zprofile.local" || true

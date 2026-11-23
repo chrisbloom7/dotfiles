@@ -138,3 +138,12 @@ teardown() {
   [ "${status}" -eq 0 ]
   [ "$(cat "${TARGET_FILE}")" = "${before}" ]
 }
+
+@test "add_eval_to_dotfile: gates each target once when given several files" {
+  second="${TEST_TMPDIR}/dotfile2"
+  run "${DOTFILES_BIN}/add_eval_to_dotfile" '[[ -f /x/tool ]]' '/x/tool env' "${TARGET_FILE}" "${second}"
+  [ "${status}" -eq 0 ]
+  expected='[[ -f /x/tool ]] && eval "$(/x/tool env)" || true'
+  [ "$(cat "${TARGET_FILE}")" = "${expected}" ]
+  [ "$(cat "${second}")" = "${expected}" ]
+}

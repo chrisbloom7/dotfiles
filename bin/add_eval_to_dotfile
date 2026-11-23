@@ -29,11 +29,14 @@ for target in "${@:3}"; do
   if [[ "${target_content//\"/}" == *"${new_eval//\"/}"* ]]; then
     log_attention "\`${new_eval}\` already exists in ${target}; skipping"
   else
+    # Build the gated line per target; reassigning new_eval would stack the
+    # gate and `|| true` again for every later file
+    line="${new_eval}"
     if [[ -n "${gate:-}" ]]; then
-      new_eval="${gate} && ${new_eval} || true"
+      line="${gate} && ${new_eval} || true"
     fi
-    log_debug "Adding \`${new_eval}\` to ${target}"
-    echo "${new_eval}" >> "${target}"
+    log_debug "Adding \`${line}\` to ${target}"
+    echo "${line}" >> "${target}"
   fi
 done
 

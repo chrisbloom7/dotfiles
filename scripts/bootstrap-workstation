@@ -17,7 +17,13 @@ fi
 source ./helpers/source_homebrew.sh
 
 log_info "Adding Homebrew evals to shell profiles"
-add_eval_to_dotfile "[[ -f \"${HOMEBREW_PREFIX}/bin/brew\" ]]" "\"${HOMEBREW_PREFIX}/bin/brew\" shellenv" "${HOME}/.bash_profile" "${HOME}/.zprofile"
+# The tracked profiles already try every known prefix, so only add a line to
+# a profile that has no `brew shellenv` at all (avoids dirtying linked files)
+for profile in "${HOME}/.bash_profile" "${HOME}/.zprofile"; do
+  if ! grep -qs 'shellenv' "${profile}"; then
+    add_eval_to_dotfile "[[ -f \"${HOMEBREW_PREFIX}/bin/brew\" ]]" "\"${HOMEBREW_PREFIX}/bin/brew\" shellenv" "${profile}"
+  fi
+done
 
 # log_info "Adding HOMEBREW_CASK_OPTS to shell profiles"
 # if [[ "$(is_macos)" == "true" ]]; then
