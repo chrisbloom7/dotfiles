@@ -27,7 +27,6 @@
 	autoSetupMerge = inherit
 	autoSetupRebase = remote
 [core]
-	pager = delta
 	autocrlf = input
 	safecrlf = warn
 	excludesfile = ~/.gitignore_global
@@ -63,8 +62,6 @@
 	cmd = bcomp -ro $LOCAL $REMOTE
 [difftool "default-difftool"]
   cmd = code --wait --diff $LOCAL $REMOTE
-[delta]
-	navigate = true
 [fetch]
 	prune = true
 [filter "lfs"]
@@ -72,8 +69,6 @@
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
-[interactive]
-	diffFilter = delta --color-only
 [gpg]
 	program = /usr/local/bin/gpg
 [gpg "ssh"]

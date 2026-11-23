@@ -54,7 +54,6 @@ brew "fd"                           # Simple, fast and user-friendly alternative
 brew "fzf"                          # Command-line fuzzy finder
 brew "gh"                           # GitHub command-line tool
 brew "git"                          # Distributed revision control system
-brew "git-delta"             # Syntax-highlighting pager for git and diff output
 brew "github-keygen"                # Bootstrap GitHub SSH configuration
 brew "mas"                          # Mac App Store command-line interface
 brew "mise"                         # Polyglot runtime manager (asdf rust clone)
