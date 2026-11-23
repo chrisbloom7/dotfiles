@@ -63,10 +63,16 @@
     "code-review-anthropics@anthropic-plugin-directory": true,
     "ruby-lsp@anthropic-plugin-directory": true,
     "typescript-lsp@claude-plugins-official": true,
-    "towit@to-wit": true,
     "chrisbloom7-development@ai-tools": true,
-    "ruby-lsp@claude-plugins-official": true,
-    "github@anthropic-plugin-directory": false
+    "github@anthropic-plugin-directory": false,
+    "design@anthropic-plugin-directory": true,
+    "stripe@claude-plugins-official": true,
+    "context7@anthropic-plugin-directory": true,
+    "plugin-dev@anthropic-plugin-directory": true,
+    "towit@to-wit": true,
+    "resend@claude-plugins-official": true,
+    "railway@claude-plugins-official": true,
+    "ruby-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "worktrunk": {
@@ -81,17 +87,17 @@
         "repo": "mistyhx/frontend-design-audit"
       }
     },
-    "to-wit": {
-      "source": {
-        "source": "github",
-        "repo": "chrisbloom7/to-wit",
-        "ref": "v0.13.1"
-      }
-    },
     "ai-tools": {
       "source": {
         "source": "github",
         "repo": "chrisbloom7/ai-tools"
+      }
+    },
+    "to-wit": {
+      "source": {
+        "source": "github",
+        "repo": "chrisbloom7/to-wit",
+        "ref": "v0.14.0"
       }
     }
   },
