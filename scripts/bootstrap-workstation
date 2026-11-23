@@ -45,6 +45,19 @@ fi
 brew_verbosity_args=(${brew_args[@]+"${brew_args[@]}"})
 brew update "${brew_args[@]}"
 
+# Newer Homebrew only loads formulae, casks and commands from non-official taps
+# you have trusted. Trust every non-official tap named in a Brewfile (plus the
+# one tapped below) so `brew bundle` can install from them.
+if brew trust --help >/dev/null 2>&1; then
+  log_info "Trusting non-official Homebrew taps"
+  trusted_taps=()
+  while IFS= read -r tap; do
+    [[ -n "${tap}" ]] && trusted_taps+=("${tap}")
+  done < <({ echo "buo/cask-upgrade"; sed -n 's/^tap "\([^"]*\)".*/\1/p' ../Brewfile* 2>/dev/null; } | grep -v '^homebrew/' | sort -u)
+  log_debug "Trusting taps: ${trusted_taps[*]}"
+  brew trust --tap "${trusted_taps[@]}"
+fi
+
 log_info "Installing Homebrew support for upgrading casks"
 brew tap buo/cask-upgrade
 
