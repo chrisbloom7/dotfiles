@@ -25,10 +25,10 @@ cask "drivethrurpg"      # Sync DriveThruRPG libraries to compatible devices
 # cask "flotato"                # Tool to turn any web page into a desktop app
 # cask "fluid"                  # Tool to turn a website into a desktop app
 cask "focusrite-control" # Focusrite interface controller
-cask "font-museomoderno"
-cask "garmin-express"    # Update maps and software, sync with Garmin Connect and register your device
+cask "font-museomoderno", force: true
+cask "garmin-express", force: true    # Update maps and software, sync with Garmin Connect and register your device
 cask "gemini"            # Disk space cleaner that finds and deletes duplicated and similar files
-cask "google-drive"      # Client for the Google Drive storage service
+cask "google-drive", force: true      # Client for the Google Drive storage service
 cask "imageoptim"        # Tool to optimise images to a smaller size
 cask "lm-studio"         # Discover, download, and run local LLMs
 # cask "mailplane"              # Gmail client ! Deprecated client
@@ -39,8 +39,8 @@ cask "lm-studio"         # Discover, download, and run local LLMs
 # cask "screenfocus"            # Tool to manage multiple screens
 cask "script-debugger"   # Integrated development environment focused entirely on AppleScript
 cask "scriptql"          # AppleScript Quick Look plugin
-cask "shutter-encoder"   # Video, audio and image converter
-cask "spotify"           # Music streaming service
+cask "shutter-encoder", force: true   # Video, audio and image converter
+cask "spotify", force: true           # Music streaming service
 cask "steam"             # Video game digital distribution service
 cask "the-unarchiver"    # Unpacks archive files
 cask "transmit"          # File transfer application

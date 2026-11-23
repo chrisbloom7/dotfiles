@@ -154,6 +154,8 @@ if [[ -z "${HELPERS_LOADED:-}" ]]; then
                                   ;;
         -p | --personal         ) ADDITIONAL_DEPENDENCIES+=( personal personal.vscode )
                                   ;;
+        --skip-local            ) _can_use_skip_local_mode && SKIP_LOCAL_MODE=true
+                                  ;;
         -q | --quiet            ) _can_use_quiet_mode && QUIET_MODE=true
                                   ;;
         -u | --update           ) _can_use_update_mode && UPDATE_MODE=true

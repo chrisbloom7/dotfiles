@@ -113,7 +113,7 @@ mise activation lives in `.zshrc` (not `.zprofile`) so it runs once for all inte
 
 ### Tests
 
-Tests use [bats-core](https://github.com/bats-core/bats-core) (`brew install bats-core`). Structure mirrors the project: `tests/bin/` for `bin/` scripts. Shared setup is in `tests/test_helper.bash` — each test file calls `_setup_common`/`_teardown_common`. A no-op `sleep` mock is injected into PATH to keep tests fast (log commands call `sleep 0.5`).
+Tests use [bats-core](https://github.com/bats-core/bats-core) (`brew install bats-core`). Structure mirrors the project: `tests/bin/` for `bin/` scripts, `tests/scripts/` for `scripts/` code (currently the setup menu). Shared setup is in `tests/test_helper.bash` — each test file calls `_setup_common`/`_teardown_common`. A no-op `sleep` mock is injected into PATH to keep tests fast (log commands call `sleep 0.5`).
 
 ### Sensitive content
 
