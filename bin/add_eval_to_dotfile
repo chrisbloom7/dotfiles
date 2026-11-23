@@ -23,7 +23,10 @@ for target in "${@:3}"; do
     touch "${target}"
   fi
 
-  if [[ "$(cat $target)" == *"${new_eval}"* ]]; then
+  # Compare ignoring double quotes so `eval "$("/x/brew" shellenv)"` matches an
+  # existing `eval "$(/x/brew shellenv)"` instead of being appended again
+  target_content="$(cat "${target}")"
+  if [[ "${target_content//\"/}" == *"${new_eval//\"/}"* ]]; then
     log_attention "\`${new_eval}\` already exists in ${target}; skipping"
   else
     if [[ -n "${gate:-}" ]]; then

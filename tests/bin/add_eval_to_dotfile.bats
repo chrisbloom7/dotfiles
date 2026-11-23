@@ -130,3 +130,11 @@ teardown() {
     }
   done
 }
+
+@test "add_eval_to_dotfile: treats an existing line that differs only by quoting as present" {
+  printf '%s\n' '[[ -f /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)" || true' > "${TARGET_FILE}"
+  before="$(cat "${TARGET_FILE}")"
+  run "${DOTFILES_BIN}/add_eval_to_dotfile" '[[ -f "/opt/homebrew/bin/brew" ]]' '"/opt/homebrew/bin/brew" shellenv' "${TARGET_FILE}"
+  [ "${status}" -eq 0 ]
+  [ "$(cat "${TARGET_FILE}")" = "${before}" ]
+}
