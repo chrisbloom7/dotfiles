@@ -120,6 +120,9 @@ After backing up your old workstation you may now follow these install instructi
 > [!NOTE]
 > This process cannot run unattended - you may be prompted for your password several times in addition to other system prompts.
 
+> [!WARNING]
+> Intel Macs have no prebuilt Homebrew bottles for current formulae, so most of them compile from source. Anything that needs `rust` or `llvm` (`mise`, `fd`, `ripgrep`, `ast-grep`, `bat`, `worktrunk`, `watchman`) can take hours. `setup` warns when it detects an Intel Mac; run it overnight, or start with `./setup --minimal`.
+
 > [!TIP]
 > While you can technically use a different location than `~/.dotfiles`, I strongly recommend you don't due to how many references you'd need to update throughout the scripts.
 
