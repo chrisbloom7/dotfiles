@@ -34,6 +34,9 @@ elif is_quiet_mode; then
 else
   brew_args=()
 fi
+# Subcommands like `brew services cleanup` and `brew cleanup` reject --force,
+# so keep a copy of the args without it
+brew_verbosity_args=(${brew_args[@]+"${brew_args[@]}"})
 brew update "${brew_args[@]}"
 
 log_info "Installing Homebrew support for upgrading casks"
@@ -91,10 +94,10 @@ if ! is_minimal_mode && ! is_update_mode; then
 fi
 
 log_verbose "Cleaning up Homebrew services"
-brew services cleanup "${brew_args[@]}"
+brew services cleanup ${brew_verbosity_args[@]+"${brew_verbosity_args[@]}"}
 
 log_verbose "Cleaning up stale lock files and outdated downloads for Homebrew"
-brew_cleanup_args=("${brew_args[@]}" --prune=all)
+brew_cleanup_args=(${brew_verbosity_args[@]+"${brew_verbosity_args[@]}"} --prune=all)
 if ! is_verbose_mode; then
   # This command is particularly noisy; only show output in verbose mode
   brew_cleanup_args+=(--quiet)
