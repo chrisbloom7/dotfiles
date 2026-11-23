@@ -129,3 +129,46 @@ calls() {
   [ "${status}" -eq 0 ] || { echo "${output}"; return 1; }
   [ "$(calls)" = "--config-file=${HOME}/.mackup-copy.cfg backup" ]
 }
+
+# ---------------------------------------------------------------------------
+# Mackup errors
+# ---------------------------------------------------------------------------
+
+@test "mackup_sync: fails when mackup logs an Error line but exits 0" {
+  cat > "${TEST_TMPDIR}/mock_bin/mackup" <<EOF2
+#!/usr/bin/env bash
+echo "\$*" >> "${MACKUP_LOG}"
+echo "Error: Unable to copy file due to permission issue"
+EOF2
+  run "${DOTFILES_BIN}/mackup_sync" backup
+  [ "${status}" -eq 1 ]
+  [[ "${output}" == *"finished with errors"* ]]
+  [[ "${output}" != *"mackup_sync backup done"* ]]
+}
+
+@test "mackup_sync: fails when mackup exits non-zero" {
+  cat > "${TEST_TMPDIR}/mock_bin/mackup" <<EOF2
+#!/usr/bin/env bash
+exit 3
+EOF2
+  run "${DOTFILES_BIN}/mackup_sync" backup
+  [ "${status}" -eq 1 ]
+}
+
+@test "mackup_sync: restore keeps going after a copy-mode error, then fails" {
+  cat > "${TEST_TMPDIR}/mock_bin/mackup" <<EOF2
+#!/usr/bin/env bash
+echo "\$*" >> "${MACKUP_LOG}"
+[[ "\$*" == *copy.cfg* || "\$*" == *mackup-copy* ]] && echo "Error: boom"
+exit 0
+EOF2
+  run "${DOTFILES_BIN}/mackup_sync" restore
+  [ "${status}" -eq 1 ]
+  [ "$(calls | wc -l | tr -d ' ')" -eq 2 ]
+}
+
+@test "mackup_sync: still reports success when mackup is clean" {
+  run "${DOTFILES_BIN}/mackup_sync" backup
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"mackup_sync backup done"* ]]
+}

@@ -58,8 +58,24 @@ fi
 export MACKUP_LINK_CFG="${MACKUP_LINK_CFG:-${HOME}/.mackup.cfg}"
 export MACKUP_COPY_CFG="${MACKUP_COPY_CFG:-${HOME}/.mackup-copy.cfg}"
 
-link_mode() { mackup --config-file="${MACKUP_LINK_CFG}" "${mackup_opts[@]}" "$@"; }
-copy_mode() { mackup --config-file="${MACKUP_COPY_CFG}" "${mackup_opts[@]}" "$@"; }
+# Mackup exits 0 even when it logs "Error: ..." for a file it couldn't copy, so
+# run it through tee, remember any failure, and report it at the end.
+mackup_failed=false
+run_mackup() {
+  local config="$1"
+  shift
+  local output status=0
+  output="$(mktemp)"
+  # Unbuffered so prompts are visible while the output is also being captured
+  PYTHONUNBUFFERED=1 mackup --config-file="${config}" ${mackup_opts[@]+"${mackup_opts[@]}"} "$@" 2>&1 | tee "${output}" || status=$?
+  if [[ ${status} -ne 0 ]] || grep -q '^Error' "${output}"; then
+    mackup_failed=true
+    log_error "mackup $* reported errors; see the output above"
+  fi
+  rm -f "${output}"
+}
+link_mode() { run_mackup "${MACKUP_LINK_CFG}" "$@"; }
+copy_mode() { run_mackup "${MACKUP_COPY_CFG}" "$@"; }
 
 case "${command}" in
   check)
@@ -85,5 +101,10 @@ case "${command}" in
     copy_mode backup
     ;;
 esac
+
+if [[ "${mackup_failed}" == true ]]; then
+  log_error "mackup_sync ${command} finished with errors"
+  exit 1
+fi
 
 log_success "mackup_sync ${command} done"
