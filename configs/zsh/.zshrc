@@ -116,6 +116,10 @@ source $ZSH/oh-my-zsh.sh
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"
 export LANG="${LANG:-en_US.UTF-8}"
 
+# Line editing: match readline and Claude Code (iTerm2 sends ^U for Cmd+Backspace).
+# zsh's default ^U kills the whole line; delete only from the cursor back to line start.
+bindkey '^U' backward-kill-line
+
 # Preferred editor for local and remote sessions
 _DEFAULT_EDITOR=
 if [[ -n $(command -v ox 2>/dev/null) ]]; then
