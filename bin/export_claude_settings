@@ -13,6 +13,7 @@
 # Review any change to the lists as carefully as a change to the snapshot.
 #   - Top-level keys: model, advisorModel, theme, the on/off booleans, and
 #     statusLine when it runs ~/.claude/statusline-command.sh
+#   - env: only the variables named in PUBLIC_ENV_VARS
 #   - permissions.ask and permissions.allow: only rules matching the generic
 #     patterns in ALLOW_RULES and ASK_RULES
 #   - enabledPlugins and extraKnownMarketplaces: only entries from the public
@@ -73,6 +74,7 @@ def HOOK_COMMANDS: [
   "^\"\\$HOME/\\.claude/hooks/[A-Za-z0-9_.-]+\"$"
 ];
 def STATUS_LINE_COMMAND: "^~/\\.claude/statusline-command\\.sh$";
+def PUBLIC_ENV_VARS: ["CLAUDE_CODE_DISABLE_MOUSE"];
 
 def matches_any(patterns): . as $s | any(patterns[]; . as $p | $s | test($p));
 def strings_only: if type == "string" then . else empty end;
@@ -97,6 +99,8 @@ def pick_bool(k): if (.[k] | type) == "boolean" then {(k): .[k]} else {} end;
       and ((.statusLine.command // "") | type == "string")
       and (.statusLine.command | test(STATUS_LINE_COMMAND)))
    then {statusLine: {type: "command", command: .statusLine.command}} else {} end)
++ {env: ((.env // {}) | with_entries(
+    select((.key | IN(PUBLIC_ENV_VARS[])) and (.value | type) == "string")))}
 + {permissions: {
     allow: [(.permissions.allow // [])[] | strings_only | select(matches_any(ALLOW_RULES))],
     ask:   [(.permissions.ask   // [])[] | strings_only | select(matches_any(ASK_RULES))]

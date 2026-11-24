@@ -10,6 +10,9 @@
     "type": "command",
     "command": "~/.claude/statusline-command.sh"
   },
+  "env": {
+    "CLAUDE_CODE_DISABLE_MOUSE": "1"
+  },
   "permissions": {
     "allow": [
       "Bash(git push -u origin *)",
