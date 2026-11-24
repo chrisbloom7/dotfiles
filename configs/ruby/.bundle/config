@@ -1,4 +1,4 @@
-----
+---
 BUNDLE_GEM__TEST: "false"
 BUNDLE_GEM__CI: "false"
 BUNDLE_GEM__MIT: "true"
