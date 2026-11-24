@@ -17,7 +17,7 @@ setup() {
   "skipWorkflowUsageWarning": true,
   "acmeUnknownKey": "acme-private-value",
   "feedbackDrafts": "acme-private-draft",
-  "env": { "CLAUDE_CODE_DISABLE_MOUSE": "1", "ACME_PRIVATE_TOKEN": "acme-private-secret" },
+  "env": { "CLAUDE_CODE_DISABLE_MOUSE_CLICKS": "1", "ACME_PRIVATE_TOKEN": "acme-private-secret" },
   "autoMode": { "environment": ["Trusted path: /srv/acme-private-vendor"] },
   "statusLine": { "type": "command", "command": "~/.claude/statusline-command.sh" },
   "permissions": {
@@ -84,7 +84,7 @@ teardown() {
   [ "$(jq 'has("acmeUnknownKey") or has("feedbackDrafts") or has("autoMode")' "${OUTPUT}")" = "false" ]
   [ "$(jq '.hooks.Stop[0].hooks | length' "${OUTPUT}")" -eq 1 ]
   [ "$(jq '.hooks | has("SessionEnd")' "${OUTPUT}")" = "false" ]
-  [ "$(jq -c '.env' "${OUTPUT}")" = '{"CLAUDE_CODE_DISABLE_MOUSE":"1"}' ]
+  [ "$(jq -c '.env' "${OUTPUT}")" = '{"CLAUDE_CODE_DISABLE_MOUSE_CLICKS":"1"}' ]
   ! rg -q 'acme|/opt/|someone' "${OUTPUT}" || { echo "Expected no fixture-private text in the output"; return 1; }
 }
 
